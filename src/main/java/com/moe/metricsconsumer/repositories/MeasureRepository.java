@@ -1,6 +1,6 @@
-package com.moe.metricsconsumer.controllers;
+package com.moe.metricsconsumer.repositories;
 
-import com.moe.metricsconsumer.models.MeasureSummary;
+import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

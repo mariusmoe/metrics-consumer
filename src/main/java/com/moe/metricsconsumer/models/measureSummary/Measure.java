@@ -1,4 +1,4 @@
-package com.moe.metricsconsumer.models;
+package com.moe.metricsconsumer.models.measureSummary;
 
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class Measure {
   public void setSpecificMeasures(List<SpecificMeasure> specificMeasures) {
     this.specificMeasures = specificMeasures;
   }
+  public Measure() {}
 
   public Measure(String measureProvider, List<SpecificMeasure> specificMeasures) {
     this.measureProvider = measureProvider;

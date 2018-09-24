@@ -1,8 +1,11 @@
-package com.moe.metricsconsumer.models;
+package com.moe.metricsconsumer.models.measureSummary;
 
 import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
+
+
 
 public class MeasureSummary {
   //  {
@@ -59,10 +62,13 @@ public class MeasureSummary {
   @Id
   public String id;
 
+  @NotNull
   public String taskName;
 
+  @NotNull
   public String taskId;
 
+  @NotNull
   private List<Measure> measures;
 
   public MeasureSummary() {}

@@ -1,4 +1,4 @@
-package com.moe.metricsconsumer.models;
+package com.moe.metricsconsumer.models.measureSummary;
 
 public class SpecificMeasure {
 
@@ -29,6 +29,8 @@ public class SpecificMeasure {
   public void setValue(float value) {
     this.value = value;
   }
+
+  public SpecificMeasure() {}
 
   public SpecificMeasure(String name, float value) {
     this.name = name;
