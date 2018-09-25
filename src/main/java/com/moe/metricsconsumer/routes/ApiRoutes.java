@@ -32,7 +32,7 @@ public class ApiRoutes {
     if (bookmark.isPresent()) {
       return bookmark.get();
     } else {
-      throw new EntityNotFoundException(MeasureSummary.class, id.toString());
+      throw new EntityNotFoundException(MeasureSummary.class, id);
     }
   }
 
