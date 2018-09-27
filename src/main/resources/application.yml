@@ -1,0 +1,9 @@
+security:
+  oauth2:
+    client:
+      accessTokenUri: https://auth.dataporten.no/oauth/token
+      userAuthorizationUri: https://auth.dataporten.no/oauth/authorization
+      clientId: 9f6c4280-42bf-4e24-8f80-1176fa7ae4a1
+      clientSecret: d82dbdf7-8017-4aa5-bbc9-f5c2ca68a7c9
+    resource:
+      userInfoUri: https://auth.dataporten.no/userinfo

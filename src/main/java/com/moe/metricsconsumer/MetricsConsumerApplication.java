@@ -32,15 +32,9 @@ public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter imp
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-
-
-//    http
-//      .authorizeRequests()
-//      .mvcMatchers("/index.html", "/", "/**/*.html").permitAll()
-//      .anyRequest().authenticated();
     http
       .authorizeRequests()
-      .mvcMatchers("/index.html").permitAll()
+      .mvcMatchers("/index.html", "/login").permitAll()
       .anyRequest().authenticated();
   }
 
