@@ -3,8 +3,15 @@
     Welcome {{title}}!
   </h1>
   <div class="container">
-    <p>Id: <span>{{data?.id}}</span></p>
+    <p>Id: <span>{{data?.name}}</span></p>
     <p>Message: <span>{{data?.content}}</span></p>
   </div>
-  <app-home></app-home>
+  <nav>
+    <a routerLink="/nope" routerLinkActive="active">Crisis Center</a>
+    <br>
+    <a routerLink="/heroes" routerLinkActive="active">Heroes</a>
+    <br>
+    <a routerLink="" routerLinkActive="active">Heroes</a>
+  </nav>
+  <router-outlet></router-outlet>
 </div>

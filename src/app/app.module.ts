@@ -10,12 +10,15 @@ import {
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
+import { AppRoutingModule } from './app-routing.module';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    NotFoundComponent
 
   ],
   imports: [
@@ -25,7 +28,8 @@ import { HomeComponent } from './components/home/home.component';
 
     // Material design components
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

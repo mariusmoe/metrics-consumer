@@ -8,20 +8,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class MetricsConsumerApplication implements CommandLineRunner {
+@EnableOAuth2Sso
+@RestController
+public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter implements CommandLineRunner {
 
   @Autowired
   private MeasureRepository repository;
+
+    @RequestMapping("/resource")
+    public Principal user(Principal principal) {
+      return principal;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(MetricsConsumerApplication.class, args);
     }
 
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+      .authorizeRequests()
+      .mvcMatchers("/index.html").permitAll()
+      .anyRequest().authenticated();
+  }
 
 
     @Override
