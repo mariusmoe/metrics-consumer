@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'login', component:  NotFoundComponent},
   { path: 'nope', component:  NotFoundComponent},
   { path: '**', component:  NotFoundComponent}
 ];

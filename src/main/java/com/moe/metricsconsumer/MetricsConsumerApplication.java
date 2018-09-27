@@ -9,12 +9,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
@@ -33,11 +39,29 @@ public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter imp
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
+      .csrf().disable()
       .authorizeRequests()
-      .mvcMatchers("/index.html", "/login").permitAll()
-      .anyRequest().authenticated();
+      .antMatchers("/index.html", "/login").permitAll()
+      .anyRequest().authenticated()
+      .and().logout()
+      .logoutSuccessUrl("/some/login")
+      .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+      .deleteCookies("JSESSIONID").invalidateHttpSession(false);
+
+      // Should redirect onlogoutSuccess to bellow, but then cors and csrf has to be fixed!
+//    https://auth.dataporten.no/logout
+
   }
 
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("https://auth.dataporten.no", "http://localhost:8080"));
+    configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
     @Override
     public void run(String... args) throws Exception{
