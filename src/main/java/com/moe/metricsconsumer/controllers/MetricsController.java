@@ -19,7 +19,13 @@ public class MetricsController {
   @Autowired
   private MeasureRepository measureRepository;
 
-  @GetMapping(value = "/", produces = "application/json")
+  @RequestMapping("/resource")
+  @ResponseBody
+  public Principal user(Principal principal) {
+    return principal;
+  }
+
+  @GetMapping("/")
   @ResponseBody
   public List<MeasureSummary> getAllMeasureSummaries() {
     return measureRepository.findAll();
