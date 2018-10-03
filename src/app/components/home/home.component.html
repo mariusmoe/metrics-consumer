@@ -1,24 +1,60 @@
-<p>
-  home works!
-</p>
-<button class="btn btn-default" (click)="getdata()">
-  getdata
-</button>
+<div class="main-content">
+  <div>
+    <p>
+      home works!
+    </p>
+    <button class="btn btn-default" (click)="getdata()">
+      getdata
+    </button>
 
-<h1 *ngIf="!name">
-  Hallo
-</h1>
-<p *ngIf="data">
-  {{data | json}}
-</p>
+    <h1 *ngIf="!name">
+      Hallo
+    </h1>
+    <div *ngIf="data">
+      <p>{{data | json}}</p>
 
-<button class="btn btn-default" (click)="login()">
-  Login
-</button>
-<button class="btn btn-default" (click)="logout()">
-  Logout
-</button>
+      <!-- https://swimlane.github.io/ngx-charts/#/ngx-charts/heat-map  ???-->
 
-<div>
-  Username/Passwort zum Testen: max/geheim
+      <ngx-charts-heat-map
+        [view]="view"
+        [scheme]="colorScheme"
+        [results]="multi"
+        [legend]="showLegend"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        (select)="onSelect($event)"
+        [yAxisTickFormatting]="yAxisTickFormatting"
+
+      >
+      </ngx-charts-heat-map>
+
+<!--      <div>
+        <table border="1">
+          <thead>
+          <tr>
+            <th *ngFor="let header of masterGridHeadders; let i = index">{{header}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of data; let i = index">
+            <th *ngFor="let objKey of _object.keys(row); let j = index">{{ row[objKey] }} </th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>-->
+
+
+
+    <div>
+      Username/Passwort zum Testen: max/geheim
+    </div>
+
+  </div>
+
 </div>

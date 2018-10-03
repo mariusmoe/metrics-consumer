@@ -1,17 +1,57 @@
-<div style="text-align:center"class="container">
-  <h1>
-    Welcome {{title}}!
-  </h1>
-  <div class="container">
-    <p>Id: <span>{{data?.name}}</span></p>
-    <p>Message: <span>{{data?.content}}</span></p>
-  </div>
-  <nav>
-    <a routerLink="/nope" routerLinkActive="active">Crisis Center</a>
-    <br>
-    <a routerLink="/heroes" routerLinkActive="active">Heroes</a>
-    <br>
-    <a routerLink="" routerLinkActive="active">Heroes</a>
-  </nav>
-  <router-outlet></router-outlet>
-</div>
+
+  <mat-toolbar class="top-row-toolbar">
+    <button mat-button (click)="sidenav.toggle()">
+      <mat-icon class="example-icon">menu</mat-icon>
+      <span> Measures</span>
+    </button>
+
+    <button mat-button [matMenuTriggerFor]="menu">
+      <mat-icon class="example-icon">face</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon class="example-icon">settings</mat-icon>
+      Settings</button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon class="example-icon">exit_to_app</mat-icon>
+      Logout</button>
+  </mat-menu>
+
+
+
+
+
+
+
+
+  <mat-sidenav-container
+    class="example-container"
+    (backdropClick)="sidenav.close()"
+    [hasBackdrop]="false">
+
+    <mat-sidenav #sidenav
+                 (keydown.escape)="sidenav.close()"
+                 disableClose
+                 [opened]="true"
+                 mode="side"
+                 class="sidenav-drawer">
+      <button mat-button (click)="sidenav.close()">Toggle</button>
+      <button mat-button routerLink="/nope" routerLinkActive="active">Crisis</button>
+      <button mat-button routerLink="/heroes" routerLinkActive="active">Heroes</button>
+      <button mat-button routerLink="/" routerLinkActive="active">Home</button>
+
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      
+      <router-outlet></router-outlet>
+
+
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
+
+
+

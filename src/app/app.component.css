@@ -1,0 +1,18 @@
+.top-row-toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidenav-drawer {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container {
+  position: absolute;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

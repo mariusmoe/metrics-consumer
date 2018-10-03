@@ -6,12 +6,17 @@ import { HttpClientModule } from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatMenuModule,
+  MatSidenavModule
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import {NgxChartsModule} from "@swimlane/ngx-charts";
 
 
 @NgModule({
@@ -29,7 +34,12 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     // Material design components
     MatButtonModule,
     MatCheckboxModule,
-    AppRoutingModule
+    MatToolbarModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSidenavModule,
+    AppRoutingModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
