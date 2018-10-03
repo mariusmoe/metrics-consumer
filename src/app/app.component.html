@@ -36,19 +36,19 @@
                  [opened]="true"
                  mode="side"
                  class="sidenav-drawer">
-      <button mat-button (click)="sidenav.close()">Toggle</button>
-      <button mat-button routerLink="/nope" routerLinkActive="active">Crisis</button>
-      <button mat-button routerLink="/heroes" routerLinkActive="active">Heroes</button>
-      <button mat-button routerLink="/" routerLinkActive="active">Home</button>
 
-
+      <div *ngFor="let summary of summaries" class="container-task">
+        <button
+          mat-button
+          routerLink="/summary/{{summary.taskId}}"
+          routerLinkActive="active"
+          class="btn-task">
+            {{summary.taskName}}
+        </button>
+      </div>
     </mat-sidenav>
-
     <mat-sidenav-content>
-      
       <router-outlet></router-outlet>
-
-
     </mat-sidenav-content>
   </mat-sidenav-container>
 

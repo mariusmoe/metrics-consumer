@@ -16,6 +16,15 @@ export interface Measure {
   value: number;
 }
 
+export interface Summary {
+  id: string;
+  userId: string;
+  taskName:string;
+  taskId:string;
+  measures?:string;
+  solutionManual: boolean;
+}
+
 
 //  {
 //    taskName: "Account-oppgave",

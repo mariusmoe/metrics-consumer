@@ -2,6 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MatSidenav} from '@angular/material/sidenav';
 import {Router, RouterOutlet} from "@angular/router";
+import {MeasureSummary, Summary} from "./_models/measure-summary";
+import {MeasureService} from "./_services/measure.service";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -15,13 +18,23 @@ export class AppComponent {
 
   isLoggedIn: boolean;
 
+  summaries: Summary[];
 
-  constructor(private http: HttpClient, private router: Router) {
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private measureService: MeasureService) {
     http.get('api/resource').subscribe(data => {
       console.log(data);
       this.data = data
       this.isLoggedIn = true;
     });
+    this.measureService.getSummaries().subscribe(
+      (data: Summary[]) => {
+        console.log(data);
+        this.summaries = data;
+      });
   }
 
 

@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {MeasureService} from "../../_services/measure.service";
 import {MeasureSummary} from "../../_models/measure-summary";
 import {multi} from '../../_models/data';
+import {switchMap} from "rxjs/operators";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -12,6 +14,7 @@ import {multi} from '../../_models/data';
 export class HomeComponent implements OnInit {
 
   data;
+  measureSummary$;
   error;
   _object = Object;
   studentData = [{
@@ -64,10 +67,14 @@ export class HomeComponent implements OnInit {
 
   masterGridHeadders = ['Measure', 'your app', 'solution guide']
 
-  ngOnInit() {
-  }
 
-  constructor(private http: HttpClient, private measureService: MeasureService) {
+
+  constructor(
+    private http: HttpClient,
+    private measureService: MeasureService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
     // TODO - create simple datastructure?
     // ANd based on event click (name) find and display further data ?
     Object.assign(this, {multi})
@@ -75,12 +82,19 @@ export class HomeComponent implements OnInit {
 
   }
 
+  ngOnInit() {
+    this.measureSummary$ = this.route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        this.measureService.getMeasureData(params.get('taskId')))
+    );
+  }
+
   onSelect(event) {
     console.log(event);
   }
 
-  getdata() {
-    this.measureService.getMeasureData().subscribe(
+  getdata(taskId: string) {
+    this.measureService.getMeasureData(taskId).subscribe(
       (data: MeasureSummary[]) => {
         console.log(data);
         data.forEach(measureSummary => {

@@ -10,9 +10,9 @@
     <h1 *ngIf="!name">
       Hallo
     </h1>
-    <div *ngIf="data">
-      <p>{{data | json}}</p>
 
+      <p>{{measureSummary$ | async | json}}</p>
+    <div *ngIf="data">
       <!-- https://swimlane.github.io/ngx-charts/#/ngx-charts/heat-map  ???-->
 
       <ngx-charts-heat-map

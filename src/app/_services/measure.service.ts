@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {Observable, throwError} from 'rxjs';
-import {MeasureSummary} from "../_models/measure-summary";
+import {Measure, MeasureSummary, Summary} from "../_models/measure-summary";
 
 
 import {catchError} from "rxjs/operators";
@@ -15,9 +15,17 @@ export class MeasureService {
 
   constructor(private http: HttpClient) { }
 
-  getMeasureData() {
+  getMeasureData(taskId: string) {
     console.log("get measure service called");
-    return this.http.get<MeasureSummary[]>('api/')
+    return this.http.get<MeasureSummary[]>(`api/${taskId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getSummaries() {
+    console.log("get summaries called");
+    return this.http.get<Summary[]>('api/')
       .pipe(
         catchError(this.handleError)
       );

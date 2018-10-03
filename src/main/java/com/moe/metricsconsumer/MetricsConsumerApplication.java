@@ -103,8 +103,8 @@ public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter imp
       someMeasure3.add(new Measure("org.metrics.cyclomatic.3", someSpecificMeasure3));
 
       repository.save(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure));
-      repository.save(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Location", someMeasure2));
-      repository.save(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Digit", someMeasure3));
+      repository.save(new MeasureSummary("001","Location-oppgave", "stateandbehavior.Location", someMeasure2));
+      repository.save(new MeasureSummary("001","Digit-oppgave", "stateandbehavior.Digit", someMeasure3));
 
 //      //save some dummy data
 //      List<SpecificMeasure> someSpecificMeasure4 = new ArrayList<>();
