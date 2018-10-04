@@ -17,7 +17,7 @@ export class MeasureService {
 
   getMeasureData(taskId: string) {
     console.log("get measure service called");
-    return this.http.get<MeasureSummary[]>(`api/${taskId}`)
+    return this.http.get<MeasureSummary>(`api/${taskId}`)
       .pipe(
         catchError(this.handleError)
       );

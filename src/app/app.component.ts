@@ -24,7 +24,8 @@ export class AppComponent {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private measureService: MeasureService) {
+    private measureService: MeasureService
+  ) {
     http.get('api/resource').subscribe(data => {
       console.log(data);
       this.data = data

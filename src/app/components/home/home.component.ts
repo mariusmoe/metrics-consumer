@@ -17,15 +17,12 @@ export class HomeComponent implements OnInit {
   measureSummary$;
   error;
   _object = Object;
-  studentData = [{
-    name: "Student",
-    series: []
-  }]
+
 
   single: any[];
   multi: any[];
 
-  view: any[] = [700, 400];
+  view: any[] = [300, 400];
 
   // options
   showXAxis = true;
@@ -34,7 +31,7 @@ export class HomeComponent implements OnInit {
   showLegend = true;
   showXAxisLabel = true;
   xAxisLabel = 'Country';
-  showYAxisLabel = true;
+  showYAxisLabel = false;
   yAxisLabel = 'Population';
 
   yAxisTickFormatting = function trimLabel(s, max = 40): string {
@@ -87,30 +84,34 @@ export class HomeComponent implements OnInit {
       switchMap((params: ParamMap) =>
         this.measureService.getMeasureData(params.get('taskId')))
     );
+    this.measureSummary$.subscribe( data => {
+      this.handleMeasureSummary(data);
+    })
   }
 
   onSelect(event) {
     console.log(event);
   }
 
-  getdata(taskId: string) {
-    this.measureService.getMeasureData(taskId).subscribe(
-      (data: MeasureSummary[]) => {
-        console.log(data);
-        data.forEach(measureSummary => {
-          console.log(measureSummary.id);
-
-          this.studentData[0].series.push({
-            name: measureSummary.measures[0].specificMeasures[0].name,
-            value: measureSummary.measures[0].specificMeasures[0].value
+  handleMeasureSummary(data: MeasureSummary) {
+      console.log(data);
+      let studentData = [{
+        name: "Student",
+        series: []
+      }]
+      data.measures.forEach(measure=> {
+        console.log(measure);
+        measure.specificMeasures.forEach((specificMeasure, index) => {
+          studentData[0].series.push({
+            name: measure.specificMeasures[index].name,
+            value: measure.specificMeasures[index].value
           })
         });
-        console.log( this.studentData)
-        this.multi = this.studentData;
-        this.data = {...data}
-        },
-          error => {this.error = error;}
-    );
+      });
+      console.log( studentData)
+      this.multi = [...studentData];
+      this.data = {...data}
+
   }
 
 
