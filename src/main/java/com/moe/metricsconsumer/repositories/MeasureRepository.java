@@ -3,10 +3,13 @@ package com.moe.metricsconsumer.repositories;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
+
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface MeasureRepository extends MongoRepository<MeasureSummary, String> {
 
   public MeasureSummary findFirstById(String id);
@@ -23,6 +26,8 @@ public interface MeasureRepository extends MongoRepository<MeasureSummary, Strin
 
 
   public MeasureSummary findFirstByUserIdAndTaskId(String userId, String taskId);
+
+
 
 
 }

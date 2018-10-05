@@ -7,9 +7,12 @@ import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.context.TypeExcludeFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,12 +21,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.context.annotation.FilterType.CUSTOM;
 import static org.springframework.http.HttpMethod.POST;
 
 @SpringBootApplication
@@ -106,26 +111,36 @@ public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter imp
       repository.save(new MeasureSummary("001","Location-oppgave", "stateandbehavior.Location", someMeasure2));
       repository.save(new MeasureSummary("001","Digit-oppgave", "stateandbehavior.Digit", someMeasure3));
 
-//      //save some dummy data
-//      List<SpecificMeasure> someSpecificMeasure4 = new ArrayList<>();
-//      someSpecificMeasure4.add(new SpecificMeasure("cyclomatic Complexity", 3));
-//      List<Measure> someMeasure4 = new ArrayList<>();
-//      someMeasure4.add(new Measure("org.metrics.cyclomatic", someSpecificMeasure4));
-//
-//
-//      List<SpecificMeasure> someSpecificMeasure5 = new ArrayList<>();
-//      someSpecificMeasure5.add(new SpecificMeasure("cyclomatic Complexity 2", 2));
-//      List<Measure> someMeasure5 = new ArrayList<>();
-//      someMeasure5.add(new Measure("org.metrics.cyclomatic.2", someSpecificMeasure5));
-//
-//      List<SpecificMeasure> someSpecificMeasure6 = new ArrayList<>();
-//      someSpecificMeasure6.add(new SpecificMeasure("cyclomatic Complexity 3", 6));
-//      List<Measure> someMeasure6 = new ArrayList<>();
-//      someMeasure6.add(new Measure("org.metrics.cyclomatic.3", someSpecificMeasure6));
-//
-//      repository.save(new MeasureSummary("001",true,"Account-oppgave", "stateandbehavior.Account", someMeasure4));
-//      repository.save(new MeasureSummary("001",true,"Account-oppgave", "stateandbehavior.Account", someMeasure5));
-//      repository.save(new MeasureSummary("001",true,"Account-oppgave", "stateandbehavior.Account", someMeasure6));
+
+
+
+      List<SpecificMeasure> specificMeasureSolution1 = new ArrayList<>();
+      specificMeasureSolution1.add(new SpecificMeasure("cyclomatic Complexity", 3));
+      List<SpecificMeasure> specificMeasureSolution12 = new ArrayList<>();
+      specificMeasureSolution12.add(new SpecificMeasure("for", 4));
+      specificMeasureSolution12.add(new SpecificMeasure("foreach", 6));
+      specificMeasureSolution12.add(new SpecificMeasure("while", 1));
+
+      List<Measure> someMeasureSolution = new ArrayList<>();
+      someMeasureSolution.add(new Measure("org.metrics.cyclomatic", specificMeasureSolution1));
+      someMeasureSolution.add(new Measure("no.hal.javalang", specificMeasureSolution12));
+
+
+      repository.save(new MeasureSummary("002", true,"Account-oppgave", "stateandbehavior.Account", someMeasureSolution));
+      repository.save(new MeasureSummary("002", true,"Location-oppgave", "stateandbehavior.Location", someMeasure2));
+      repository.save(new MeasureSummary("002", true, "Digit-oppgave", "stateandbehavior.Digit", someMeasure3));
+
+
+
+
+
+
+
+
+
+
+
+
 
       // fetch all
       System.out.println("MeasureSummary found with findAll():");

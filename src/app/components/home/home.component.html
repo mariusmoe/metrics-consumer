@@ -12,7 +12,7 @@
     </h1>
 
       <p>{{measureSummary$ | async | json}}</p>
-    <div *ngIf="data">
+    <div *ngIf="!loading">
       <!-- https://swimlane.github.io/ngx-charts/#/ngx-charts/heat-map  ???-->
 
       <ngx-charts-heat-map
@@ -49,11 +49,6 @@
       </div>
     </div>-->
 
-
-
-    <div>
-      Username/Passwort zum Testen: max/geheim
-    </div>
 
   </div>
 

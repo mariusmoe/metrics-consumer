@@ -5,6 +5,8 @@ import {MeasureSummary} from "../../_models/measure-summary";
 import {multi} from '../../_models/data';
 import {switchMap} from "rxjs/operators";
 import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {forkJoin, Observable} from "rxjs";
+
 
 @Component({
   selector: 'app-home',
@@ -13,7 +15,7 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 })
 export class HomeComponent implements OnInit {
 
-  data;
+  loading = true;
   measureSummary$;
   error;
   _object = Object;
@@ -22,14 +24,14 @@ export class HomeComponent implements OnInit {
   single: any[];
   multi: any[];
 
-  view: any[] = [300, 400];
+  view: any[] = [500, 280];
 
   // options
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   showLegend = true;
-  showXAxisLabel = true;
+  showXAxisLabel = false;
   xAxisLabel = 'Country';
   showYAxisLabel = false;
   yAxisLabel = 'Population';
@@ -63,6 +65,8 @@ export class HomeComponent implements OnInit {
 
 
   masterGridHeadders = ['Measure', 'your app', 'solution guide']
+  private solutionMeasureSummary$: Observable<any>;
+  private paramObservable$: Observable<any>;
 
 
 
@@ -80,39 +84,91 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.measureSummary$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        this.measureService.getMeasureData(params.get('taskId')))
+
+
+    // this.route.paramMap.pipe(
+    //   switchMap((params: ParamMap) =>
+    //     this.retriveData(params.get('taskId')))
+    // );
+    //
+    // this.paramObservable$.subscribe(data)
+
+    this.route.paramMap.subscribe( params =>
+      this.retriveData(params.get('taskId'))
+      
     );
-    this.measureSummary$.subscribe( data => {
-      this.handleMeasureSummary(data);
-    })
+
+    // this.measureSummary$.subscribe( data => {
+    //   this.handleMeasureSummary(data);
+    // })
+    // https://coryrylan.com/blog/angular-multiple-http-requests-with-rxjs
+  }
+
+  retriveData(taskId: string) {
+
+    let student = this.measureService.getMeasureData(taskId);
+    let solutionManual = this.measureService.getSolutionMeasureData(taskId);
+
+    forkJoin([student, solutionManual]).subscribe(results => {
+      // results[0] is student
+      // results[1] is solutionManual
+      console.log(results);
+      let studentData = [];
+      // Horizontal data display (long names on yaxis are cut)
+      // results.forEach((data, resultsIndex) => {
+      //   data.measures.forEach(measure=> {
+      //     measure.specificMeasures.forEach((specificMeasure, index) => {
+      //       studentData[resultsIndex].series.push({
+      //         name: measure.specificMeasures[index].name,
+      //         value: measure.specificMeasures[index].value
+      //       })
+      //     });
+      //   });
+      //
+      // })
+      results.forEach((data, resultsIndex) => {
+        data.measures.forEach(measure => {
+          measure.specificMeasures.forEach((specificMeasure, index) => {
+            studentData.push({
+              name: measure.specificMeasures[index].name,
+              series: [
+                {name: "Student", value: measure.specificMeasures[index].value},
+                {name: "Solution", value: measure.specificMeasures[index].value}
+              ]
+            })
+          })
+        })
+      });
+      console.log( studentData)
+      this.multi = [...studentData];
+      this.loading = false;
+    });
   }
 
   onSelect(event) {
     console.log(event);
   }
 
-  handleMeasureSummary(data: MeasureSummary) {
-      console.log(data);
-      let studentData = [{
-        name: "Student",
-        series: []
-      }]
-      data.measures.forEach(measure=> {
-        console.log(measure);
-        measure.specificMeasures.forEach((specificMeasure, index) => {
-          studentData[0].series.push({
-            name: measure.specificMeasures[index].name,
-            value: measure.specificMeasures[index].value
-          })
-        });
-      });
-      console.log( studentData)
-      this.multi = [...studentData];
-      this.data = {...data}
-
-  }
+  // handleMeasureSummary(data: MeasureSummary) {
+  //     console.log(data);
+  //     let studentData = [{
+  //       name: "Student",
+  //       series: []
+  //     }]
+  //     data.measures.forEach(measure=> {
+  //       console.log(measure);
+  //       measure.specificMeasures.forEach((specificMeasure, index) => {
+  //         studentData[0].series.push({
+  //           name: measure.specificMeasures[index].name,
+  //           value: measure.specificMeasures[index].value
+  //         })
+  //       });
+  //     });
+  //     console.log( studentData)
+  //     this.multi = [...studentData];
+  //     this.data = {...data}
+  //
+  // }
 
 
 

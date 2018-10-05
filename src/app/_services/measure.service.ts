@@ -23,6 +23,14 @@ export class MeasureService {
       );
   }
 
+  getSolutionMeasureData(taskId: string) {
+    console.log("get solution service called");
+    return this.http.get<MeasureSummary>(`api/solution/${taskId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   getSummaries() {
     console.log("get summaries called");
     return this.http.get<Summary[]>('api/')
