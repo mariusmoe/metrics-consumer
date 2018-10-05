@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MeasureService} from "../../_services/measure.service";
-import {MeasureSummary} from "../../_models/measure-summary";
-import {multi} from '../../_models/data';
-import {switchMap} from "rxjs/operators";
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {forkJoin, Observable} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
+import {forkJoin } from "rxjs";
 
 
 @Component({
@@ -16,12 +13,8 @@ import {forkJoin, Observable} from "rxjs";
 export class HomeComponent implements OnInit {
 
   loading = true;
-  measureSummary$;
-  error;
-  _object = Object;
+  taskName = ''
 
-
-  single: any[];
   multi: any[];
 
   view: any[] = [500, 280];
@@ -36,23 +29,10 @@ export class HomeComponent implements OnInit {
   showYAxisLabel = false;
   yAxisLabel = 'Population';
 
-  yAxisTickFormatting = function trimLabel(s, max = 40): string {
-    if(typeof s !== 'string') {
-      if(typeof s === 'number') {
-        return s + '';
-      } else {
-        return '';
-      }
-    }
+  xAxisTickFormatting = function trimLabel(s, max = 40): string {
+  return s.split(":", 2)[1];
+  };
 
-    s = s.trim();
-    if(s.length <= max) {
-      return s;
-    } else {
-      return `${s.slice(0, max)}...`;
-    }
-  }
-  // yAxisTicks = ['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',];
 
   colorScheme = {
     "name":"solar",
@@ -62,46 +42,18 @@ export class HomeComponent implements OnInit {
               "#ff8f00","#ff6f00"]
   };
 
-
-
-  masterGridHeadders = ['Measure', 'your app', 'solution guide']
-  private solutionMeasureSummary$: Observable<any>;
-  private paramObservable$: Observable<any>;
-
-
-
   constructor(
     private http: HttpClient,
     private measureService: MeasureService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    // TODO - create simple datastructure?
-    // ANd based on event click (name) find and display further data ?
-    Object.assign(this, {multi})
-
-
-  }
+  ) { }
 
   ngOnInit() {
-
-
-    // this.route.paramMap.pipe(
-    //   switchMap((params: ParamMap) =>
-    //     this.retriveData(params.get('taskId')))
-    // );
-    //
-    // this.paramObservable$.subscribe(data)
-
     this.route.paramMap.subscribe( params =>
       this.retriveData(params.get('taskId'))
-      
     );
 
-    // this.measureSummary$.subscribe( data => {
-    //   this.handleMeasureSummary(data);
-    // })
-    // https://coryrylan.com/blog/angular-multiple-http-requests-with-rxjs
   }
 
   retriveData(taskId: string) {
@@ -113,33 +65,25 @@ export class HomeComponent implements OnInit {
       // results[0] is student
       // results[1] is solutionManual
       console.log(results);
+      this.taskName = taskId;
       let studentData = [];
-      // Horizontal data display (long names on yaxis are cut)
-      // results.forEach((data, resultsIndex) => {
-      //   data.measures.forEach(measure=> {
-      //     measure.specificMeasures.forEach((specificMeasure, index) => {
-      //       studentData[resultsIndex].series.push({
-      //         name: measure.specificMeasures[index].name,
-      //         value: measure.specificMeasures[index].value
-      //       })
-      //     });
-      //   });
-      //
-      // })
-      results.forEach((data, resultsIndex) => {
-        data.measures.forEach(measure => {
+
+        // Go through all measures and add them to the heatmap
+        // Important -> Assumes that solution guide and student has the same number of measures
+        results[0].measures.forEach((measure, measureIndex) => {
           measure.specificMeasures.forEach((specificMeasure, index) => {
+            let localMeasureID = (`0${measureIndex}`).slice(-2) + (`0${index}`).slice(-2);
             studentData.push({
-              name: measure.specificMeasures[index].name,
+              name: localMeasureID + ':' + measure.specificMeasures[index].name,
               series: [
-                {name: "Student", value: measure.specificMeasures[index].value},
-                {name: "Solution", value: measure.specificMeasures[index].value}
+                {name: "Student", value: results[0].measures[measureIndex].specificMeasures[index].value},
+                {name: "Solution", value: results[1].measures[measureIndex].specificMeasures[index].value}
               ]
             })
           })
-        })
-      });
-      console.log( studentData)
+        });
+
+      console.log( studentData);
       this.multi = [...studentData];
       this.loading = false;
     });
@@ -147,29 +91,8 @@ export class HomeComponent implements OnInit {
 
   onSelect(event) {
     console.log(event);
+    console.log(event.series.split(":", 2)[0]);
   }
-
-  // handleMeasureSummary(data: MeasureSummary) {
-  //     console.log(data);
-  //     let studentData = [{
-  //       name: "Student",
-  //       series: []
-  //     }]
-  //     data.measures.forEach(measure=> {
-  //       console.log(measure);
-  //       measure.specificMeasures.forEach((specificMeasure, index) => {
-  //         studentData[0].series.push({
-  //           name: measure.specificMeasures[index].name,
-  //           value: measure.specificMeasures[index].value
-  //         })
-  //       });
-  //     });
-  //     console.log( studentData)
-  //     this.multi = [...studentData];
-  //     this.data = {...data}
-  //
-  // }
-
 
 
 

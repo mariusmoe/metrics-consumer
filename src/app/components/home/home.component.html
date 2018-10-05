@@ -1,14 +1,8 @@
 <div class="main-content">
   <div>
-    <p>
-      home works!
-    </p>
-    <button class="btn btn-default" (click)="getdata()">
-      getdata
-    </button>
 
     <h1 *ngIf="!name">
-      Hallo
+      {{taskName}}
     </h1>
 
       <p>{{measureSummary$ | async | json}}</p>
@@ -28,7 +22,7 @@
         [xAxisLabel]="xAxisLabel"
         [yAxisLabel]="yAxisLabel"
         (select)="onSelect($event)"
-        [yAxisTickFormatting]="yAxisTickFormatting"
+        [xAxisTickFormatting]="xAxisTickFormatting"
 
       >
       </ngx-charts-heat-map>
