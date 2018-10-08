@@ -46,29 +46,29 @@ public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter imp
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
+//    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
 
 
-//     http
-//      .csrf().disable()
-//      .authorizeRequests()
-//      .antMatchers("/index.html", "/login").permitAll()
-//      .anyRequest().authenticated()
-//      .and().logout()
-//      .logoutSuccessUrl("/some/login")
-//      .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-//      .deleteCookies("JSESSIONID").invalidateHttpSession(false);
+     http
+      .csrf().disable()
+      .authorizeRequests()
+      .antMatchers("/index.html", "/login").permitAll()
+      .anyRequest().authenticated()
+      .and().logout()
+      .logoutSuccessUrl("/some/login")
+      .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+      .deleteCookies("JSESSIONID").invalidateHttpSession(false);
 
       // Should redirect onlogoutSuccess to bellow, but then cors and csrf has to be fixed!
 //    https://auth.dataporten.no/logout
 
   }
 
-  // TODO - remove!
-  @Override
-  public void configure(WebSecurity webSecurity) throws Exception {
-    webSecurity.ignoring().antMatchers(POST, "/api");
-  }
+//  // TODO - remove!
+//  @Override
+//  public void configure(WebSecurity webSecurity) throws Exception {
+//    webSecurity.ignoring().antMatchers(POST, "/api");
+//  }
 
   @Bean
   CorsConfigurationSource corsConfigurationSource() {

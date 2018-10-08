@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
   multi: any[];
 
-  view: any[] = [500, 280];
+  view: any[] = [500, 300];
 
   // options
   showXAxis = true;
