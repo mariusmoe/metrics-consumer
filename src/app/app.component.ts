@@ -30,6 +30,7 @@ export class AppComponent {
       console.log(data);
       this.data = data
       this.isLoggedIn = true;
+      localStorage.setItem('currentUser', JSON.stringify(data));
     });
     this.measureService.getSummaries().subscribe(
       (data: Summary[]) => {
@@ -44,6 +45,12 @@ export class AppComponent {
   }
 
   logout() {
+    try {
+      localStorage.removeItem('currentUser');
+    } catch (e) {
+      console.error(e);
+    }
+
     this.http.post('logout', {}).subscribe(
       res => {
         console.log(res)

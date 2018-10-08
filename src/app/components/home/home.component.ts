@@ -62,11 +62,12 @@ export class HomeComponent implements OnInit {
     let solutionManual = this.measureService.getSolutionMeasureData(taskId);
 
     forkJoin([student, solutionManual]).subscribe(results => {
-      // results[0] is student
-      // results[1] is solutionManual
-      console.log(results);
-      this.taskName = taskId;
-      let studentData = [];
+      if (results[0]) {
+        // results[0] is student
+        // results[1] is solutionManual
+        console.log(results);
+        this.taskName = taskId;
+        let studentData = [];
 
         // Go through all measures and add them to the heatmap
         // Important -> Assumes that solution guide and student has the same number of measures
@@ -83,9 +84,11 @@ export class HomeComponent implements OnInit {
           })
         });
 
-      console.log( studentData);
-      this.multi = [...studentData];
-      this.loading = false;
+        console.log( studentData);
+        this.multi = [...studentData];
+        this.loading = false;
+      }
+
     });
   }
 

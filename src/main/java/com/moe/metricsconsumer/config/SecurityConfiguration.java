@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
 //    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
 
-    // READ THIS to fix "always redirect unauthenticated requests" 
+    // READ THIS to fix "always redirect unauthenticated requests"
     // https://stackoverflow.com/questions/4269686/spring-security-need-403-error-not-redirect/30935622
 
     http
@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/","/*.js","/*.js.map","/index.html", "/login", "/static/**").permitAll()
       .anyRequest().authenticated()
       .and().logout()
-      .logoutSuccessUrl("/some/login")
+      .logoutSuccessUrl("/user/login")
       .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
       .deleteCookies("JSESSIONID").invalidateHttpSession(false);
 

@@ -1,6 +1,13 @@
 <div class="main-content">
-  <br>
-  <h1>
-    404 not-found
-  </h1>
+  <div *ngIf="!loggedIn">
+    <br>
+    <h1>
+      Log in to see content!
+    </h1>
+
+    <a href="login">login</a>
+  </div>
+  <div *ngIf="loggedIn">
+    <- Pick a task from the menu to the left!
+  </div>
 </div>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Summary} from "../../_models/measure-summary";
+import {AuthService} from "../../_services/auth.service";
 
 @Component({
   selector: 'app-not-found',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotFoundComponent implements OnInit {
 
-  constructor() { }
+  loggedIn = false;
 
-  ngOnInit() {
-  }
+  constructor(private authService: AuthService) { }
+
+  ngOnInit() {}
+  // ngOnInit() {
+  //   this.authService.isLoggedIn().subscribe(
+  //     (res: boolean) => {
+  //       console.log(res);
+  //       this.loggedIn = res;
+  //     });
+  // }
+
+
+
+
 
 }
