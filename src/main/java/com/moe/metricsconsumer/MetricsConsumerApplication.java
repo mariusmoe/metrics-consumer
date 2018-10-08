@@ -7,21 +7,16 @@ import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.boot.context.TypeExcludeFilter;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 
 
 import java.util.ArrayList;
@@ -32,43 +27,31 @@ import static org.springframework.context.annotation.FilterType.CUSTOM;
 import static org.springframework.http.HttpMethod.POST;
 
 @SpringBootApplication
-@EnableOAuth2Sso
-public class MetricsConsumerApplication extends WebSecurityConfigurerAdapter implements CommandLineRunner {
+public class MetricsConsumerApplication implements CommandLineRunner {
 
   @Autowired
   private MeasureRepository repository;
 
 
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
         SpringApplication.run(MetricsConsumerApplication.class, args);
     }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-//    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
 
 
-     http
-      .csrf().disable()
-      .authorizeRequests()
-      .antMatchers("/index.html", "/login").permitAll()
-      .anyRequest().authenticated()
-      .and().logout()
-      .logoutSuccessUrl("/some/login")
-      .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-      .deleteCookies("JSESSIONID").invalidateHttpSession(false);
 
-      // Should redirect onlogoutSuccess to bellow, but then cors and csrf has to be fixed!
-//    https://auth.dataporten.no/logout
 
-  }
+
+
 
 //  // TODO - remove!
 //  @Override
 //  public void configure(WebSecurity webSecurity) throws Exception {
 //    webSecurity.ignoring().antMatchers(POST, "/api");
 //  }
+
+
 
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
