@@ -3,6 +3,7 @@ import { RouterModule, Routes }  from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomeComponent } from './components/home/home.component';
 import {AuthGuard} from "./_guards/auth.guard";
+import {SettingsComponent} from "./components/settings/settings.component";
 
 
 
@@ -11,6 +12,7 @@ const appRoutes: Routes = [
   { path: 'login', component: HomeComponent },
   { path: 'user/login', component:  NotFoundComponent},
   { path: 'summary/:taskId', component:  HomeComponent, canActivate: [AuthGuard]},
+  { path: 'settings', component:  SettingsComponent, canActivate: [AuthGuard]},
   { path: '**', component:  NotFoundComponent}
 ];
 
@@ -18,7 +20,7 @@ const appRoutes: Routes = [
   imports: [
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      { enableTracing: false } // <-- debugging purposes only
     )
   ],
   exports: [

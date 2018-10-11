@@ -5,6 +5,7 @@ import {Router, RouterOutlet} from "@angular/router";
 import {MeasureSummary, Summary} from "./_models/measure-summary";
 import {MeasureService} from "./_services/measure.service";
 import {Observable} from "rxjs";
+import {AuthService} from "./_services/auth.service";
 
 
 @Component({
@@ -24,14 +25,11 @@ export class AppComponent {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private measureService: MeasureService
+    private measureService: MeasureService,
+    private authService: AuthService
   ) {
-    http.get('api/resource').subscribe(data => {
-      console.log(data);
-      this.data = data
-      this.isLoggedIn = true;
-      localStorage.setItem('currentUser', JSON.stringify(data));
-    });
+    this.authService.getResource();
+
     this.measureService.getSummaries().subscribe(
       (data: Summary[]) => {
         console.log(data);
@@ -45,21 +43,13 @@ export class AppComponent {
   }
 
   logout() {
-    try {
-      localStorage.removeItem('currentUser');
-    } catch (e) {
-      console.error(e);
-    }
-
-    this.http.post('logout', {}).subscribe(
-      res => {
-        console.log(res)
+    this.authService.logout().subscribe(result => {
+      if (result === true) {
         this.router.navigateByUrl('/login');
-      }, error => {
-        // We do not need to parse the response. As long as the session is destroyed we are happy.
-        console.log(error)
-        this.router.navigateByUrl('/login');
-      })
+      } else {
+        console.error('Could not logout at this moment');
+      }
+    })
   }
 
 

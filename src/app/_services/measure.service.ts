@@ -39,6 +39,13 @@ export class MeasureService {
       );
   }
 
+  deleteAllUserdata() {
+    return this.http.delete<MeasureSummary[]>("api/all/delete")
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
 
 
 

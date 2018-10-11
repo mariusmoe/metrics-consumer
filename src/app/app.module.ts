@@ -10,20 +10,22 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatMenuModule,
-  MatSidenavModule
+  MatSidenavModule, MatTooltipModule, MatCardModule
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { SettingsComponent } from './components/settings/settings.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    SettingsComponent
 
   ],
   imports: [
@@ -39,7 +41,9 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
     MatMenuModule,
     MatSidenavModule,
     AppRoutingModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatTooltipModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

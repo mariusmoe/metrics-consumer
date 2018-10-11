@@ -15,7 +15,8 @@ public interface MeasureRepository extends MongoRepository<MeasureSummary, Strin
   public MeasureSummary findFirstById(String id);
   public MeasureSummary getFirstByTaskName(String taskName);
   public List<MeasureSummary> findByTaskName(String taskName);
-
+  public List<MeasureSummary> removeById(String id);
+  public List<MeasureSummary> removeAllByUserId(String userId);
   /**
    * Returns a list of all tasknames and taskIds that the user has registered
    * @param userId  The userId of the user Should be derived from principal!

@@ -2,6 +2,9 @@ package com.moe.metricsconsumer.apiErrorHandling;
 
 import org.springframework.util.StringUtils;
 
+/**
+ * Custom error for not found
+ */
 public class EntityNotFoundException extends Exception {
 
   public EntityNotFoundException(Class clazz, String... searchParams) {

@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {MeasureService} from "../../_services/measure.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {forkJoin } from "rxjs";
+import {MeasureSummary} from "../../_models/measure-summary";
 
 
 @Component({
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   taskName = ''
 
   multi: any[];
+  measureSummaryStudent: MeasureSummary;
 
   view: any[] = [500, 300];
 
@@ -68,6 +70,7 @@ export class HomeComponent implements OnInit {
         console.log(results);
         this.taskName = taskId;
         let studentData = [];
+        this.measureSummaryStudent = results[0];
 
         // Go through all measures and add them to the heatmap
         // Important -> Assumes that solution guide and student has the same number of measures
