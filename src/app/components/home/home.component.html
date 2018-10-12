@@ -3,35 +3,40 @@
 
 
     <div *ngIf="!name">
-      <mat-card>
+      <mat-card class="measure-card">
         <mat-card-title>{{taskName}}</mat-card-title>
       </mat-card>
 
     </div>
 
-      <p>{{measureSummary$ | async | json}}</p>
     <div *ngIf="!loading">
       <!-- https://swimlane.github.io/ngx-charts/#/ngx-charts/heat-map  ???-->
 
-      <ngx-charts-heat-map
-        [view]="view"
-        [scheme]="colorScheme"
-        [results]="multi"
-        [legend]="showLegend"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        (select)="onSelect($event)"
-        [xAxisTickFormatting]="xAxisTickFormatting"
+      <div class="heatmap-container">
+        <ngx-charts-heat-map
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="multi"
+          [legend]="showLegend"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          (select)="onSelect($event)"
+          [xAxisTickFormatting]="xAxisTickFormatting"
 
+        >
+        </ngx-charts-heat-map>
+      </div>
+
+
+      <mat-card *ngFor="let specificMeasure of measureSummaryStudent.measures; let i = index"
+                id="card-{{i}}"
+                class="measure-card"
       >
-      </ngx-charts-heat-map>
-
-      <mat-card *ngFor="let specificMeasure of measureSummaryStudent.measures; let i = index">
         <mat-card-title>{{specificMeasure.measureProvider}}</mat-card-title>
         <p *ngFor="let measure of specificMeasure.specificMeasures">{{measure.name}} : {{measure.value}}</p>
       </mat-card>

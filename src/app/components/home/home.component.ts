@@ -71,12 +71,14 @@ export class HomeComponent implements OnInit {
         this.taskName = taskId;
         let studentData = [];
         this.measureSummaryStudent = results[0];
+        let count = 0;
 
         // Go through all measures and add them to the heatmap
         // Important -> Assumes that solution guide and student has the same number of measures
         results[0].measures.forEach((measure, measureIndex) => {
           measure.specificMeasures.forEach((specificMeasure, index) => {
-            let localMeasureID = (`0${measureIndex}`).slice(-2) + (`0${index}`).slice(-2);
+            let localMeasureID = count//(`0${measureIndex}`).slice(-2) + (`0${index}`).slice(-2);
+            count++;
             studentData.push({
               name: localMeasureID + ':' + measure.specificMeasures[index].name,
               series: [
