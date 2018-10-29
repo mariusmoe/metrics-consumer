@@ -1,9 +1,21 @@
 package com.moe.metricsconsumer;
 
 import com.moe.metricsconsumer.repositories.MeasureRepository;
+import com.moe.metricsconsumer.fv.DelegatedFeatures;
+import com.moe.metricsconsumer.fv.DerivedFeatures;
+import com.moe.metricsconsumer.fv.ExpressionFeatures;
+import com.moe.metricsconsumer.fv.FeatureList;
+import com.moe.metricsconsumer.fv.FeatureValued;
+import com.moe.metricsconsumer.fv.FilteredFeatures2;
+import com.moe.metricsconsumer.fv.FvFactory;
+import com.moe.metricsconsumer.fv.impl.FeatureListImpl;
+import com.moe.metricsconsumer.fv.util.Op1;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
+
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -40,8 +52,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
 
 
-
-
+  
+  	
 
 
 
@@ -69,7 +81,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
       //save some dummy data
       List<SpecificMeasure> someSpecificMeasure = new ArrayList<>();
-      someSpecificMeasure.add(new SpecificMeasure("cyclomatic Complexity", 7));
+      someSpecificMeasure.add(new SpecificMeasure("cyclomatic complexity", 7));
       List<SpecificMeasure> someSpecificMeasure21 = new ArrayList<>();
       someSpecificMeasure21.add(new SpecificMeasure("for", 7));
       someSpecificMeasure21.add(new SpecificMeasure("foreach", 4));
@@ -81,12 +93,12 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
 
       List<SpecificMeasure> someSpecificMeasure2 = new ArrayList<>();
-      someSpecificMeasure2.add(new SpecificMeasure("cyclomatic Complexity 2", 3));
+      someSpecificMeasure2.add(new SpecificMeasure("cyclomatic complexity 2", 3));
       List<Measure> someMeasure2 = new ArrayList<>();
       someMeasure2.add(new Measure("org.metrics.cyclomatic.2", someSpecificMeasure2));
 
       List<SpecificMeasure> someSpecificMeasure3 = new ArrayList<>();
-      someSpecificMeasure3.add(new SpecificMeasure("cyclomatic Complexity 3", 5));
+      someSpecificMeasure3.add(new SpecificMeasure("cyclomatic complexity 3", 5));
       List<Measure> someMeasure3 = new ArrayList<>();
       someMeasure3.add(new Measure("org.metrics.cyclomatic.3", someSpecificMeasure3));
 
@@ -98,7 +110,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
 
       List<SpecificMeasure> specificMeasureSolution1 = new ArrayList<>();
-      specificMeasureSolution1.add(new SpecificMeasure("cyclomatic Complexity", 3));
+      specificMeasureSolution1.add(new SpecificMeasure("cyclomatic complexity", 3));
       List<SpecificMeasure> specificMeasureSolution12 = new ArrayList<>();
       specificMeasureSolution12.add(new SpecificMeasure("for", 4));
       specificMeasureSolution12.add(new SpecificMeasure("foreach", 6));
@@ -118,8 +130,49 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
 
 
+      FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+		featureList.getFeatures().put("f1",  1.0);
+		featureList.getFeatures().put("f2",  2.0);
+       
+       System.out.println("------------------------------------");
+       System.out.println("------------------------------------");
+       System.out.println("------------------------------------");
+       System.out.println(featureList.toString());
+       System.out.println(featureList.getFeatureNames());
+       featureList.set(FeatureListImpl.valueOf("f1", 3.0, "f3", 4.0), false);
+       System.out.println(featureList.toString());
+       featureList.set(FeatureListImpl.valueOf("f1", 9.0, "f5", 4.0), true);
+       System.out.println(featureList.toString());
+       System.out.println("************************************");
+       featureList.apply(Op1.NEG);
+       System.out.println(featureList.toString());
+       FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
+       
+       
+		FeatureList f = FvFactory.eINSTANCE.createFeatureList();
+		f.getFeatures().put("m_s",  1.0);
+		f.getFeatures().put("n",  2.0);
+		ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
+		//expressionFeatures.getContained().add(f);
+		expressionFeatures.setOther(f);
+		expressionFeatures.getFeatures().put("sum", "m_s+n");
+		expressionFeatures.getFeatures().put("product and one", "m_s * n + 1");
 
+		//expressionFeatures.getFeatures().put("average", "");
+		
+		
+		System.out.println(expressionFeatures.getFeatureNames());
+		System.out.println(expressionFeatures.getFeatures().toString());
 
+		System.out.println(expressionFeatures.getFeatureValue("sum"));
+		System.out.println(expressionFeatures.getFeatureValue("product and one"));
+
+		// System.out.println(expressionFeatures.getFeatureValue("average"));
+
+       System.out.println("------------------------------------");
+       System.out.println("------------------------------------");
+       System.out.println("------------------------------------");
+       
 
 
 

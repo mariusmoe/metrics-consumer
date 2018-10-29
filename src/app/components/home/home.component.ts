@@ -53,11 +53,17 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe( params =>
-      this.retriveData(params.get('taskId'))
-    );
+      // this.retriveData(params.get('taskId'))
+      this.retriveFvData(params.get('taskId'))
+
+      );
 
   }
 
+  /**
+   * Retreive unconfigured measure data
+   * @param taskId task id 
+   */
   retriveData(taskId: string) {
 
     let student = this.measureService.getMeasureData(taskId);
@@ -92,6 +98,49 @@ export class HomeComponent implements OnInit {
         console.log( studentData);
         this.multi = [...studentData];
         this.loading = false;
+      }
+
+    });
+  }ø
+
+  /**
+   * Retreive the Fv for the specified task
+   * @param taskId 
+   */
+  retriveFvData (taskId: string) {
+    let student = this.measureService.getMeasureFvData(taskId);
+    let solutionManual = this.measureService.getSolutionFvMeasureData(taskId);
+    console.log('FV');
+    
+
+    forkJoin([student, solutionManual]).subscribe(results => {
+      if (results[0]) {
+        // results[0] is student
+        // results[1] is solutionManual
+        console.log(results);
+        this.taskName = taskId;
+        let studentData = [];
+        
+        let count = 0;
+
+        // Go through all measures and add them to the heatmap
+        // Important -> Assumes that solution guide and student has the same number of measures
+        results[0].featureNames.forEach((featureName, index) => {
+          console.log(results[0].features[index][Object.keys(results[0].features[index])[0]]);
+          
+          
+          studentData.push({
+            name: 'NYI:' +featureName,
+            series: [
+              { name: "Student", value: results[0].features[index][Object.keys(results[0].features[index])[0]] },
+              { name: "Solution", value: results[1].features[index][Object.keys(results[0].features[index])[0]] }
+            ]
+          })
+        })
+
+        console.log( studentData);
+        this.loading = false;
+        this.multi = [...studentData];
       }
 
     });

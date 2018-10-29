@@ -1,0 +1,63 @@
+/**
+ */
+package com.moe.metricsconsumer.impl;
+
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+
+import com.moe.metricsconsumer.exercise.ExercisePackage;
+import com.moe.metricsconsumer.exercise.StringEditAnswer;
+
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>String Edit Answer</b></em>'.
+ * <!-- end-user-doc -->
+ *
+ * @generated
+ */
+public abstract class StringEditAnswerImpl extends TaskAnswerImpl implements StringEditAnswer {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StringEditAnswerImpl() {
+		super();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EClass eStaticClass() {
+		return ExercisePackage.Literals.STRING_EDIT_ANSWER;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String getEditorPath() {
+		return "answer.txt";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ExercisePackage.STRING_EDIT_ANSWER___GET_EDITOR_PATH:
+				return getEditorPath();
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+} //StringEditAnswerImpl

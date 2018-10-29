@@ -6,6 +6,7 @@ import {Measure, MeasureSummary, Summary} from "../_models/measure-summary";
 
 
 import {catchError} from "rxjs/operators";
+import { FeatureList } from '../_models/feature-list';
 
 
 @Injectable({
@@ -26,6 +27,22 @@ export class MeasureService {
   getSolutionMeasureData(taskId: string) {
     console.log("get solution service called");
     return this.http.get<MeasureSummary>(`api/solution/${taskId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getMeasureFvData(taskId: string) {
+    console.log("get measure service called");
+    return this.http.get<FeatureList>(`api/fv/${taskId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getSolutionFvMeasureData(taskId: string) {
+    console.log("get solution service called");
+    return this.http.get<FeatureList>(`api/fv/${taskId}`)
       .pipe(
         catchError(this.handleError)
       );
