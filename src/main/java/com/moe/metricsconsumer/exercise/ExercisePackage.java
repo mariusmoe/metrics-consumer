@@ -57,14 +57,14 @@ public interface ExercisePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ExercisePackage eINSTANCE = com.moe.metricsconsumer.impl.ExercisePackageImpl.init();
+	ExercisePackage eINSTANCE = com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ExerciseImpl <em>Exercise</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ExerciseImpl <em>Exercise</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ExerciseImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercise()
+	 * @see com.moe.metricsconsumer.exercise.impl.ExerciseImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercise()
 	 * @generated
 	 */
 	int EXERCISE = 0;
@@ -124,11 +124,11 @@ public interface ExercisePackage extends EPackage {
 	int EXERCISE_OPERATION_COUNT = 1;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ExerciseProposalsImpl <em>Proposals</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ExerciseProposalsImpl <em>Proposals</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ExerciseProposalsImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExerciseProposals()
+	 * @see com.moe.metricsconsumer.exercise.impl.ExerciseProposalsImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExerciseProposals()
 	 * @generated
 	 */
 	int EXERCISE_PROPOSALS = 1;
@@ -179,11 +179,11 @@ public interface ExercisePackage extends EPackage {
 	int EXERCISE_PROPOSALS_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.AbstractExercisePartImpl <em>Abstract Exercise Part</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractExercisePartImpl <em>Abstract Exercise Part</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.AbstractExercisePartImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractExercisePart()
+	 * @see com.moe.metricsconsumer.exercise.impl.AbstractExercisePartImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractExercisePart()
 	 * @generated
 	 */
 	int ABSTRACT_EXERCISE_PART = 2;
@@ -234,11 +234,11 @@ public interface ExercisePackage extends EPackage {
 	int ABSTRACT_EXERCISE_PART_OPERATION_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ExercisePartProposalsImpl <em>Part Proposals</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ExercisePartProposalsImpl <em>Part Proposals</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ExercisePartProposalsImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercisePartProposals()
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePartProposalsImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercisePartProposals()
 	 * @generated
 	 */
 	int EXERCISE_PART_PROPOSALS = 3;
@@ -280,11 +280,11 @@ public interface ExercisePackage extends EPackage {
 	int EXERCISE_PART_PROPOSALS_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ExercisePartRefImpl <em>Part Ref</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ExercisePartRefImpl <em>Part Ref</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ExercisePartRefImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercisePartRef()
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePartRefImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercisePartRef()
 	 * @generated
 	 */
 	int EXERCISE_PART_REF = 4;
@@ -344,11 +344,11 @@ public interface ExercisePackage extends EPackage {
 	int EXERCISE_PART_REF_OPERATION_COUNT = ABSTRACT_EXERCISE_PART_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ExercisePartImpl <em>Part</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ExercisePartImpl <em>Part</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ExercisePartImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercisePart()
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePartImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercisePart()
 	 * @generated
 	 */
 	int EXERCISE_PART = 5;
@@ -426,11 +426,11 @@ public interface ExercisePackage extends EPackage {
 	int EXERCISE_PART_OPERATION_COUNT = ABSTRACT_EXERCISE_PART_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.AbstractTaskImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractTask()
+	 * @see com.moe.metricsconsumer.exercise.impl.AbstractTaskImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractTask()
 	 * @generated
 	 */
 	int ABSTRACT_TASK = 6;
@@ -472,11 +472,11 @@ public interface ExercisePackage extends EPackage {
 	int ABSTRACT_TASK_OPERATION_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.TaskRefImpl <em>Task Ref</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.TaskRefImpl <em>Task Ref</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.TaskRefImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskRef()
+	 * @see com.moe.metricsconsumer.exercise.impl.TaskRefImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskRef()
 	 * @generated
 	 */
 	int TASK_REF = 7;
@@ -527,11 +527,11 @@ public interface ExercisePackage extends EPackage {
 	int TASK_REF_OPERATION_COUNT = ABSTRACT_TASK_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.TaskImpl <em>Task</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.TaskImpl <em>Task</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.TaskImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTask()
+	 * @see com.moe.metricsconsumer.exercise.impl.TaskImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTask()
 	 * @generated
 	 */
 	int TASK = 8;
@@ -600,11 +600,11 @@ public interface ExercisePackage extends EPackage {
 	int TASK_OPERATION_COUNT = ABSTRACT_TASK_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.QuestionImpl <em>Question</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.QuestionImpl <em>Question</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.QuestionImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getQuestion()
+	 * @see com.moe.metricsconsumer.exercise.impl.QuestionImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getQuestion()
 	 * @generated
 	 */
 	int QUESTION = 9;
@@ -628,11 +628,11 @@ public interface ExercisePackage extends EPackage {
 	int QUESTION_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.StringQuestionImpl <em>String Question</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.StringQuestionImpl <em>String Question</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.StringQuestionImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringQuestion()
+	 * @see com.moe.metricsconsumer.exercise.impl.StringQuestionImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringQuestion()
 	 * @generated
 	 */
 	int STRING_QUESTION = 10;
@@ -665,11 +665,11 @@ public interface ExercisePackage extends EPackage {
 	int STRING_QUESTION_OPERATION_COUNT = QUESTION_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.AnswerImpl <em>Answer</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.AnswerImpl <em>Answer</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.AnswerImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAnswer()
+	 * @see com.moe.metricsconsumer.exercise.impl.AnswerImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAnswer()
 	 * @generated
 	 */
 	int ANSWER = 11;
@@ -720,11 +720,11 @@ public interface ExercisePackage extends EPackage {
 	int ANSWER_OPERATION_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ProposalImpl <em>Proposal</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ProposalImpl <em>Proposal</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ProposalImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getProposal()
+	 * @see com.moe.metricsconsumer.exercise.impl.ProposalImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getProposal()
 	 * @generated
 	 */
 	int PROPOSAL = 12;
@@ -793,11 +793,11 @@ public interface ExercisePackage extends EPackage {
 	int PROPOSAL_OPERATION_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.TaskAnswerImpl <em>Task Answer</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.TaskAnswerImpl <em>Task Answer</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.TaskAnswerImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskAnswer()
+	 * @see com.moe.metricsconsumer.exercise.impl.TaskAnswerImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskAnswer()
 	 * @generated
 	 */
 	int TASK_ANSWER = 13;
@@ -866,11 +866,11 @@ public interface ExercisePackage extends EPackage {
 	int TASK_ANSWER_OPERATION_COUNT = ANSWER_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.TaskProposalImpl <em>Task Proposal</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.TaskProposalImpl <em>Task Proposal</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.TaskProposalImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskProposal()
+	 * @see com.moe.metricsconsumer.exercise.impl.TaskProposalImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskProposal()
 	 * @generated
 	 */
 	int TASK_PROPOSAL = 14;
@@ -1002,11 +1002,11 @@ public interface ExercisePackage extends EPackage {
 	int TASK_PROPOSAL_OPERATION_COUNT = PROPOSAL_OPERATION_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.TaskEventImpl <em>Task Event</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.TaskEventImpl <em>Task Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.TaskEventImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskEvent()
+	 * @see com.moe.metricsconsumer.exercise.impl.TaskEventImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskEvent()
 	 * @generated
 	 */
 	int TASK_EVENT = 15;
@@ -1102,11 +1102,11 @@ public interface ExercisePackage extends EPackage {
 	int TASK_EVENT_OPERATION_COUNT = FvPackage.EFEATURE_OBJECT_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.StringEditTaskProposalImpl <em>String Edit Task Proposal</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.StringEditTaskProposalImpl <em>String Edit Task Proposal</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.StringEditTaskProposalImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringEditTaskProposal()
+	 * @see com.moe.metricsconsumer.exercise.impl.StringEditTaskProposalImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringEditTaskProposal()
 	 * @generated
 	 */
 	int STRING_EDIT_TASK_PROPOSAL = 16;
@@ -1238,11 +1238,11 @@ public interface ExercisePackage extends EPackage {
 	int STRING_EDIT_TASK_PROPOSAL_OPERATION_COUNT = TASK_PROPOSAL_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.StringEditAnswerImpl <em>String Edit Answer</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.StringEditAnswerImpl <em>String Edit Answer</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.StringEditAnswerImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringEditAnswer()
+	 * @see com.moe.metricsconsumer.exercise.impl.StringEditAnswerImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringEditAnswer()
 	 * @generated
 	 */
 	int STRING_EDIT_ANSWER = 17;
@@ -1320,11 +1320,11 @@ public interface ExercisePackage extends EPackage {
 	int STRING_EDIT_ANSWER_OPERATION_COUNT = TASK_ANSWER_OPERATION_COUNT + 1;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.AbstractStringEditEventImpl <em>Abstract String Edit Event</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractStringEditEventImpl <em>Abstract String Edit Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.AbstractStringEditEventImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractStringEditEvent()
+	 * @see com.moe.metricsconsumer.exercise.impl.AbstractStringEditEventImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractStringEditEvent()
 	 * @generated
 	 */
 	int ABSTRACT_STRING_EDIT_EVENT = 18;
@@ -1456,11 +1456,11 @@ public interface ExercisePackage extends EPackage {
 	int ABSTRACT_STRING_EDIT_EVENT_OPERATION_COUNT = TASK_EVENT_OPERATION_COUNT + 2;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.AbstractStringEditImpl <em>Abstract String Edit</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractStringEditImpl <em>Abstract String Edit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.AbstractStringEditImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractStringEdit()
+	 * @see com.moe.metricsconsumer.exercise.impl.AbstractStringEditImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractStringEdit()
 	 * @generated
 	 */
 	int ABSTRACT_STRING_EDIT = 19;
@@ -1502,11 +1502,11 @@ public interface ExercisePackage extends EPackage {
 	int ABSTRACT_STRING_EDIT_OPERATION_COUNT = 2;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.RelativeStringEditImpl <em>Relative String Edit</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.RelativeStringEditImpl <em>Relative String Edit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.RelativeStringEditImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getRelativeStringEdit()
+	 * @see com.moe.metricsconsumer.exercise.impl.RelativeStringEditImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getRelativeStringEdit()
 	 * @generated
 	 */
 	int RELATIVE_STRING_EDIT = 20;
@@ -1557,11 +1557,11 @@ public interface ExercisePackage extends EPackage {
 	int RELATIVE_STRING_EDIT_OPERATION_COUNT = ABSTRACT_STRING_EDIT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.StringEditImpl <em>String Edit</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.StringEditImpl <em>String Edit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.StringEditImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringEdit()
+	 * @see com.moe.metricsconsumer.exercise.impl.StringEditImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringEdit()
 	 * @generated
 	 */
 	int STRING_EDIT = 21;
@@ -1612,11 +1612,11 @@ public interface ExercisePackage extends EPackage {
 	int STRING_EDIT_OPERATION_COUNT = ABSTRACT_STRING_EDIT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.ReplaceSubstringEditImpl <em>Replace Substring Edit</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.ReplaceSubstringEditImpl <em>Replace Substring Edit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ReplaceSubstringEditImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getReplaceSubstringEdit()
+	 * @see com.moe.metricsconsumer.exercise.impl.ReplaceSubstringEditImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getReplaceSubstringEdit()
 	 * @generated
 	 */
 	int REPLACE_SUBSTRING_EDIT = 22;
@@ -1694,11 +1694,11 @@ public interface ExercisePackage extends EPackage {
 	int REPLACE_SUBSTRING_EDIT_OPERATION_COUNT = STRING_EDIT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.moe.metricsconsumer.impl.MarkerInfoImpl <em>Marker Info</em>}' class.
+	 * The meta object id for the '{@link com.moe.metricsconsumer.exercise.impl.MarkerInfoImpl <em>Marker Info</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.MarkerInfoImpl
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getMarkerInfo()
+	 * @see com.moe.metricsconsumer.exercise.impl.MarkerInfoImpl
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getMarkerInfo()
 	 * @generated
 	 */
 	int MARKER_INFO = 23;
@@ -1761,7 +1761,7 @@ public interface ExercisePackage extends EPackage {
 	 * The meta object id for the '<em>ETimestamp</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getETimestamp()
+	 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getETimestamp()
 	 * @generated
 	 */
 	int ETIMESTAMP = 24;
@@ -2668,11 +2668,11 @@ public interface ExercisePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ExerciseImpl <em>Exercise</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ExerciseImpl <em>Exercise</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ExerciseImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercise()
+		 * @see com.moe.metricsconsumer.exercise.impl.ExerciseImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercise()
 		 * @generated
 		 */
 		EClass EXERCISE = eINSTANCE.getExercise();
@@ -2710,11 +2710,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation EXERCISE___CREATE_PROPOSALS = eINSTANCE.getExercise__CreateProposals();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ExerciseProposalsImpl <em>Proposals</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ExerciseProposalsImpl <em>Proposals</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ExerciseProposalsImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExerciseProposals()
+		 * @see com.moe.metricsconsumer.exercise.impl.ExerciseProposalsImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExerciseProposals()
 		 * @generated
 		 */
 		EClass EXERCISE_PROPOSALS = eINSTANCE.getExerciseProposals();
@@ -2744,11 +2744,11 @@ public interface ExercisePackage extends EPackage {
 		EReference EXERCISE_PROPOSALS__ALL_PROPOSALS = eINSTANCE.getExerciseProposals_AllProposals();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.AbstractExercisePartImpl <em>Abstract Exercise Part</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractExercisePartImpl <em>Abstract Exercise Part</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.AbstractExercisePartImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractExercisePart()
+		 * @see com.moe.metricsconsumer.exercise.impl.AbstractExercisePartImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractExercisePart()
 		 * @generated
 		 */
 		EClass ABSTRACT_EXERCISE_PART = eINSTANCE.getAbstractExercisePart();
@@ -2778,11 +2778,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation ABSTRACT_EXERCISE_PART___CREATE_PROPOSALS = eINSTANCE.getAbstractExercisePart__CreateProposals();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ExercisePartProposalsImpl <em>Part Proposals</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ExercisePartProposalsImpl <em>Part Proposals</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ExercisePartProposalsImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercisePartProposals()
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePartProposalsImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercisePartProposals()
 		 * @generated
 		 */
 		EClass EXERCISE_PART_PROPOSALS = eINSTANCE.getExercisePartProposals();
@@ -2804,11 +2804,11 @@ public interface ExercisePackage extends EPackage {
 		EReference EXERCISE_PART_PROPOSALS__EXERCISE_PART = eINSTANCE.getExercisePartProposals_ExercisePart();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ExercisePartRefImpl <em>Part Ref</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ExercisePartRefImpl <em>Part Ref</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ExercisePartRefImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercisePartRef()
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePartRefImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercisePartRef()
 		 * @generated
 		 */
 		EClass EXERCISE_PART_REF = eINSTANCE.getExercisePartRef();
@@ -2822,11 +2822,11 @@ public interface ExercisePackage extends EPackage {
 		EReference EXERCISE_PART_REF__PART_REF = eINSTANCE.getExercisePartRef_PartRef();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ExercisePartImpl <em>Part</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ExercisePartImpl <em>Part</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ExercisePartImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getExercisePart()
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePartImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getExercisePart()
 		 * @generated
 		 */
 		EClass EXERCISE_PART = eINSTANCE.getExercisePart();
@@ -2856,11 +2856,11 @@ public interface ExercisePackage extends EPackage {
 		EReference EXERCISE_PART__TASKS = eINSTANCE.getExercisePart_Tasks();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.AbstractTaskImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractTask()
+		 * @see com.moe.metricsconsumer.exercise.impl.AbstractTaskImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractTask()
 		 * @generated
 		 */
 		EClass ABSTRACT_TASK = eINSTANCE.getAbstractTask();
@@ -2882,11 +2882,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation ABSTRACT_TASK___GET_Q = eINSTANCE.getAbstractTask__GetQ();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.TaskRefImpl <em>Task Ref</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.TaskRefImpl <em>Task Ref</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.TaskRefImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskRef()
+		 * @see com.moe.metricsconsumer.exercise.impl.TaskRefImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskRef()
 		 * @generated
 		 */
 		EClass TASK_REF = eINSTANCE.getTaskRef();
@@ -2900,11 +2900,11 @@ public interface ExercisePackage extends EPackage {
 		EReference TASK_REF__TASK_REF = eINSTANCE.getTaskRef_TaskRef();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.TaskImpl <em>Task</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.TaskImpl <em>Task</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.TaskImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTask()
+		 * @see com.moe.metricsconsumer.exercise.impl.TaskImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTask()
 		 * @generated
 		 */
 		EClass TASK = eINSTANCE.getTask();
@@ -2934,21 +2934,21 @@ public interface ExercisePackage extends EPackage {
 		EReference TASK__A = eINSTANCE.getTask_A();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.QuestionImpl <em>Question</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.QuestionImpl <em>Question</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.QuestionImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getQuestion()
+		 * @see com.moe.metricsconsumer.exercise.impl.QuestionImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getQuestion()
 		 * @generated
 		 */
 		EClass QUESTION = eINSTANCE.getQuestion();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.StringQuestionImpl <em>String Question</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.StringQuestionImpl <em>String Question</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.StringQuestionImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringQuestion()
+		 * @see com.moe.metricsconsumer.exercise.impl.StringQuestionImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringQuestion()
 		 * @generated
 		 */
 		EClass STRING_QUESTION = eINSTANCE.getStringQuestion();
@@ -2962,11 +2962,11 @@ public interface ExercisePackage extends EPackage {
 		EAttribute STRING_QUESTION__QUESTION = eINSTANCE.getStringQuestion_Question();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.AnswerImpl <em>Answer</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.AnswerImpl <em>Answer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.AnswerImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAnswer()
+		 * @see com.moe.metricsconsumer.exercise.impl.AnswerImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAnswer()
 		 * @generated
 		 */
 		EClass ANSWER = eINSTANCE.getAnswer();
@@ -2996,11 +2996,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation ANSWER___CREATE_PROPOSAL = eINSTANCE.getAnswer__CreateProposal();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ProposalImpl <em>Proposal</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ProposalImpl <em>Proposal</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ProposalImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getProposal()
+		 * @see com.moe.metricsconsumer.exercise.impl.ProposalImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getProposal()
 		 * @generated
 		 */
 		EClass PROPOSAL = eINSTANCE.getProposal();
@@ -3046,11 +3046,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation PROPOSAL___VALIDATE = eINSTANCE.getProposal__Validate();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.TaskAnswerImpl <em>Task Answer</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.TaskAnswerImpl <em>Task Answer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.TaskAnswerImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskAnswer()
+		 * @see com.moe.metricsconsumer.exercise.impl.TaskAnswerImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskAnswer()
 		 * @generated
 		 */
 		EClass TASK_ANSWER = eINSTANCE.getTaskAnswer();
@@ -3072,11 +3072,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation TASK_ANSWER___ACCEPT_EVENT__TASKEVENT = eINSTANCE.getTaskAnswer__AcceptEvent__TaskEvent();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.TaskProposalImpl <em>Task Proposal</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.TaskProposalImpl <em>Task Proposal</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.TaskProposalImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskProposal()
+		 * @see com.moe.metricsconsumer.exercise.impl.TaskProposalImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskProposal()
 		 * @generated
 		 */
 		EClass TASK_PROPOSAL = eINSTANCE.getTaskProposal();
@@ -3138,11 +3138,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation TASK_PROPOSAL___ADD_TASK_EVENT__TASKEVENT = eINSTANCE.getTaskProposal__AddTaskEvent__TaskEvent();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.TaskEventImpl <em>Task Event</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.TaskEventImpl <em>Task Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.TaskEventImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getTaskEvent()
+		 * @see com.moe.metricsconsumer.exercise.impl.TaskEventImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getTaskEvent()
 		 * @generated
 		 */
 		EClass TASK_EVENT = eINSTANCE.getTaskEvent();
@@ -3180,21 +3180,21 @@ public interface ExercisePackage extends EPackage {
 		EOperation TASK_EVENT___GET_TEXT = eINSTANCE.getTaskEvent__GetText();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.StringEditTaskProposalImpl <em>String Edit Task Proposal</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.StringEditTaskProposalImpl <em>String Edit Task Proposal</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.StringEditTaskProposalImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringEditTaskProposal()
+		 * @see com.moe.metricsconsumer.exercise.impl.StringEditTaskProposalImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringEditTaskProposal()
 		 * @generated
 		 */
 		EClass STRING_EDIT_TASK_PROPOSAL = eINSTANCE.getStringEditTaskProposal();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.StringEditAnswerImpl <em>String Edit Answer</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.StringEditAnswerImpl <em>String Edit Answer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.StringEditAnswerImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringEditAnswer()
+		 * @see com.moe.metricsconsumer.exercise.impl.StringEditAnswerImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringEditAnswer()
 		 * @generated
 		 */
 		EClass STRING_EDIT_ANSWER = eINSTANCE.getStringEditAnswer();
@@ -3208,11 +3208,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation STRING_EDIT_ANSWER___GET_EDITOR_PATH = eINSTANCE.getStringEditAnswer__GetEditorPath();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.AbstractStringEditEventImpl <em>Abstract String Edit Event</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractStringEditEventImpl <em>Abstract String Edit Event</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.AbstractStringEditEventImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractStringEditEvent()
+		 * @see com.moe.metricsconsumer.exercise.impl.AbstractStringEditEventImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractStringEditEvent()
 		 * @generated
 		 */
 		EClass ABSTRACT_STRING_EDIT_EVENT = eINSTANCE.getAbstractStringEditEvent();
@@ -3250,11 +3250,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation ABSTRACT_STRING_EDIT_EVENT___CREATE_STRING_EDIT__STRING_ABSTRACTSTRINGEDITEVENT = eINSTANCE.getAbstractStringEditEvent__CreateStringEdit__String_AbstractStringEditEvent();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.AbstractStringEditImpl <em>Abstract String Edit</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.AbstractStringEditImpl <em>Abstract String Edit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.AbstractStringEditImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getAbstractStringEdit()
+		 * @see com.moe.metricsconsumer.exercise.impl.AbstractStringEditImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getAbstractStringEdit()
 		 * @generated
 		 */
 		EClass ABSTRACT_STRING_EDIT = eINSTANCE.getAbstractStringEdit();
@@ -3276,11 +3276,11 @@ public interface ExercisePackage extends EPackage {
 		EOperation ABSTRACT_STRING_EDIT___INIT_STRING_EDIT__STRING_ABSTRACTSTRINGEDIT = eINSTANCE.getAbstractStringEdit__InitStringEdit__String_AbstractStringEdit();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.RelativeStringEditImpl <em>Relative String Edit</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.RelativeStringEditImpl <em>Relative String Edit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.RelativeStringEditImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getRelativeStringEdit()
+		 * @see com.moe.metricsconsumer.exercise.impl.RelativeStringEditImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getRelativeStringEdit()
 		 * @generated
 		 */
 		EClass RELATIVE_STRING_EDIT = eINSTANCE.getRelativeStringEdit();
@@ -3294,11 +3294,11 @@ public interface ExercisePackage extends EPackage {
 		EReference RELATIVE_STRING_EDIT__EDIT = eINSTANCE.getRelativeStringEdit_Edit();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.StringEditImpl <em>String Edit</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.StringEditImpl <em>String Edit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.StringEditImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getStringEdit()
+		 * @see com.moe.metricsconsumer.exercise.impl.StringEditImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getStringEdit()
 		 * @generated
 		 */
 		EClass STRING_EDIT = eINSTANCE.getStringEdit();
@@ -3312,11 +3312,11 @@ public interface ExercisePackage extends EPackage {
 		EAttribute STRING_EDIT__STORED_STRING = eINSTANCE.getStringEdit_StoredString();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.ReplaceSubstringEditImpl <em>Replace Substring Edit</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.ReplaceSubstringEditImpl <em>Replace Substring Edit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ReplaceSubstringEditImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getReplaceSubstringEdit()
+		 * @see com.moe.metricsconsumer.exercise.impl.ReplaceSubstringEditImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getReplaceSubstringEdit()
 		 * @generated
 		 */
 		EClass REPLACE_SUBSTRING_EDIT = eINSTANCE.getReplaceSubstringEdit();
@@ -3338,11 +3338,11 @@ public interface ExercisePackage extends EPackage {
 		EAttribute REPLACE_SUBSTRING_EDIT__END = eINSTANCE.getReplaceSubstringEdit_End();
 
 		/**
-		 * The meta object literal for the '{@link com.moe.metricsconsumer.impl.MarkerInfoImpl <em>Marker Info</em>}' class.
+		 * The meta object literal for the '{@link com.moe.metricsconsumer.exercise.impl.MarkerInfoImpl <em>Marker Info</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.MarkerInfoImpl
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getMarkerInfo()
+		 * @see com.moe.metricsconsumer.exercise.impl.MarkerInfoImpl
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getMarkerInfo()
 		 * @generated
 		 */
 		EClass MARKER_INFO = eINSTANCE.getMarkerInfo();
@@ -3383,7 +3383,7 @@ public interface ExercisePackage extends EPackage {
 		 * The meta object literal for the '<em>ETimestamp</em>' data type.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see com.moe.metricsconsumer.impl.ExercisePackageImpl#getETimestamp()
+		 * @see com.moe.metricsconsumer.exercise.impl.ExercisePackageImpl#getETimestamp()
 		 * @generated
 		 */
 		EDataType ETIMESTAMP = eINSTANCE.getETimestamp();

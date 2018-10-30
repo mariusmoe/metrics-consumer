@@ -19,7 +19,7 @@ public interface ExerciseFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ExerciseFactory eINSTANCE = com.moe.metricsconsumer.impl.ExerciseFactoryImpl.init();
+	ExerciseFactory eINSTANCE = com.moe.metricsconsumer.exercise.impl.ExerciseFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Exercise</em>'.
