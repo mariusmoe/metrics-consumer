@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -80,5 +82,34 @@ public class WebLayerTest {
 //      .andDo(document("home", responseFields(
 //        fieldWithPath("message").description("The welcome message for the user.")
 //      )));
+  }
+
+  @Test
+  public  void shouldReturnSolution() throws Exception {
+    List<SpecificMeasure> someSpecificMeasure = new ArrayList<>();
+    someSpecificMeasure.add(new SpecificMeasure("cyclomatic Complexity", 7));
+    List<SpecificMeasure> someSpecificMeasure21 = new ArrayList<>();
+    someSpecificMeasure21.add(new SpecificMeasure("for", 7));
+    someSpecificMeasure21.add(new SpecificMeasure("foreach", 4));
+    someSpecificMeasure21.add(new SpecificMeasure("while", 1));
+
+    List<Measure> someMeasure = new ArrayList<>();
+    someMeasure.add(new Measure("org.metrics.cyclomatic", someSpecificMeasure));
+    someMeasure.add(new Measure("no.hal.javalang", someSpecificMeasure21));
+    List<MeasureSummary> result = new ArrayList<>();
+    result.add(new MeasureSummary("001",true,"Account-oppgave", "stateandbehavior.Account", someMeasure));
+
+    Query query = new Query();
+    query.addCriteria(Criteria.where("isSolutionManual").is(true));
+    query.addCriteria(Criteria.where("taskId").is("stateandbehavior.Account"));
+
+    given(this.mongoTemplate.findOne(query, MeasureSummary.class))
+      .willReturn(
+        (MeasureSummary) result
+      );
+    this.mockMvc.perform(get("/api/fv"))
+      .andExpect(status().isOk())
+      .andExpect(content().string("[{\"id\":null,\"userId\":\"001\",\"taskName\":\"Account-oppgave\",\"taskId\":\"stateandbehavior.Account\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomatic Complexity\",\"value\":7.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":7.0},{\"name\":\"foreach\",\"value\":4.0},{\"name\":\"while\",\"value\":1.0}]}],\"solutionManual\":false}]"))
+      .andDo(MockMvcResultHandlers.print());
   }
 }

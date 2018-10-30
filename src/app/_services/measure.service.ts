@@ -42,7 +42,7 @@ export class MeasureService {
 
   getSolutionFvMeasureData(taskId: string) {
     console.log("get solution service called");
-    return this.http.get<FeatureList>(`api/fv/${taskId}`)
+    return this.http.get<FeatureList>(`api/fv/solution/${taskId}`)
       .pipe(
         catchError(this.handleError)
       );
