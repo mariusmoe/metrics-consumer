@@ -1,8 +1,9 @@
 package com.moe.metricsconsumer.controllers;
 
-import com.moe.metricsconsumer.fv.ExpressionFeatures;
-import com.moe.metricsconsumer.fv.FeatureList;
-import com.moe.metricsconsumer.fv.FvFactory;
+
+import no.hal.learning.fv.ExpressionFeatures;
+import no.hal.learning.fv.FeatureList;
+import no.hal.learning.fv.FvFactory;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;

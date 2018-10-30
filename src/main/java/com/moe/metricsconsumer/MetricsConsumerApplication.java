@@ -1,19 +1,17 @@
 package com.moe.metricsconsumer;
 
 import com.moe.metricsconsumer.repositories.MeasureRepository;
-import com.moe.metricsconsumer.fv.DelegatedFeatures;
-import com.moe.metricsconsumer.fv.DerivedFeatures;
-import com.moe.metricsconsumer.fv.ExpressionFeatures;
-import com.moe.metricsconsumer.fv.FeatureList;
-import com.moe.metricsconsumer.fv.FeatureValued;
-import com.moe.metricsconsumer.fv.FilteredFeatures2;
-import com.moe.metricsconsumer.fv.FvFactory;
-import com.moe.metricsconsumer.fv.impl.FeatureListImpl;
-import com.moe.metricsconsumer.fv.util.Op1;
+
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 
+import no.hal.learning.fv.ExpressionFeatures;
+import no.hal.learning.fv.FeatureList;
+import no.hal.learning.fv.FilteredFeatures2;
+import no.hal.learning.fv.FvFactory;
+import no.hal.learning.fv.impl.FeatureListImpl;
+import no.hal.learning.fv.util.Op1;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMapUtil.FeatureValue;
 import org.springframework.beans.factory.annotation.Autowired;

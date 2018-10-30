@@ -1,11 +1,14 @@
 package com.moe.metricsconsumer.controllers;
 
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
-import com.moe.metricsconsumer.fv.FeatureValued;
+
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
+import no.hal.learning.fv.ExpressionFeatures;
+import no.hal.learning.fv.FeatureList;
+import no.hal.learning.fv.FvFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.emf.common.util.URI;
@@ -25,9 +28,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.moe.metricsconsumer.fv.ExpressionFeatures;
-import com.moe.metricsconsumer.fv.FeatureList;
-import com.moe.metricsconsumer.fv.FvFactory;
 
 import javax.validation.Valid;
 import java.io.IOException;
