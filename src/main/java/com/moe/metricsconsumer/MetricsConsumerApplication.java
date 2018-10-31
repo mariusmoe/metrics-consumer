@@ -1,5 +1,6 @@
 package com.moe.metricsconsumer;
 
+import com.moe.metricsconsumer.models.Achievement;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 
 import com.moe.metricsconsumer.models.measureSummary.Measure;
@@ -170,7 +171,6 @@ public class MetricsConsumerApplication implements CommandLineRunner {
        System.out.println("------------------------------------");
        System.out.println("------------------------------------");
        System.out.println("------------------------------------");
-       
 
 
 
