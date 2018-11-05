@@ -7,6 +7,13 @@ import org.springframework.data.annotation.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * An achievement can have three states
+ *
+ * Hidden   - the user can not yet see what the achievement is for
+ * Revealed - The user can see the achievement
+ * Unlocked - The user has achieved the achievement
+ */
 enum AchievementState {
   HIDDEN, REVEALED, UNLOCKED
 }
@@ -43,7 +50,18 @@ public class Achievement {
   private int progress;
 
 
-
+  /**
+   *
+   * @param threshold       Value must supass this value to achieve the achievement
+   * @param isCummulative   Boolean indicating if the achievement shoudld be rewarded for accumulated score
+   * @param taskIdRef       Reference to task if any
+   * @param expression      Tell which metrics shoudl be included - must use qualified name of metric
+   * @param name            Name of the achievement
+   * @param description     A describprion of the achievement
+   * @param state           See ->
+   * @see AchievementState
+   * @param progress        Progress where 1 is low and 100 is done, min 1, max 100.
+   */
   public Achievement(@NotNull int threshold,
                      boolean isCummulative,
                      String taskIdRef,

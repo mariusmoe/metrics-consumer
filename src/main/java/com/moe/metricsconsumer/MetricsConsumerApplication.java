@@ -1,6 +1,8 @@
 package com.moe.metricsconsumer;
 
 import com.moe.metricsconsumer.models.Achievement;
+import com.moe.metricsconsumer.models.FvConfiguration;
+import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 
 import com.moe.metricsconsumer.models.measureSummary.Measure;
@@ -29,10 +31,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.context.annotation.FilterType.CUSTOM;
 import static org.springframework.http.HttpMethod.POST;
@@ -42,6 +41,9 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
   @Autowired
   private MeasureRepository repository;
+
+  @Autowired
+  private FvConfigurationRepository fvConfigurationRepository;
 
 
 
@@ -171,6 +173,13 @@ public class MetricsConsumerApplication implements CommandLineRunner {
        System.out.println("------------------------------------");
        System.out.println("------------------------------------");
        System.out.println("------------------------------------");
+
+      HashMap<String, String> exFeatures = new HashMap<>();
+      exFeatures.put("sum", "no_hal_javalang__foreach + no_hal_javalang__while");
+      exFeatures.put("for-while", "no_hal_javalang__for + no_hal_javalang__while");
+      exFeatures.put("for", "no_hal_javalang__for");
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",exFeatures));
+
 
 
 

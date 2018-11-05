@@ -10,9 +10,11 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
+import java.io.IOException;
+
 public class ConfigCreator {
 
-  public void create() {
+  public void create() throws IOException {
 
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
     featureList.getFeatures().put("no_hal_javalang__foreach", 4.0);
@@ -34,11 +36,14 @@ public class ConfigCreator {
     // load config from XMI
     Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
     ResourceSet resSet = new ResourceSetImpl();
+
     Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
     configResource.getContents().add(expressionFeatures);
+
     Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
     dataResource.getContents().add(featureList);
-//    dataResource.save(null);
-//    configResource.save(null);
+
+    dataResource.save(null);
+    configResource.save(null);
   }
 }

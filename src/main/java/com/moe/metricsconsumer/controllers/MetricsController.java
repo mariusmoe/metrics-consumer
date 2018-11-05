@@ -1,10 +1,11 @@
 package com.moe.metricsconsumer.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
 import java.util.*;
 import java.util.function.Function;
@@ -36,6 +39,9 @@ public class MetricsController {
 
   @Autowired
   private MongoTemplate mongoTemplate;
+
+  @Autowired
+  ObjectMapper mapper;
 
   @RequestMapping("/resource")
   @ResponseBody
@@ -97,15 +103,55 @@ public class MetricsController {
    */
   @PostMapping("/")
   @ResponseBody
-  public MeasureSummary newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
-    return measureRepository.save(newMeasureSummary);
+  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
+    MeasureSummary measureSummary = newMeasureSummary;
+
+    StringBuilder stringBuilder = new StringBuilder();
+    // TODO: use user id from principal instead of provided object
+    stringBuilder.append(newMeasureSummary.getUserId());
+    stringBuilder.append(newMeasureSummary.getTaskName());
+    MessageDigest messageDigest = null;
+
+    // Why hash the name? We don't wat to share the id unnecessarily
+    try {
+      messageDigest = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
+    messageDigest.update(stringBuilder.toString().getBytes());
+    String hashedName = Base64.getEncoder().encodeToString(messageDigest.digest());
+    measureSummary.setId(hashedName);
+    return saveMeasureSummary(measureSummary);
+
+
+
   }
+
 
   @PostMapping("/solution")
   @ResponseBody
-  public MeasureSummary newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
-    return measureRepository.save(newMeasureSummary);
+  public ObjectNode newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
+    return saveMeasureSummary(newMeasureSummary);
   }
+
+
+  private ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) {
+    ObjectNode res;
+    try {
+      measureRepository.save(newMeasureSummary);
+      res =  mapper.createObjectNode();
+      res.put("measureSummaryRef", newMeasureSummary.getId());
+      res.put("measureSummary", newMeasureSummary.toString());
+      res.put("status", "2000");
+    } catch (Exception e) {
+      res =  mapper.createObjectNode();
+      res.put("message", "ERROR: " + e.toString());
+      res.put("status", "4000");
+    }
+    return res;
+  }
+
+
 
   @GetMapping("/mod")
   @ResponseBody
