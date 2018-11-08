@@ -1,5 +1,7 @@
 package com.moe.metricsconsumer.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
@@ -40,6 +42,12 @@ public class MetricsControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private MetricsController metricsController;
+
+  @Autowired
+  ObjectMapper mapper;
 
   @MockBean
   private MeasureRepository measureRepository;
@@ -134,24 +142,29 @@ public class MetricsControllerTest {
       .willReturn(
         measureSummary
       );
-    this.mockMvc.perform(get("/api/stateandbehavior.Account"))
+    this.mockMvc.perform(post("/api/"))
       .andExpect(status().isOk())
       .andExpect(content().json("{\"id\":null,\"userId\":\"001\",\"taskName\":\"Account-oppgave\",\"taskId\":\"stateandbehavior.Account\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomatic Complexity\",\"value\":7.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":7.0},{\"name\":\"foreach\",\"value\":4.0},{\"name\":\"while\",\"value\":1.0}]}],\"solutionManual\":false}"))
       .andDo(MockMvcResultHandlers.print());
   }
 
+
   @Test
   public void newSolutionMeasureSummary() throws Exception {
-    given(saveMeasureSummary(measureSummary))
-      .willReturn(
-        measureSummary
-      );
-    this.mockMvc.perform(post("/api/stateandbehavior.Account"))
+    // OMG the POST method expect a valid object in the post request! How can you be so stupid moe?
+    ObjectNode res = mapper.createObjectNode();
+    res.put("measureSummaryRef", measureSummary.getId());
+    res.put("measureSummary", measureSummary.toString());
+    res.put("status", "2000");
+    given(this.metricsController.saveMeasureSummary(measureSummary))
+     .willReturn(
+      res
+     );
+    this.mockMvc.perform(post("/api/"))
       .andExpect(status().isOk())
-      .andExpect(content().json(":\"foreach\",\"value\":4.0},{\"name\":\"while\",\"value\":1.0}]}],\"solutionManual\":false}"))
-      .andDo(MockMvcResultHandlers.print());
+     .andExpect(content().json(":\"foreach\",\"value\":4.0},{\"name\":\"while\",\"value\":1.0}]}],\"solutionManual\":false}"))
+     .andDo(MockMvcResultHandlers.print());
   }
-
 
 
   @Test

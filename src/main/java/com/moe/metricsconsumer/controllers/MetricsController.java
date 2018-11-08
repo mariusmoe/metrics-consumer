@@ -137,7 +137,7 @@ public class MetricsController {
   }
 
 
-  private ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) {
+  public ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) {
     ObjectNode res;
     try {
       measureRepository.save(newMeasureSummary);
