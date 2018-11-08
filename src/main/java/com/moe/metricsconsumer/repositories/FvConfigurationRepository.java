@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FvConfigurationRepository extends MongoRepository<FvConfiguration, String> {
 
+
+  public FvConfiguration findFirstByTaskId(String taskId);
 }
 
 

@@ -7,17 +7,6 @@ import org.springframework.data.annotation.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- * An achievement can have three states
- *
- * Hidden   - the user can not yet see what the achievement is for
- * Revealed - The user can see the achievement
- * Unlocked - The user has achieved the achievement
- */
-enum AchievementState {
-  HIDDEN, REVEALED, UNLOCKED
-}
-
 
 @Data
 public class Achievement {
@@ -43,7 +32,7 @@ public class Achievement {
   private String description;
 
   @NotNull
-  private AchievementState state;
+private AchievementState state;
 
 
   @Size(min = 1, max = 100)

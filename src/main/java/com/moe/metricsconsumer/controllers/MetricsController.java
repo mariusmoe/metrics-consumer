@@ -131,7 +131,9 @@ public class MetricsController {
   @PostMapping("/solution")
   @ResponseBody
   public ObjectNode newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
-    return saveMeasureSummary(newMeasureSummary);
+    MeasureSummary measureSummary = newMeasureSummary;
+    measureSummary.setSolutionManual(true);
+    return saveMeasureSummary(measureSummary);
   }
 
 

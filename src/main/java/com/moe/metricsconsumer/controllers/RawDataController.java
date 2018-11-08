@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 
+import com.moe.metricsconsumer.repositories.XmlRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,10 @@ public class RawDataController {
   @Autowired
   ObjectMapper mapper;
 
+  @Autowired
+  XmlRepository xmlRepository;
 
-  // TODO: make this enpoint able to receive a .ex file and store it
+
   // Possible extensions - print a warning if some metrics has not been calculated
   // Flow of information - see activity diagram -> need to be sent with a code
   @PostMapping("/")
@@ -55,6 +58,11 @@ public class RawDataController {
     // Reason we only want to keep one copy of the ex file.
     // See: https://stackoverflow.com/a/33164008/5489113
     // for how to delete multiple documents in an efficient manner
+
+
+    try {
+      xmlRepository.removeByMeasureSummaryRef(measureSummaryRef);
+    } catch (Exception e) {}
 
     for(MultipartFile uploadedFile : uploadingFiles) {
       try {

@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface XmlRepository extends MongoRepository<ExerciseDocument, String> {
 
+  public ExerciseDocument removeByMeasureSummaryRef(String measureSummaryRef);
+
 }
 
 

@@ -2,9 +2,11 @@ package com.moe.metricsconsumer.controllers;
 
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 
+import com.moe.metricsconsumer.models.FvConfiguration;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
+import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import no.hal.learning.fv.ExpressionFeatures;
 import no.hal.learning.fv.FeatureList;
@@ -51,6 +53,9 @@ public class MetricsControllerFv {
   @Autowired
   private MongoTemplate mongoTemplate;
 
+  @Autowired
+  private FvConfigurationRepository fvConfigurationRepository;
+
 	
 	@GetMapping("/{taskId}")
 	@ResponseBody
@@ -91,7 +96,7 @@ public class MetricsControllerFv {
         featureList.getFeatures().put(measure.getMeasureProvider()
           .replace(".", "_") + "__" +specificMeasure.getName()
           .replace(".", "_"), (double) specificMeasure.getValue());
-        System.out.println(measure.getMeasureProvider() + "_" +specificMeasure.getName());
+//        System.out.println(measure.getMeasureProvider() + "_" +specificMeasure.getName());
       }
     }
 
@@ -111,14 +116,14 @@ public class MetricsControllerFv {
 
     System.out.println(expressionFeatures.getOther());
 
-    // TODO: This should be configurable
-    expressionFeatures.getFeatures().put("sum", "no_hal_javalang__foreach + no_hal_javalang__while");
-    expressionFeatures.getFeatures().put("for-while", "no_hal_javalang__for + no_hal_javalang__while");
-    expressionFeatures.getFeatures().put("for", "no_hal_javalang__for");
 
-    //expressionFeatures.getFeatures().put("one", "m * n + 1");
-
-
+    FvConfiguration fvConfiguration = fvConfigurationRepository.findFirstByTaskId(taskId);
+    System.out.println(taskId);
+    System.out.println(fvConfiguration.toString());
+    for (Map.Entry<String, String> entry : fvConfiguration.getExpressionFeature().entrySet()) {
+      System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+      expressionFeatures.getFeatures().put(entry.getKey(), entry.getValue());
+    }
 
     FeatureList finalFeatureList = FvFactory.eINSTANCE.createFeatureList();
 
