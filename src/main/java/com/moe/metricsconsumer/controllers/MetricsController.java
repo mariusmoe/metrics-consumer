@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
+import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import org.codehaus.jackson.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class MetricsController {
    */
   @PostMapping("/")
   @ResponseBody
-  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
+  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws NoSuchFieldException {
     MeasureSummary measureSummary = newMeasureSummary;
 
     StringBuilder stringBuilder = new StringBuilder();
@@ -121,6 +122,37 @@ public class MetricsController {
     messageDigest.update(stringBuilder.toString().getBytes());
     String hashedName = Base64.getEncoder().encodeToString(messageDigest.digest());
     measureSummary.setId(hashedName);
+
+    // TODO: Check if reward is warranted
+    // Get all achievements for this task   |\
+    // Get all cumulative achievements      | \ -> could these be done with one request?
+
+/*    Criteria criteria = new Criteria();
+    criteria.orOperator(
+      Criteria.where(Achievement.class.getField("taskIdRef").getName()).is(measureSummary.getTaskId()),
+      Criteria.where(Achievement.class.getField("isCummulative").getName()).is(true));
+    Query query = new Query(criteria);
+
+    List<Achievement> relevantAchievements = this.mongoTemplate.find(query, Achievement.class);
+
+    String userAchievementId = "";
+    // Loop over -> add achieved achievements to list as a list of UserAchievement
+    for (Achievement achievement : relevantAchievements){
+      if (achievement.isCummulative()) {
+        // The achievement is cumulative
+        // find existing cumulative userAchievement or create new
+        userAchievementId = "";
+      }
+      if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
+        // The achievement belong to this task
+        // Create/overwrite userAchievement
+        userAchievementId = hashedName;
+      }
+    };*/
+
+    // Batch save the achieved achievements
+
+
     return saveMeasureSummary(measureSummary);
 
 

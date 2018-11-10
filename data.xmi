@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fv:FeatureList xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:fv="platform:/plugin/no.hal.learning.execise.model/model/fv.ecore">
+  <features key="no_hal_javalang__foreach" value="4.0"/>
+  <features key="no_hal_javalang__while" value="5.0"/>
+  <features key="no_hal_javalang__for" value="2.0"/>
+</fv:FeatureList>

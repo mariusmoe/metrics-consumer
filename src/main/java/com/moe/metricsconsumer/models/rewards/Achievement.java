@@ -1,11 +1,9 @@
-package com.moe.metricsconsumer.models;
+package com.moe.metricsconsumer.models.rewards;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 
 @Data
@@ -31,51 +29,31 @@ public class Achievement {
   @NotNull
   private String description;
 
-  @NotNull
-private AchievementState state;
-
-
-  @Size(min = 1, max = 100)
-  private int progress;
 
 
   /**
    *
    * @param threshold       Value must supass this value to achieve the achievement
-   * @param isCummulative   Boolean indicating if the achievement shoudld be rewarded for accumulated score
+   * @param isCumulative   Boolean indicating if the achievement shoudld be rewarded for accumulated score
    * @param taskIdRef       Reference to task if any
    * @param expression      Tell which metrics shoudl be included - must use qualified name of metric
    * @param name            Name of the achievement
    * @param description     A describprion of the achievement
-   * @param state           See ->
-   * @see AchievementState
-   * @param progress        Progress where 1 is low and 100 is done, min 1, max 100.
    */
   public Achievement(@NotNull int threshold,
-                     boolean isCummulative,
+                     boolean isCumulative,
                      String taskIdRef,
                      @NotNull String expression,
                      @NotNull String name,
-                     @NotNull String description,
-                     @NotNull AchievementState state,
-                     @Size(min = 1, max = 100) int progress) {
+                     @NotNull String description
+                     ) {
     this.threshold = threshold;
-    this.isCummulative = isCummulative;
+    this.isCummulative = isCumulative;
     this.taskIdRef = taskIdRef;
     this.expression = expression;
     this.name = name;
     this.description = description;
-    this.state = state;
-    this.progress = progress;
-  }
 
-  public Achievement(@NotNull int threshold,
-                     @NotNull String expression,
-                     @NotNull String name,
-                     @NotNull String description,
-                     @NotNull AchievementState state
-                     ) {
-    this(threshold, false, "", expression, name, description, state,1);
   }
 
 

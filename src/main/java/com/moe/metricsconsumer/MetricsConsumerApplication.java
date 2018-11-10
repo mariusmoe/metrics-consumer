@@ -1,7 +1,7 @@
 package com.moe.metricsconsumer;
 
-import com.moe.metricsconsumer.models.Achievement;
-import com.moe.metricsconsumer.models.AchievementState;
+import com.moe.metricsconsumer.models.rewards.Achievement;
+import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.FvConfiguration;
 import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
@@ -207,29 +207,26 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement1 = new Achievement(200,
         false,
         taskIdRefAccount,
-        "no_hal_javalang__while * 3",
-        "While expert",
-        "Award for exceptional work on while",
-        AchievementState.REVEALED,
-        1);
+        "no_hal_javalang__for * 3",
+        "For expert For for",
+        "Award for exceptional work on for"
+        );
 
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
         "no_hal_javalang__while * 3",
         "While expert",
-        "Award for exceptional work on while",
-        AchievementState.REVEALED,
-        1);
+        "Award for exceptional work on while"
+        );
 
       Achievement achievement3 = new Achievement(1200,
         false,
         taskIdRefAccount,
         "no_hal_javalang__while * 3",
         "While expert",
-        "Award for exceptional work on while",
-        AchievementState.REVEALED,
-        1);
+        "Award for exceptional work on while"
+      );
 
 
 

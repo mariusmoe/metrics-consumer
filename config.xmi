@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fv:ExpressionFeatures xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fv="platform:/plugin/no.hal.learning.execise.model/model/fv.ecore">
+  <features key="sum" value="no_hal_javalang__foreach + no_hal_javalang__while"/>
+  <features key="for-while" value="no_hal_javalang__for + no_hal_javalang__while"/>
+  <features key="for" value="no_hal_javalang__for"/>
+  <other xsi:type="fv:FeatureList" href="data.xmi#/"/>
+</fv:ExpressionFeatures>

@@ -10,11 +10,13 @@ import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import no.hal.learning.fv.ExpressionFeatures;
 import no.hal.learning.fv.FeatureList;
+import no.hal.learning.fv.FeatureValued;
 import no.hal.learning.fv.FvFactory;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -99,16 +101,49 @@ public class MetricsControllerFv {
 //        System.out.println(measure.getMeasureProvider() + "_" +specificMeasure.getName());
       }
     }
-
+    System.out.println("----------------------------------------------");
+    System.out.println("----------------------------------------------");
     // load config from XMI
-//    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
-//    ResourceSet resSet = new ResourceSetImpl();
-//    Resource resource = resSet.getResource(URI.createURI("config.xmi"), true);
-//    for (EObject eObject : resource.getContents()) {
-//      if (eObject instanceof FeatureValued) {
-//
-//      }
-//    }
+    ConfigCreator configCreator = new ConfigCreator();
+    try {
+      configCreator.create();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+    Resource resource = resSet.getResource(URI.createURI("config.xmi"), true);
+
+    Resource newDataResource = resSet.createResource(URI.createURI("newData.xmi"));
+    newDataResource.getContents().add(featureList);
+
+    // Replace all references to data.xmi with newData.xmi
+    for (EObject eObject : resource.getContents()) {
+      if (eObject instanceof FeatureValued) {
+        System.out.println(eObject.eClass().getEAllStructuralFeatures());
+        for (EStructuralFeature eStructuralFeature : eObject.eClass().getEAllStructuralFeatures()) {
+          if (eStructuralFeature.getName().equals("other")) {
+            System.out.println("YAY");
+            eObject.eSet(eStructuralFeature,featureList);
+          }
+        }
+        System.out.println("*******");
+        System.out.println(eObject.eContents());
+        System.out.println(eObject.eClass().getEAllStructuralFeatures());
+
+//        eObject.eSet(eObject.eContents(), featureList);
+
+
+      }
+      System.out.println(eObject);
+    }
+    System.out.println("------");
+
+    System.out.println(resource.getAllContents());
+
+    System.out.println("----------------------------------------------");
+    System.out.println("----------------------------------------------");
     // link config to real data, i.e. featureList
 
     ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();

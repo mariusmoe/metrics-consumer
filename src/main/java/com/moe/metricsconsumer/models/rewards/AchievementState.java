@@ -1,4 +1,4 @@
-package com.moe.metricsconsumer.models;
+package com.moe.metricsconsumer.models.rewards;
 
 /**
  * An achievement can have three states
