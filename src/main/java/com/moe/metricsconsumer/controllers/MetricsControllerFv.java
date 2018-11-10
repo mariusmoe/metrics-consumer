@@ -106,7 +106,7 @@ public class MetricsControllerFv {
     // load config from XMI
     ConfigCreator configCreator = new ConfigCreator();
     try {
-      configCreator.create();
+      configCreator.create4();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -115,33 +115,37 @@ public class MetricsControllerFv {
     ResourceSet resSet = new ResourceSetImpl();
     Resource resource = resSet.getResource(URI.createURI("config.xmi"), true);
 
-    Resource newDataResource = resSet.createResource(URI.createURI("newData.xmi"));
-    newDataResource.getContents().add(featureList);
-
-    // Replace all references to data.xmi with newData.xmi
+    // Replace all references to 'other' in config.xmi with 'featureList'
     for (EObject eObject : resource.getContents()) {
       if (eObject instanceof FeatureValued) {
-        System.out.println(eObject.eClass().getEAllStructuralFeatures());
         for (EStructuralFeature eStructuralFeature : eObject.eClass().getEAllStructuralFeatures()) {
           if (eStructuralFeature.getName().equals("other")) {
-            System.out.println("YAY");
             eObject.eSet(eStructuralFeature,featureList);
           }
         }
-        System.out.println("*******");
-        System.out.println(eObject.eContents());
-        System.out.println(eObject.eClass().getEAllStructuralFeatures());
-
-//        eObject.eSet(eObject.eContents(), featureList);
-
-
       }
-      System.out.println(eObject);
     }
-    System.out.println("------");
 
-    System.out.println(resource.getAllContents());
 
+    FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
+    ExpressionFeatures foundExpressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
+
+    for (EObject eObject  : resource.getContents()) {
+      if (eObject instanceof ExpressionFeatures) {
+        System.out.println("its an expressionFeature!!!!!!!!");
+        // Hvorfor blir getFeatureValue kalt?
+        foundExpressionFeatures = (ExpressionFeatures) eObject;
+      }
+      if (eObject instanceof FeatureValued) {
+        calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
+      }
+    }
+
+    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+//    System.out.println(foundExpressionFeatures);
+    System.out.println(calculatedFeatureList);
+    System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
+    System.out.println(evaluateFeatureValues(foundExpressionFeatures));
     System.out.println("----------------------------------------------");
     System.out.println("----------------------------------------------");
     // link config to real data, i.e. featureList
@@ -167,6 +171,14 @@ public class MetricsControllerFv {
     }
 
 	  return finalFeatureList;
+  }
+
+  public FeatureList evaluateFeatureValues(FeatureValued features) {
+	  FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    for (String featureName : features.getFeatureNames()) {
+      featureList.getFeatures().put(featureName, features.getFeatureValue(featureName));
+    }
+    return featureList;
   }
 	
 	

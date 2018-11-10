@@ -68,6 +68,10 @@ public class MetricsControllerTest {
   MeasureSummary measureSummary;
   MeasureSummary measureSummarySolution;
 
+  /**
+   * Create some objects the will be used in the following tests
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception {
     List<SpecificMeasure> someSpecificMeasure = new ArrayList<>();
