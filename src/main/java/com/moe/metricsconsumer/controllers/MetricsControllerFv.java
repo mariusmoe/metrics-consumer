@@ -40,20 +40,14 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.Principal;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
 
 
 @RequestMapping("/api/fv")
 @Controller
 public class MetricsControllerFv {
-	
-	  @Autowired
-	  private MeasureRepository measureRepository;
+
+  @Autowired
+  private MeasureRepository measureRepository;
 
   @Autowired
   private MongoTemplate mongoTemplate;
@@ -61,32 +55,33 @@ public class MetricsControllerFv {
   @Autowired
   private FvConfigurationRepository fvConfigurationRepository;
 
-	
-	@GetMapping("/{taskId}")
-	@ResponseBody
-	public FeatureList getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
-		return getOneGenericMeasureFv(taskId, false, "001");
-	}
+
+  @GetMapping("/{taskId}")
+  @ResponseBody
+  public FeatureList getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
+    return getOneGenericMeasureFv(taskId, false, "001");
+  }
 
   @GetMapping("/solution/{taskId}")
   @ResponseBody
   public FeatureList getOneSolutionMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
-    return getOneGenericMeasureFv(taskId,  true);
+    return getOneGenericMeasureFv(taskId, true);
   }
 
   /**
    * Will create a fv based on the fvConfig for the requested task
-   * @param taskId      id of task
-   * @param isSolution  is this the solution manual fv
-   * @param userId      the user to retreive the fv for
-   * @return            a feature list
+   *
+   * @param taskId     id of task
+   * @param isSolution is this the solution manual fv
+   * @param userId     the user to retreive the fv for
+   * @return a feature list
    * @throws EntityNotFoundException
    */
-	private FeatureList getOneGenericMeasureFv(String taskId, boolean isSolution, String... userId) throws EntityNotFoundException {
+  private FeatureList getOneGenericMeasureFv(String taskId, boolean isSolution, String... userId) throws EntityNotFoundException {
 
-	  // TODO: set userId based on the principal
+    // TODO: set userId based on the principal
     // The userId is optional for now
-	  String _userId = (userId.length >= 1) ? userId[0] : "";
+    String _userId = (userId.length >= 1) ? userId[0] : "";
 
     // featureList is the featureList of the student or solution
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
@@ -104,16 +99,16 @@ public class MetricsControllerFv {
     }
 
     // Check if measureSummary was found -> return error if not found
-   if (measureSummary == null) {
-     throw new EntityNotFoundException(MeasureSummary.class, taskId);
+    if (measureSummary == null) {
+      throw new EntityNotFoundException(MeasureSummary.class, taskId);
 
-   }
+    }
 
-   // Add the meassureSummary to the featureList object
+    // Add the meassureSummary to the featureList object
     for (Measure measure : measureSummary.getMeasures()) {
       for (SpecificMeasure specificMeasure : measure.getSpecificMeasures()) {
         featureList.getFeatures().put(measure.getMeasureProvider()
-          .replace(".", "_") + "__" +specificMeasure.getName()
+          .replace(".", "_") + "__" + specificMeasure.getName()
           .replace(".", "_"), (double) specificMeasure.getValue());
       }
     }
@@ -134,69 +129,48 @@ public class MetricsControllerFv {
 
     // Replace all references to 'other' in config.xmi with 'featureList'
     for (EObject eObject : resource.getContents()) {
+
       replaceReference(eObject);
+
       Iterator<EObject> iterator = eObject.eAllContents();
-      while (iterator.hasNext()){
+      while (iterator.hasNext()) {
         replaceReference(iterator.next());
       }
 
+      // Legacy code -> too be deprecated
       if (eObject instanceof FeatureValued) {
-        System.out.println(eObject.eClass().getEAllStructuralFeatures());
-        System.out.println(eObject.eClass().getEReferences());
-        System.out.println(eObject.eResource().getURI());
-
-
-
         for (EStructuralFeature eStructuralFeature : eObject.eClass().getEAllStructuralFeatures()) {
-          System.out.println(eStructuralFeature.eResource().getAllContents());
-
           if (eStructuralFeature.getName().equals("other")) {
-            System.out.println(eStructuralFeature.getEContainingClass().getEAllStructuralFeatures());
-
-
-            eObject.eSet(eStructuralFeature,featureList);
+            eObject.eSet(eStructuralFeature, featureList);
           }
         }
       }
     }
 
 
-
-
+    // Legacy code -> too be deprecated
+    // the calculatedFeatureList that shall be returned to the requester
     FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
-    ExpressionFeatures foundExpressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
 
-    for (EObject eObject  : resource.getContents()) {
-      if (eObject instanceof ExpressionFeatures) {
-        System.out.println("its an expressionFeature!!!!!!!!");
-        // Hvorfor blir getFeatureValue kalt?
-        foundExpressionFeatures = (ExpressionFeatures) eObject;
-      }
+    for (EObject eObject : resource.getContents()) {
       if (eObject instanceof FeatureValued) {
         calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
       }
     }
 
     System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-//    System.out.println(foundExpressionFeatures);
+    System.out.println("Old way of only replacing 'other' references");
     System.out.println(calculatedFeatureList);
     System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-    System.out.println(evaluateFeatureValues(foundExpressionFeatures));
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    // link config to real data, i.e. featureList
 
+    // link config to real data, i.e. featureList
+    //
     ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
     expressionFeatures.setOther(featureList);
 
-    System.out.println(expressionFeatures.getOther());
-
 
     FvConfiguration fvConfiguration = fvConfigurationRepository.findFirstByTaskId(taskId);
-    System.out.println(taskId);
-    System.out.println(fvConfiguration.toString());
     for (Map.Entry<String, String> entry : fvConfiguration.getExpressionFeature().entrySet()) {
-      System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
       expressionFeatures.getFeatures().put(entry.getKey(), entry.getValue());
     }
 
@@ -206,50 +180,48 @@ public class MetricsControllerFv {
       finalFeatureList.getFeatures().put(featureName, expressionFeatures.getFeatureValue(featureName));
     }
 
-	  return finalFeatureList;
+    return finalFeatureList;
   }
 
+  /**
+   * Find the reference or the references that is not the same as the eObject's eResource and replace them
+   * (the last part is NYI)
+   *
+   * @param eObject   The eObject to replace references in
+   */
   private void replaceReference(EObject eObject) {
     for (EReference eStructuralFeature : eObject.eClass().getEAllReferences()) {
-      System.out.println(eStructuralFeature.eResource().getAllContents());
+      // Skip if its a container, isContainment, or is not changeable
       if (eStructuralFeature.isContainer() || eStructuralFeature.isContainment() || !eStructuralFeature.isChangeable()) {
         continue;
       }
+      // If there is more than one eStructuralFeature
       if (eStructuralFeature.isMany()) {
         EList<? extends EObject> references = (EList<? extends EObject>) eObject.eGet(eStructuralFeature);
         for (int i = 0; i < references.size(); i++) {
           EObject referenced = references.get(i);
           if (referenced.eResource() != eObject.eResource()) {
-            System.out.println(eStructuralFeature.getName() +" -> " + eObject);
+            System.out.println(eStructuralFeature.getName() + " -> " + eObject);
+            // TODO: replace the reference
+            // See below... same problem
           }
         }
       } else {
         EObject referenced = (EObject) eObject.eGet(eStructuralFeature);
         if (referenced.eResource() != eObject.eResource()) {
-          System.out.println(eStructuralFeature.getName() +" -> " + eObject);
-
+          System.out.println(eStructuralFeature.getName() + " -> " + eObject);
+          // TODO: replace the reference
+          // Problem -> we don't know that the reference to replece to is featureList (even thou this is most likely
+          // the most common scenario)
+          // could be solved by adding an ID in feature valued
+//          eObject.eSet(eStructuralFeature, featureList);
         }
       }
       if (eStructuralFeature.getName().equals("other")) {
-        System.out.println(eStructuralFeature.getEContainingClass().getEAllStructuralFeatures());
-
-
-//        eObject.eSet(eStructuralFeature,featureList);
+        System.out.println("It was an 'other' reference");
       }
     }
   }
 
-  public FeatureList evaluateFeatureValues(FeatureValued features) {
-	  FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
-    for (String featureName : features.getFeatureNames()) {
-      featureList.getFeatures().put(featureName, features.getFeatureValue(featureName));
-    }
-    return featureList;
-  }
-	
-	
-	
-		
-		
-		
+
 }
