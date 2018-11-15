@@ -16,7 +16,7 @@ public class Achievement {
   private int threshold;
 
 
-  private boolean isCummulative;
+  private boolean isCumulative;
 
   private String taskIdRef;
 
@@ -48,7 +48,7 @@ public class Achievement {
                      @NotNull String description
                      ) {
     this.threshold = threshold;
-    this.isCummulative = isCumulative;
+    this.isCumulative = isCumulative;
     this.taskIdRef = taskIdRef;
     this.expression = expression;
     this.name = name;

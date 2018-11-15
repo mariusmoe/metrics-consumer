@@ -66,10 +66,9 @@ public class RawDataController {
 
     for(MultipartFile uploadedFile : uploadingFiles) {
       try {
-        ExerciseDocument exerciseDocument = new ExerciseDocument();
-        exerciseDocument.setMeasureSummaryRef(measureSummaryRef);
-        exerciseDocument.setDocType("ex");
-        exerciseDocument.setFile(new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()));
+        ExerciseDocument exerciseDocument = new ExerciseDocument(measureSummaryRef,
+          "ex",
+          new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()) );
         mongoTemplate.save(exerciseDocument);
         System.out.println(exerciseDocument);
       } catch (Exception e) {

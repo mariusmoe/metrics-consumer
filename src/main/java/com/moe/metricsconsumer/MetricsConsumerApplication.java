@@ -3,6 +3,7 @@ package com.moe.metricsconsumer;
 import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.FvConfiguration;
+import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 
@@ -31,6 +32,9 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
   @Autowired
   private FvConfigurationRepository fvConfigurationRepository;
+
+  @Autowired
+  private AchievementRepository achievementRepository;
 
 
 
@@ -67,6 +71,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
     public void run(String... args) throws Exception{
       repository.deleteAll();
       fvConfigurationRepository.deleteAll();
+      achievementRepository.deleteAll();
 
 
 //      //save some dummy data
@@ -227,6 +232,10 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         "While expert",
         "Award for exceptional work on while"
       );
+
+      achievementRepository.save(achievement1);
+      achievementRepository.save(achievement2);
+      achievementRepository.save(achievement3);
 
 
 

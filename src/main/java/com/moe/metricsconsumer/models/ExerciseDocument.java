@@ -22,4 +22,10 @@ public class ExerciseDocument {
 
   @Field
   private Binary file;
+
+  public ExerciseDocument(String measureSummaryRef, String docType, Binary file) {
+    this.measureSummaryRef = measureSummaryRef;
+    this.docType = docType;
+    this.file = file;
+  }
 }

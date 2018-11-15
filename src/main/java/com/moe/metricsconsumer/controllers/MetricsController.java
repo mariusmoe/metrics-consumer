@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.rewards.Achievement;
+import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
+import com.moe.metricsconsumer.repositories.UserAchievementRepository;
 import org.codehaus.jackson.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -40,6 +42,9 @@ public class MetricsController {
 
   @Autowired
   private MongoTemplate mongoTemplate;
+
+  @Autowired
+  private UserAchievementRepository userAchievementRepository;
 
   @Autowired
   ObjectMapper mapper;
@@ -113,7 +118,7 @@ public class MetricsController {
     stringBuilder.append(newMeasureSummary.getTaskName());
     MessageDigest messageDigest = null;
 
-    // Why hash the name? We don't wat to share the id unnecessarily
+    // Why hash the name? We don't want to share the id unnecessarily
     try {
       messageDigest = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
@@ -127,28 +132,40 @@ public class MetricsController {
     // Get all achievements for this task   |\
     // Get all cumulative achievements      | \ -> could these be done with one request?
 
-/*    Criteria criteria = new Criteria();
+    Criteria criteria = new Criteria();
     criteria.orOperator(
-      Criteria.where(Achievement.class.getField("taskIdRef").getName()).is(measureSummary.getTaskId()),
-      Criteria.where(Achievement.class.getField("isCummulative").getName()).is(true));
+      Criteria.where("taskIdRef").is(measureSummary.getTaskId()),
+      Criteria.where("isCumulative").is(true));
     Query query = new Query(criteria);
 
     List<Achievement> relevantAchievements = this.mongoTemplate.find(query, Achievement.class);
+    List<UserAchievement> userAchievements = this.userAchievementRepository.findByUserRef(newMeasureSummary.getUserId());
+    System.out.println(relevantAchievements);
+    System.out.println(userAchievements);
 
     String userAchievementId = "";
     // Loop over -> add achieved achievements to list as a list of UserAchievement
     for (Achievement achievement : relevantAchievements){
-      if (achievement.isCummulative()) {
+      if (achievement.isCumulative()) {
+        UserAchievement userAchievement = userAchievements.stream()
+          .filter(object -> achievement.getId().equals(object.getAchievementRef()))
+          .findAny()
+          .orElse(null);
+        if (userAchievement != null) {
+
+        }
         // The achievement is cumulative
         // find existing cumulative userAchievement or create new
         userAchievementId = "";
+//        UserAchievement userAchievement = new UserAchievement(newMeasureSummary.getUserId(), achievement.getId(),null , history, null);
+
       }
       if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
         // The achievement belong to this task
         // Create/overwrite userAchievement
         userAchievementId = hashedName;
       }
-    };*/
+    };
 
     // Batch save the achieved achievements
 
