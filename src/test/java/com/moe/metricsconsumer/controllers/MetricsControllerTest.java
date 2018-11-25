@@ -5,9 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
-import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
-import com.moe.metricsconsumer.repositories.MeasureRepository;
-import com.moe.metricsconsumer.repositories.XmlRepository;
+import com.moe.metricsconsumer.repositories.*;
+import com.moe.metricsconsumer.util.TestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +50,12 @@ public class MetricsControllerTest {
 
   @MockBean
   private MeasureRepository measureRepository;
+
+  @MockBean
+  private AchievementRepository achievementRepository;
+
+  @MockBean
+  private UserAchievementRepository userAchievementRepository;
 
   @MockBean
   private FvConfigurationRepository fvConfigurationRepository;
@@ -146,9 +151,12 @@ public class MetricsControllerTest {
       .willReturn(
         measureSummary
       );
-    this.mockMvc.perform(post("/api/"))
+    this.mockMvc.perform(post("/api/")
+      .contentType(TestUtil.APPLICATION_JSON_UTF8)
+      .content(TestUtil.convertObjectToJsonBytes(measureSummary))
+    )
       .andExpect(status().isOk())
-      .andExpect(content().json("{\"id\":null,\"userId\":\"001\",\"taskName\":\"Account-oppgave\",\"taskId\":\"stateandbehavior.Account\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomatic Complexity\",\"value\":7.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":7.0},{\"name\":\"foreach\",\"value\":4.0},{\"name\":\"while\",\"value\":1.0}]}],\"solutionManual\":false}"))
+      .andExpect(content().json("{\"measureSummaryRef\":\"lyHhaVtqDwXCI5Yo2by/Cf+YxKF1+go1/OM5J7PvC7s=\",\"measureSummary\":\"MeasureSummary(id=lyHhaVtqDwXCI5Yo2by/Cf+YxKF1+go1/OM5J7PvC7s=, userId=001, isSolutionManual=false, taskName=Account-oppgave, taskId=stateandbehavior.Account, measures=[Measure{measureProvider='org.metrics.cyclomatic', specificMeasures=[SpecificMeasure{name='cyclomatic Complexity', value=7.0}]}, Measure{measureProvider='no.hal.javalang', specificMeasures=[SpecificMeasure{name='for', value=7.0}, SpecificMeasure{name='foreach', value=4.0}, SpecificMeasure{name='while', value=1.0}]}])\",\"status\":\"2000\"}"))
       .andDo(MockMvcResultHandlers.print());
   }
 
@@ -164,10 +172,13 @@ public class MetricsControllerTest {
      .willReturn(
       res
      );
-    this.mockMvc.perform(post("/api/"))
+    this.mockMvc.perform(post("/api/")
+      .contentType(TestUtil.APPLICATION_JSON_UTF8)
+      .content(TestUtil.convertObjectToJsonBytes(measureSummarySolution))
+    )
       .andExpect(status().isOk())
-     .andExpect(content().json(":\"foreach\",\"value\":4.0},{\"name\":\"while\",\"value\":1.0}]}],\"solutionManual\":false}"))
-     .andDo(MockMvcResultHandlers.print());
+      .andExpect(content().json("{\"measureSummaryRef\":\"lyHhaVtqDwXCI5Yo2by/Cf+YxKF1+go1/OM5J7PvC7s=\",\"measureSummary\":\"MeasureSummary(id=lyHhaVtqDwXCI5Yo2by/Cf+YxKF1+go1/OM5J7PvC7s=, userId=001, isSolutionManual=true, taskName=Account-oppgave, taskId=stateandbehavior.Account, measures=[Measure{measureProvider='org.metrics.cyclomatic', specificMeasures=[SpecificMeasure{name='cyclomatic Complexity', value=7.0}]}, Measure{measureProvider='no.hal.javalang', specificMeasures=[SpecificMeasure{name='for', value=7.0}, SpecificMeasure{name='foreach', value=4.0}, SpecificMeasure{name='while', value=1.0}]}])\",\"status\":\"2000\"}"))
+      .andDo(MockMvcResultHandlers.print());
   }
 
 

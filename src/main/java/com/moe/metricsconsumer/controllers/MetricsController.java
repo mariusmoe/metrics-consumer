@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.rewards.Achievement;
+import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.rewards.UserAchievement;
+import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
 import org.codehaus.jackson.JsonNode;
@@ -45,6 +47,8 @@ public class MetricsController {
 
   @Autowired
   private UserAchievementRepository userAchievementRepository;
+
+
 
   @Autowired
   ObjectMapper mapper;
@@ -137,42 +141,59 @@ public class MetricsController {
       Criteria.where("taskIdRef").is(measureSummary.getTaskId()),
       Criteria.where("isCumulative").is(true));
     Query query = new Query(criteria);
-
     List<Achievement> relevantAchievements = this.mongoTemplate.find(query, Achievement.class);
-    List<UserAchievement> userAchievements = this.userAchievementRepository.findByUserRef(newMeasureSummary.getUserId());
-    System.out.println(relevantAchievements);
-    System.out.println(userAchievements);
+
+    // Will find all achievements a user has ever received
+
+    System.out.println("newMeasureSummary.getUserId(): " + newMeasureSummary.getUserId());
+
+    Query query2 = new Query(Criteria.where("userRef").is(newMeasureSummary.getUserId()));
+    List<UserAchievement> userAchievements = this.mongoTemplate.find(query2, UserAchievement.class);
+
+    System.out.println("relevantAchievements: " + relevantAchievements);
+    System.out.println("userAchievements: " + userAchievements);
 
     String userAchievementId = "";
     // Loop over -> add achieved achievements to list as a list of UserAchievement
+    List<UserAchievement> userAchievementList = new ArrayList<>();
     for (Achievement achievement : relevantAchievements){
+
+      // If it is cumulative we should replace/add the value for this task or create it
       if (achievement.isCumulative()) {
         UserAchievement userAchievement = userAchievements.stream()
           .filter(object -> achievement.getId().equals(object.getAchievementRef()))
           .findAny()
           .orElse(null);
         if (userAchievement != null) {
-
+          // It exists already -> just update or add to history
+//          userAchievement.getHistory().put(measureSummary.getTaskName(), 5);
+//          userAchievementList.add(userAchievement);
+        } else {
+          // It ain't here -> create a new UserAchievement
+          // TODO: create eval method for (if the reward should be given/progress)
+          UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
+            achievement.getId(),
+            AchievementState.REVEALED, null, null);
+          userAchievementList.add(newUserAchievement);
         }
-        // The achievement is cumulative
-        // find existing cumulative userAchievement or create new
-        userAchievementId = "";
-//        UserAchievement userAchievement = new UserAchievement(newMeasureSummary.getUserId(), achievement.getId(),null , history, null);
-
       }
-      if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
-        // The achievement belong to this task
-        // Create/overwrite userAchievement
-        userAchievementId = hashedName;
+      else if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
+        // The achievement belong to this task -> Create/overwrite userAchievement
+        // TODO: create eval method for (if the reward should be given)
+        System.out.println("READ tHIS: " + newMeasureSummary.getUserId());
+        UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
+          achievement.getId(),
+          AchievementState.REVEALED, null, null);
+        System.out.println("newUserAchievement: " + newUserAchievement);
+        userAchievementList.add(newUserAchievement);
       }
     };
 
+    System.out.println("userAchievementList: " + userAchievementList);
     // Batch save the achieved achievements
-
+    this.userAchievementRepository.saveAll(userAchievementList);
 
     return saveMeasureSummary(measureSummary);
-
-
 
   }
 

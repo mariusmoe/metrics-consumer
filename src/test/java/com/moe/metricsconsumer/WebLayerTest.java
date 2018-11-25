@@ -5,9 +5,7 @@ import com.moe.metricsconsumer.controllers.MetricsController;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
-import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
-import com.moe.metricsconsumer.repositories.MeasureRepository;
-import com.moe.metricsconsumer.repositories.XmlRepository;
+import com.moe.metricsconsumer.repositories.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -60,6 +58,12 @@ public class WebLayerTest {
 
   @MockBean
   private ResourceServerProperties resourceServerProperties;
+
+  @MockBean
+  private AchievementRepository achievementRepository;
+
+  @MockBean
+  private UserAchievementRepository userAchievementRepository;
 
 
 

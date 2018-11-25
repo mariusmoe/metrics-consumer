@@ -3,6 +3,7 @@ package com.moe.metricsconsumer.controllers;
 
 
 import no.hal.learning.fv.*;
+import no.hal.learning.fv.impl.MetaDataFeatureValuedImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -15,13 +16,43 @@ public class ConfigCreator {
 
   public void create() throws IOException {
 
+
+
+
+
+/*
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setDelegation(FvFactory.eINSTANCE.createFeatureList());
+    metaDataFeatureValued.setFeatureValuedId("lang");
+    metaDataFeatureValued.setTags(Arrays.asList("some", "tag"));
+
+    metaDataFeatureValued.getFeatures().put("no_hal_javalang__foreach", 4.0);
+    metaDataFeatureValued.getFeatures().put("no_hal_javalang__while", 5.0);
+    metaDataFeatureValued.getFeatures().put("no_hal_javalang__for", 2.0);
+
+    FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+    featureValuedContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
+
+
+*/
+
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+
+
     featureList.getFeatures().put("no_hal_javalang__foreach", 4.0);
     featureList.getFeatures().put("no_hal_javalang__while", 5.0);
     featureList.getFeatures().put("no_hal_javalang__for", 2.0);
 
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+
     ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
-    expressionFeatures.setOther(featureList);
+    expressionFeatures.setOther(metaDataFeatureValued);
+
+
+
 
     System.out.println(expressionFeatures.getOther());
 
@@ -40,7 +71,7 @@ public class ConfigCreator {
     configResource.getContents().add(expressionFeatures);
 
     Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
-    dataResource.getContents().add(featureList);
+    dataResource.getContents().add(metaDataFeatureValued);
 
     dataResource.save(null);
     configResource.save(null);

@@ -3,11 +3,13 @@ package com.moe.metricsconsumer;
 import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.FvConfiguration;
+import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 
 
+import com.moe.metricsconsumer.repositories.UserAchievementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +37,9 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
   @Autowired
   private AchievementRepository achievementRepository;
+
+  @Autowired
+  private UserAchievementRepository userAchievementRepository;
 
 
 
@@ -72,6 +77,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       repository.deleteAll();
       fvConfigurationRepository.deleteAll();
       achievementRepository.deleteAll();
+      userAchievementRepository.deleteAll();
 
 
 //      //save some dummy data
@@ -220,22 +226,29 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
-        "no_hal_javalang__while * 3",
-        "While expert",
-        "Award for exceptional work on while"
+        "no_hal_javalang__while * 5",
+        "While expert super",
+        "Award for exceptional work on while nr1"
         );
 
       Achievement achievement3 = new Achievement(1200,
         false,
         taskIdRefAccount,
-        "no_hal_javalang__while * 3",
-        "While expert",
-        "Award for exceptional work on while"
+        "no_hal_javalang__while * 1",
+        "While expert easy",
+        "Award for exceptional work on while next"
       );
 
       achievementRepository.save(achievement1);
       achievementRepository.save(achievement2);
       achievementRepository.save(achievement3);
+
+//      List<Achievement> achievementList = achievementRepository.findAll();
+//
+//      UserAchievement userAchievement = new UserAchievement("001", achievementList.get(0).getId(), AchievementState.REVEALED, null, null);
+//      userAchievementRepository.save(userAchievement);
+//      UserAchievement userAchievement2 = new UserAchievement("001", achievementList.get(1).getId(), AchievementState.REVEALED, null, null);
+//      userAchievementRepository.save(userAchievement2);
 
 
 

@@ -3,5 +3,5 @@
   <features key="sum-for-while" value="no_hal_javalang__foreach + no_hal_javalang__while"/>
   <features key="add-for-while" value="no_hal_javalang__for + no_hal_javalang__while"/>
   <features key="just-for" value="no_hal_javalang__for"/>
-  <other xsi:type="fv:FeatureList" href="data.xmi#/"/>
+  <other xsi:type="fv:MetaDataFeatureValued" href="data.xmi#/"/>
 </fv:ExpressionFeatures>

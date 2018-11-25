@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Holds data about a user
@@ -22,11 +23,11 @@ public class UserAchievement {
 
   private AchievementState achievementState;
 
-  private HashMap<String, String> history;
+  private Map<String, Integer> history;
 
   private LocalDateTime dateAchieved;
 
-  public UserAchievement(String userRef, String achievementRef, AchievementState achievementState, HashMap<String, String> history, LocalDateTime dateAchieved) {
+  public UserAchievement(String userRef, String achievementRef, AchievementState achievementState, LocalDateTime dateAchieved, Map<String, Integer> history) {
     this.userRef = userRef;
     this.achievementRef = achievementRef;
     this.achievementState = achievementState;
@@ -34,7 +35,7 @@ public class UserAchievement {
     this.dateAchieved = dateAchieved;
   }
 
-  public UserAchievement(String userRef, String achievementRef, AchievementState achievementState, LocalDateTime dateAchieved) {
-    this(userRef, achievementRef, achievementState,null, dateAchieved);
-  }
+//  public UserAchievement(String userRef, String achievementRef, AchievementState achievementState, LocalDateTime dateAchieved) {
+//    this(userRef, achievementRef, achievementState,null, dateAchieved);
+//  }
 }

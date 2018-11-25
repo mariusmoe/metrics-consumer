@@ -8,10 +8,7 @@ import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
-import no.hal.learning.fv.ExpressionFeatures;
-import no.hal.learning.fv.FeatureList;
-import no.hal.learning.fv.FeatureValued;
-import no.hal.learning.fv.FvFactory;
+import no.hal.learning.fv.*;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.emf.common.util.EList;
@@ -83,12 +80,14 @@ public class MetricsControllerFv {
     // The userId is optional for now
     String _userId = (userId.length >= 1) ? userId[0] : "";
 
+    FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+
     // featureList is the featureList of the student or solution
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
     MeasureSummary measureSummary;
 
 
-    // Based on wheter this is a solution -> get the correct metrics
+    // Based on whether this is a solution -> get the correct metrics
     if (isSolution) {
       Query query = new Query();
       query.addCriteria(Criteria.where("isSolutionManual").is(true));
@@ -104,13 +103,38 @@ public class MetricsControllerFv {
 
     }
 
-    // Add the meassureSummary to the featureList object
+
+
+    // Add the meassureSummary to the featureValuedContainer object
     for (Measure measure : measureSummary.getMeasures()) {
+
+      // Create the feature list
+      FeatureList fvList = FvFactory.eINSTANCE.createFeatureList();
+
+      // Add all the stuff in the featureList
+      for (SpecificMeasure specificMeasure : measure.getSpecificMeasures()) {
+        fvList.getFeatures().put(
+          specificMeasure.getName().replace(".", "_"),
+          (double) specificMeasure.getValue());
+      }
+
+      // Deprecated -> legacy code
       for (SpecificMeasure specificMeasure : measure.getSpecificMeasures()) {
         featureList.getFeatures().put(measure.getMeasureProvider()
           .replace(".", "_") + "__" + specificMeasure.getName()
           .replace(".", "_"), (double) specificMeasure.getValue());
       }
+
+      // Add metadata to metaDataFeatureValued
+      MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+      metaDataFeatureValued.setFeatureValuedId(measure.getMeasureProvider());
+
+      // Add featureList to the metadata
+      metaDataFeatureValued.setDelegatedFeatureValued(fvList);
+
+      // Add the metadata to the root container
+      featureValuedContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
+
     }
 
     // TODO: Retreive this config based on task
@@ -133,6 +157,7 @@ public class MetricsControllerFv {
       replaceReference(eObject);
 
       Iterator<EObject> iterator = eObject.eAllContents();
+      System.out.println(eObject.eAllContents());
       while (iterator.hasNext()) {
         replaceReference(iterator.next());
       }
@@ -210,10 +235,23 @@ public class MetricsControllerFv {
         EObject referenced = (EObject) eObject.eGet(eStructuralFeature);
         if (referenced.eResource() != eObject.eResource()) {
           System.out.println(eStructuralFeature.getName() + " -> " + eObject);
+          System.out.println(eObject.getClass());
           // TODO: replace the reference
           // Problem -> we don't know that the reference to replece to is featureList (even thou this is most likely
           // the most common scenario)
           // could be solved by adding an ID in feature valued
+
+          FeatureValued referencedFeatureValued = (FeatureValued) referenced;
+          System.out.println("Id of referencedFeatureValued: " + referencedFeatureValued);
+
+          // TODO: Do the following:
+          // 1. fix how featureLists are retrieved from db -> create one for each IMetricsProvider
+          // 2. ->
+
+          // Now find the featureValued with the correct id in the retrieving user's data. Isn't this just featureList?
+
+
+
 //          eObject.eSet(eStructuralFeature, featureList);
         }
       }
