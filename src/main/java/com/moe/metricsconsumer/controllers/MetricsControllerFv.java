@@ -9,8 +9,6 @@ import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import no.hal.learning.fv.*;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -24,18 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.validation.Valid;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.security.Principal;
 import java.util.*;
 
 
@@ -127,7 +119,7 @@ public class MetricsControllerFv {
 
       // Add metadata to metaDataFeatureValued
       MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
-      metaDataFeatureValued.setFeatureValuedId(measure.getMeasureProvider());
+      metaDataFeatureValued.setFeatureValuedId(measure.getMeasureProvider().replace(".", "_"));
 
       // Add featureList to the metadata
       metaDataFeatureValued.setDelegatedFeatureValued(fvList);
@@ -154,58 +146,31 @@ public class MetricsControllerFv {
     // Replace all references to 'other' in config.xmi with 'featureList'
     for (EObject eObject : resource.getContents()) {
 
-      replaceReference(eObject);
+      eObject = replaceReference(eObject, featureValuedContainer);
 
       Iterator<EObject> iterator = eObject.eAllContents();
       System.out.println(eObject.eAllContents());
       while (iterator.hasNext()) {
-        replaceReference(iterator.next());
-      }
-
-      // Legacy code -> too be deprecated
-      if (eObject instanceof FeatureValued) {
-        for (EStructuralFeature eStructuralFeature : eObject.eClass().getEAllStructuralFeatures()) {
-          if (eStructuralFeature.getName().equals("other")) {
-            eObject.eSet(eStructuralFeature, featureList);
-          }
-        }
+        replaceReference(iterator.next(), featureValuedContainer);
       }
     }
 
-
-    // Legacy code -> too be deprecated
-    // the calculatedFeatureList that shall be returned to the requester
     FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
 
     for (EObject eObject : resource.getContents()) {
+      System.out.println(eObject);
       if (eObject instanceof FeatureValued) {
         calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
       }
     }
 
     System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
-    System.out.println("Old way of only replacing 'other' references");
+    System.out.println("New way of only replacing 'other' references");
     System.out.println(calculatedFeatureList);
     System.out.println("++++++++++++++++++++++++++++++++++++++++++++++");
 
-    // link config to real data, i.e. featureList
-    //
-    ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
-    expressionFeatures.setOther(featureList);
 
-
-    FvConfiguration fvConfiguration = fvConfigurationRepository.findFirstByTaskId(taskId);
-    for (Map.Entry<String, String> entry : fvConfiguration.getExpressionFeature().entrySet()) {
-      expressionFeatures.getFeatures().put(entry.getKey(), entry.getValue());
-    }
-
-    FeatureList finalFeatureList = FvFactory.eINSTANCE.createFeatureList();
-
-    for (String featureName : expressionFeatures.getFeatureNames()) {
-      finalFeatureList.getFeatures().put(featureName, expressionFeatures.getFeatureValue(featureName));
-    }
-
-    return finalFeatureList;
+    return calculatedFeatureList;
   }
 
   /**
@@ -214,7 +179,8 @@ public class MetricsControllerFv {
    *
    * @param eObject   The eObject to replace references in
    */
-  private void replaceReference(EObject eObject) {
+  @SuppressWarnings("unchecked")
+  private EObject replaceReference(EObject eObject, FeatureValuedContainer featureValuedContainer) {
     for (EReference eStructuralFeature : eObject.eClass().getEAllReferences()) {
       // Skip if its a container, isContainment, or is not changeable
       if (eStructuralFeature.isContainer() || eStructuralFeature.isContainment() || !eStructuralFeature.isChangeable()) {
@@ -226,39 +192,36 @@ public class MetricsControllerFv {
         for (int i = 0; i < references.size(); i++) {
           EObject referenced = references.get(i);
           if (referenced.eResource() != eObject.eResource()) {
-            System.out.println(eStructuralFeature.getName() + " -> " + eObject);
-            // TODO: replace the reference
-            // See below... same problem
+            MetaDataFeatureValued metaDataFeatureValuedReferenced = findMetaDataFeatureValuedReferenced(featureValuedContainer, referenced);
+            eObject.eSet(eStructuralFeature, metaDataFeatureValuedReferenced);
           }
         }
       } else {
         EObject referenced = (EObject) eObject.eGet(eStructuralFeature);
         if (referenced.eResource() != eObject.eResource()) {
-          System.out.println(eStructuralFeature.getName() + " -> " + eObject);
-          System.out.println(eObject.getClass());
-          // TODO: replace the reference
-          // Problem -> we don't know that the reference to replece to is featureList (even thou this is most likely
-          // the most common scenario)
-          // could be solved by adding an ID in feature valued
-
-          FeatureValued referencedFeatureValued = (FeatureValued) referenced;
-          System.out.println("Id of referencedFeatureValued: " + referencedFeatureValued);
-
-          // TODO: Do the following:
-          // 1. fix how featureLists are retrieved from db -> create one for each IMetricsProvider
-          // 2. ->
-
-          // Now find the featureValued with the correct id in the retrieving user's data. Isn't this just featureList?
-
-
-
-//          eObject.eSet(eStructuralFeature, featureList);
+          MetaDataFeatureValued metaDataFeatureValuedReferenced = findMetaDataFeatureValuedReferenced(featureValuedContainer, referenced);
+          eObject.eSet(eStructuralFeature, metaDataFeatureValuedReferenced);
         }
       }
-      if (eStructuralFeature.getName().equals("other")) {
-        System.out.println("It was an 'other' reference");
+    }
+    return eObject;
+  }
+
+  private MetaDataFeatureValued findMetaDataFeatureValuedReferenced(FeatureValuedContainer featureValuedContainer, EObject referenced) {
+    // Now find the featureValued with the correct id in the retrieving user's data.
+    Iterator<EObject> iterator = featureValuedContainer.eAllContents();
+    while (iterator.hasNext()) {
+      EObject containerIt = iterator.next();
+      if (containerIt instanceof MetaDataFeatureValued && referenced instanceof MetaDataFeatureValued) {
+        MetaDataFeatureValued referencedMetaDataFeatureValued = (MetaDataFeatureValued) referenced;
+        if (((MetaDataFeatureValued) containerIt).getFeatureValuedId().equals(referencedMetaDataFeatureValued.getFeatureValuedId())){
+          // Replace reference to data in config xmi
+          return (MetaDataFeatureValued) containerIt;
+        }
       }
     }
+    // Throw error instead?
+    return null;
   }
 
 

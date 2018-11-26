@@ -39,9 +39,9 @@ public class ConfigCreator {
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
 
 
-    featureList.getFeatures().put("no_hal_javalang__foreach", 4.0);
-    featureList.getFeatures().put("no_hal_javalang__while", 5.0);
-    featureList.getFeatures().put("no_hal_javalang__for", 2.0);
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
 
     MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
     metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
@@ -57,9 +57,9 @@ public class ConfigCreator {
     System.out.println(expressionFeatures.getOther());
 
     // TODO: This should be configurable
-    expressionFeatures.getFeatures().put("sum-for-while", "no_hal_javalang__foreach + no_hal_javalang__while");
-    expressionFeatures.getFeatures().put("add-for-while", "no_hal_javalang__for + no_hal_javalang__while");
-    expressionFeatures.getFeatures().put("just-for", "no_hal_javalang__for");
+    expressionFeatures.getFeatures().put("sum-for-while", "foreach + while");
+    expressionFeatures.getFeatures().put("add-for-while", "for + while");
+    expressionFeatures.getFeatures().put("just-for", "for");
 
     //expressionFeatures.getFeatures().put("one", "m * n + 1");
 
@@ -80,9 +80,9 @@ public class ConfigCreator {
   public void create2() throws IOException {
 
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
-    featureList.getFeatures().put("no_hal_javalang__foreach", 4.0);
-    featureList.getFeatures().put("no_hal_javalang__while", 5.0);
-    featureList.getFeatures().put("no_hal_javalang__for", 2.0);
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
 
 
     DerivedFeatures1 derivedFeatures = FvFactory.eINSTANCE.createDerivedFeatures1();
