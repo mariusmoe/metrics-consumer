@@ -39,9 +39,9 @@ public class ConfigCreator {
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
 
 
-    featureList.getFeatures().put("foreach", 4.0);
-    featureList.getFeatures().put("while", 5.0);
-    featureList.getFeatures().put("for", 2.0);
+    featureList.getFeatures().put("foreach", 99.0);
+    featureList.getFeatures().put("while", 99.0);
+    featureList.getFeatures().put("for", 99.0);
 
     MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
     metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
@@ -166,6 +166,37 @@ public class ConfigCreator {
 
     Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
     dataResource.getContents().add(featureList);
+
+    dataResource.save(null);
+    configResource.save(null);
+  }
+
+  public void createAchievementConfig() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures.setPred(Pred2Kind.GT);
+    filteredFeatures.setVal(3);
+    filteredFeatures.setOther(metaDataFeatureValued);
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig.xmi"));
+    configResource.getContents().add(filteredFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
 
     dataResource.save(null);
     configResource.save(null);

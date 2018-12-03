@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 
 @Data

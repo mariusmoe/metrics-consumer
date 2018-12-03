@@ -3,14 +3,25 @@ package com.moe.metricsconsumer.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
+import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
+import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
 import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
+import no.hal.learning.fv.*;
 import org.codehaus.jackson.JsonNode;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -47,6 +58,11 @@ public class MetricsController {
 
   @Autowired
   private UserAchievementRepository userAchievementRepository;
+
+  @Autowired
+  private AchievementRepository achievementRepository;
+
+  ControllerUtil controllerUtil = new ControllerUtil();
 
 
 
@@ -153,6 +169,8 @@ public class MetricsController {
     System.out.println("relevantAchievements: " + relevantAchievements);
     System.out.println("userAchievements: " + userAchievements);
 
+    FeatureValuedContainer featureValuedContainer = controllerUtil.createContainerFromMeasures(measureSummary);
+
     String userAchievementId = "";
     // Loop over -> add achieved achievements to list as a list of UserAchievement
     List<UserAchievement> userAchievementList = new ArrayList<>();
@@ -180,12 +198,49 @@ public class MetricsController {
       else if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
         // The achievement belong to this task -> Create/overwrite userAchievement
         // TODO: create eval method for (if the reward should be given)
-        System.out.println("READ tHIS: " + newMeasureSummary.getUserId());
+        ConfigCreator configCreator = new ConfigCreator();
+        try {
+          configCreator.createAchievementConfig();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+        // Load config from file system
+        Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+        ResourceSet resSet = new ResourceSetImpl();
+        Resource resource = resSet.getResource(URI.createURI("achievementConfig.xmi"), true);
+
+        FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
+        // Replace all references to 'other' in config.xmi with 'featureList'
+        for (EObject eObject : resource.getContents()) {
+
+          eObject = controllerUtil.replaceReference(eObject, featureValuedContainer);
+          calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
+
+        }
+        // Printed too many times due to all achivements has the same config atm
+        System.out.println("----------------------------");
+        System.out.println("calculatedFeatureList: " + calculatedFeatureList);
+        System.out.println("----------------------------");
+
+
+        if (calculatedFeatureList.getFeatures().size() > 0) {
+
+          System.out.println("GRATULERER!!!");
+        }
+
+
+
+
+        System.out.println("READ tHIS: " + calculatedFeatureList);
+
+
         UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
           achievement.getId(),
           AchievementState.REVEALED, null, null);
         System.out.println("newUserAchievement: " + newUserAchievement);
         userAchievementList.add(newUserAchievement);
+
+
       }
     };
 
@@ -225,6 +280,20 @@ public class MetricsController {
 
 
 
+  @GetMapping("/achievements/user")
+  @ResponseBody
+  public List<UserAchievement> getAllAchievedAchievements() {
+    return this.userAchievementRepository.findAllByUserRef("001");
+  }
+
+
+  @GetMapping("/achievements")
+  @ResponseBody
+  public List<Achievement> getAllAchievements() {
+    return this.achievementRepository.findAll();
+  }
+
+
   @GetMapping("/mod")
   @ResponseBody
   public String getMessageOfTheDay(Principal principal) {
@@ -245,5 +314,18 @@ public class MetricsController {
     LinkedHashMap linkedHashMap = (LinkedHashMap) auth.getPrincipal();
     return this.measureRepository.removeAllByUserId((String) linkedHashMap.get("userid"));
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

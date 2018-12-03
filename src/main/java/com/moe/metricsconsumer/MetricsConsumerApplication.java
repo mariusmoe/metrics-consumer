@@ -218,7 +218,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement1 = new Achievement(200,
         false,
         taskIdRefAccount,
-        "no_hal_javalang__for * 3",
+        "for * 3",
         "For expert For for",
         "Award for exceptional work on for"
         );
@@ -226,7 +226,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
-        "no_hal_javalang__while * 5",
+        "while * 5",
         "While expert super",
         "Award for exceptional work on while nr1"
         );
@@ -234,7 +234,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement3 = new Achievement(1200,
         false,
         taskIdRefAccount,
-        "no_hal_javalang__while * 1",
+        "while * 1",
         "While expert easy",
         "Award for exceptional work on while next"
       );
