@@ -2,6 +2,7 @@ package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.moe.metricsconsumer.apiErrorHandling.CouldNotSaveException;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
@@ -12,6 +13,7 @@ import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
+import com.sun.xml.internal.bind.v2.TODO;
 import no.hal.learning.fv.*;
 import org.codehaus.jackson.JsonNode;
 import org.eclipse.emf.common.util.EList;
@@ -32,12 +34,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -129,7 +134,7 @@ public class MetricsController {
    */
   @PostMapping("/")
   @ResponseBody
-  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws NoSuchFieldException {
+  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws NoSuchFieldException, CouldNotSaveException {
     MeasureSummary measureSummary = newMeasureSummary;
 
     StringBuilder stringBuilder = new StringBuilder();
@@ -204,6 +209,7 @@ public class MetricsController {
         } catch (IOException e) {
           e.printStackTrace();
         }
+        // TODO: load config for the right achievement
         // Load config from file system
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
         ResourceSet resSet = new ResourceSetImpl();
@@ -217,6 +223,9 @@ public class MetricsController {
           calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
 
         }
+
+
+
         // Printed too many times due to all achivements has the same config atm
         System.out.println("----------------------------");
         System.out.println("calculatedFeatureList: " + calculatedFeatureList);
@@ -224,7 +233,7 @@ public class MetricsController {
 
 
         if (calculatedFeatureList.getFeatures().size() > 0) {
-
+          giveRewardToUser(achievement, newMeasureSummary.getUserId());
           System.out.println("GRATULERER!!!");
         }
 
@@ -250,6 +259,23 @@ public class MetricsController {
 
     return saveMeasureSummary(measureSummary);
 
+  }
+
+  /**
+   * Create a userAchievement and sets the userRef to the userId param
+   * @param achievement   The achievement to reward the user
+   * @param userId        The user that shall receive the reward
+   * @throws Exception
+   */
+  private void giveRewardToUser(Achievement achievement, String userId) throws CouldNotSaveException {
+    UserAchievement userAchievement = new UserAchievement(
+      userId, achievement.getId(), AchievementState.UNLOCKED, LocalDateTime.now(), null);
+    System.out.println("userAchievement: " + userAchievement);
+    try {
+      this.userAchievementRepository.save(userAchievement);
+    } catch (Exception ex) {
+      throw new CouldNotSaveException(userAchievement.getClass(), userAchievement.toString());
+    }
   }
 
 

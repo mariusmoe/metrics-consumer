@@ -1,6 +1,7 @@
 package com.moe.metricsconsumer.models.rewards;
 
 import lombok.Data;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class Achievement {
   private String taskIdRef;
 
   @NotNull
-  private String expression;
+  private Binary expression;
 
   @NotNull
   private String name;
@@ -44,7 +45,7 @@ public class Achievement {
   public Achievement(@NotNull int threshold,
                      boolean isCumulative,
                      String taskIdRef,
-                     @NotNull String expression,
+                     @NotNull Binary expression,
                      @NotNull String name,
                      @NotNull String description
                      ) {

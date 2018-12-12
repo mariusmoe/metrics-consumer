@@ -36,6 +36,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     return buildResponseEntity(apiError);
   }
 
+  @ExceptionHandler(CouldNotSaveException.class)
+  protected ResponseEntity<Object> handleEntityNotFound(CouldNotSaveException ex) {
+    ApiError apiError = new ApiError(NOT_FOUND,CouldNotSaveException.class.getSimpleName(), ex);
+    return buildResponseEntity(apiError);
+  }
+
 
   @ExceptionHandler(MultipartException.class)
   public ObjectNode handleError1(MultipartException e, RedirectAttributes redirectAttributes) {

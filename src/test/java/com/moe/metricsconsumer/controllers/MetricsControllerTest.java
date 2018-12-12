@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
+import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.repositories.*;
 import com.moe.metricsconsumer.util.TestUtil;
 import org.junit.After;
@@ -178,6 +179,47 @@ public class MetricsControllerTest {
     )
       .andExpect(status().isOk())
       .andExpect(content().json("{\"measureSummaryRef\":\"lyHhaVtqDwXCI5Yo2by/Cf+YxKF1+go1/OM5J7PvC7s=\",\"measureSummary\":\"MeasureSummary(id=lyHhaVtqDwXCI5Yo2by/Cf+YxKF1+go1/OM5J7PvC7s=, userId=001, isSolutionManual=true, taskName=Account-oppgave, taskId=stateandbehavior.Account, measures=[Measure{measureProvider='org.metrics.cyclomatic', specificMeasures=[SpecificMeasure{name='cyclomatic Complexity', value=7.0}]}, Measure{measureProvider='no.hal.javalang', specificMeasures=[SpecificMeasure{name='for', value=7.0}, SpecificMeasure{name='foreach', value=4.0}, SpecificMeasure{name='while', value=1.0}]}])\",\"status\":\"2000\"}"))
+      .andDo(MockMvcResultHandlers.print());
+  }
+
+  @Test
+  public void getAllAchievements() throws Exception {
+    String taskIdRefAccount = "stateandbehavior.Account";
+    Achievement achievement1 = new Achievement(200,
+      false,
+      taskIdRefAccount,
+      "for * 3",
+      "For expert For for",
+      "Award for exceptional work on for"
+    );
+
+    Achievement achievement2 = new Achievement(600,
+      false,
+      taskIdRefAccount,
+      "while * 5",
+      "While expert super",
+      "Award for exceptional work on while nr1"
+    );
+
+    Achievement achievement3 = new Achievement(1200,
+      false,
+      taskIdRefAccount,
+      "while * 1",
+      "While expert easy",
+      "Award for exceptional work on while next"
+    );
+    List<Achievement> achievements = new ArrayList<>();
+    achievements.add(achievement1);
+    achievements.add(achievement2);
+    achievements.add(achievement3);
+
+    given(this.achievementRepository.findAll())
+      .willReturn(
+        achievements
+      );
+    this.mockMvc.perform(get("/api/achievements"))
+      .andExpect(status().isOk())
+      .andExpect(content().json("[{\"id\":null,\"threshold\":200,\"taskIdRef\":\"stateandbehavior.Account\",\"expression\":\"for * 3\",\"name\":\"For expert For for\",\"description\":\"Award for exceptional work on for\",\"cumulative\":false},{\"id\":null,\"threshold\":600,\"taskIdRef\":\"stateandbehavior.Account\",\"expression\":\"while * 5\",\"name\":\"While expert super\",\"description\":\"Award for exceptional work on while nr1\",\"cumulative\":false},{\"id\":null,\"threshold\":1200,\"taskIdRef\":\"stateandbehavior.Account\",\"expression\":\"while * 1\",\"name\":\"While expert easy\",\"description\":\"Award for exceptional work on while next\",\"cumulative\":false}]"))
       .andDo(MockMvcResultHandlers.print());
   }
 

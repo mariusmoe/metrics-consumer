@@ -1,5 +1,6 @@
 package com.moe.metricsconsumer;
 
+import com.moe.metricsconsumer.controllers.ConfigCreator;
 import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.FvConfiguration;
@@ -10,6 +11,9 @@ import com.moe.metricsconsumer.repositories.MeasureRepository;
 
 
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -212,13 +216,15 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       exFeatures3.put("for", "no_hal_javalang__for");
       fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",exFeatures3));
 
-
+      ConfigCreator configCreator = new ConfigCreator();
+      configCreator.createAchievementConfig();
+      Resource resource =
       // TODO: Change these according to notes!
       String taskIdRefAccount = "stateandbehavior.Account";
       Achievement achievement1 = new Achievement(200,
         false,
         taskIdRefAccount,
-        "for * 3",
+        new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()),
         "For expert For for",
         "Award for exceptional work on for"
         );
@@ -226,7 +232,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
-        "while * 5",
+        null,
         "While expert super",
         "Award for exceptional work on while nr1"
         );
@@ -234,7 +240,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement3 = new Achievement(1200,
         false,
         taskIdRefAccount,
-        "while * 1",
+        null,
         "While expert easy",
         "Award for exceptional work on while next"
       );

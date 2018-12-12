@@ -1,0 +1,2754 @@
+{
+	"info": {
+		"_postman_id": "582c6a5a-69cb-4d54-ba17-4aabb7fd14b0",
+		"name": "metrics-consumer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "000_populate_db",
+			"item": [
+				{
+					"name": "Add new measureSummary - stateandbehavior.Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "634e2879-db73-4110-8ad8-7eefc66e51b6",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Account-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Account\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 5\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 0\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 3\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Add new measureSummary - stateandbehavior.Account Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "634e2879-db73-4110-8ad8-7eefc66e51b6",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Account-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Account\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 6\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 5\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 6\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/solution/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solution",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Add new measureSummary - stateandbehavior.Location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7386c32-c18a-4a28-a0b4-680ebed547fa",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Location-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Location\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 6\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 5\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 7\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 1\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Add new measureSummary - stateandbehavior.Location Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d7386c32-c18a-4a28-a0b4-680ebed547fa",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Location-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Location\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 1\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/solution",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solution"
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Add new measureSummary  - stateandbehavior.Digit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "74f78127-c6e0-43d5-85de-6eb3dc384e6d",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Digit-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Digit\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 7\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 9\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Add new measureSummary  - stateandbehavior.Digit Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "74f78127-c6e0-43d5-85de-6eb3dc384e6d",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Digit-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Digit\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 4\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 0\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 3\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/solution",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"solution"
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				}
+			],
+			"description": "Should populate db with default data\n"
+		},
+		{
+			"name": "01-Scenario_Solving-a-task",
+			"item": [
+				{
+					"name": "Add new measureSummary 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "be7ef0ee-4023-4845-b587-f6afe658fc56",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 2\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 0\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 0\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Retreive all Retreive achieved achievements 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42b2615b-266b-4901-b573-1c1506ef9218",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									"",
+									"// This thest should test if the reight award has been given ",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.value).to.eql(100);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/achievement",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"achievement"
+							]
+						},
+						"description": "## Retreive achievements\n\n- Used to check that the right achievement has been rewarded the user"
+					},
+					"response": []
+				},
+				{
+					"name": "Add new measureSummary 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "be7ef0ee-4023-4845-b587-f6afe658fc56",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 4\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 3\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 0\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Retreive all Retreive achieved achievements 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42b2615b-266b-4901-b573-1c1506ef9218",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									"",
+									"// This thest should test if the reight award has been given ",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.value).to.eql(100);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/achievement",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"achievement"
+							]
+						},
+						"description": "## Retreive achievements\n\n- Used to check that the right achievement has been rewarded the user"
+					},
+					"response": []
+				},
+				{
+					"name": "Add new measureSummary 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "be7ef0ee-4023-4845-b587-f6afe658fc56",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 5\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 3\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Retreive all Retreive achieved achievements 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42b2615b-266b-4901-b573-1c1506ef9218",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									"",
+									"// This thest should test if the reight award has been given ",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.value).to.eql(100);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/achievement",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"achievement"
+							]
+						},
+						"description": "## Retreive achievements\n\n- Used to check that the right achievement has been rewarded the user"
+					},
+					"response": []
+				}
+			],
+			"description": "## Scenario - solving a tesk\n\nThis scenario will simulate a student's interactions while solving a task"
+		},
+		{
+			"name": "02-Scenario_Solving-a-task-with-xml",
+			"item": [
+				{
+					"name": "Add one new measureSummary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "350b690d-d246-491e-9f06-759871f98b70",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"let jsonData = pm.response.json();",
+									"console.log('json response: ' + jsonData);",
+									"pm.environment.set('measureSummaryRef', jsonData.measureSummaryRef)",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": {{$randomInt}}\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": {{$randomInt}}\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": {{$randomInt}}\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": {{$randomInt}}\n                }\n            ]\n        }\n    ]\n }"
+						},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add new measureSummary",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n    \n    \"taskName\": \"Train-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Train\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 2\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+								},
+								"url": {
+									"raw": "localhost:8080/api/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 26 Oct 2018 11:54:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"id\":\"5bd3008ad7e0e22633a44a08\",\"userId\":\"001\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]},{\"measureProvider\":\"no.hal.javalang\",\"specificMeasures\":[{\"name\":\"for\",\"value\":2.0},{\"name\":\"foreach\",\"value\":1.0},{\"name\":\"while\",\"value\":4.0}]}],\"solutionManual\":false}"
+						}
+					]
+				},
+				{
+					"name": "Add one new ex file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "991fede4-af2f-4d29-aae4-8a114f16bbc4",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "measureSummaryRef",
+								"value": "{{measureSummaryRef}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "uploadingFiles",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/xml/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"xml",
+								""
+							]
+						},
+						"description": "Should add a new measureSummary to the service"
+					},
+					"response": [
+						{
+							"name": "Add one new ex file - success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "measureSummaryRef",
+										"value": "{{measureSummaryRef}}"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "uploadingFiles",
+											"type": "file",
+											"src": {
+												"0": {}
+											}
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:8080/api/xml/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"xml",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true",
+									"name": "Access-Control-Allow-Credentials",
+									"description": "Indicates whether or not the response to the request can be exposed when the credentials flag is true. When used as part of a response to a preflight request, this indicates whether or not the actual request can be made using credentials."
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+									"name": "Access-Control-Allow-Headers",
+									"description": "Used in response to a preflight request to indicate which HTTP headers can be used when making the actual request."
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET, POST, DELETE, PUT, PATCH, HEAD",
+									"name": "Access-Control-Allow-Methods",
+									"description": "Specifies the method or methods allowed when accessing the resource. This is used in response to a preflight request."
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*",
+									"name": "Access-Control-Allow-Origin",
+									"description": "Specifies a URI that may access the resource. For requests without credentials, the server may specify '*' as a wildcard, thereby allowing any origin to access the resource."
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Access-Control-Allow-Origin, Access-Control-Allow-Credentials",
+									"name": "Access-Control-Expose-Headers",
+									"description": "Lets a server whitelist headers that browsers are allowed to access."
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "10",
+									"name": "Access-Control-Max-Age",
+									"description": "Indicates how long the results of a preflight request can be cached in seconds."
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate",
+									"name": "Cache-Control",
+									"description": "Tells all caching mechanisms from server to client whether they may cache this object. It is measured in seconds"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 04 Nov 2018 11:53:40 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Expires",
+									"value": "0",
+									"name": "Expires",
+									"description": "Gives the date/time after which the response is considered stale"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache",
+									"name": "Pragma",
+									"description": "Implementation-specific headers that may have various effects anywhere along the request-response chain."
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff",
+									"name": "X-Content-Type-Options",
+									"description": "The only defined value, \"nosniff\", prevents Internet Explorer from MIME-sniffing a response away from the declared content-type"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY",
+									"name": "X-Frame-Options",
+									"description": "Clickjacking protection: \"deny\" - no rendering within a frame, \"sameorigin\" - no rendering if origin mismatch"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block",
+									"name": "X-XSS-Protection",
+									"description": "Cross-site scripting (XSS) filter"
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+									"httpOnly": true,
+									"domain": "localhost",
+									"path": "/",
+									"secure": false,
+									"value": "9BE252AC1037BB49174D798857ADAA10",
+									"key": "JSESSIONID"
+								}
+							],
+							"body": "{\"message\":\"Success - document has been saved\",\"status\":\"2000\"}"
+						}
+					]
+				},
+				{
+					"name": "Retreive all Retreive achieved achievements 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42b2615b-266b-4901-b573-1c1506ef9218",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 400ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(400);",
+									"});",
+									"",
+									"",
+									"// This thest should test if the reight award has been given ",
+									"pm.test(\"Your test name\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.value).to.eql(100);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/achievement",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"achievement"
+							]
+						},
+						"description": "## Retreive achievements\n\n- Used to check that the right achievement has been rewarded the user"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get all tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						""
+					]
+				},
+				"description": "Should return a list of all measures\n"
+			},
+			"response": [
+				{
+					"name": "localhost:8080/api/",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 21 Sep 2018 11:12:41 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [],
+					"body": "[{\"id\":\"5ba4d223d7e0e24d9ff24e8d\",\"taskName\":\"Account-oppgave\",\"taskId\":\"stateandbehavior.Account\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":7.0}]}]},{\"id\":\"5ba4d223d7e0e24d9ff24e8e\",\"taskName\":\"Account-oppgave\",\"taskId\":\"stateandbehavior.Account\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":7.0}]}]}]"
+				}
+			]
+		},
+		{
+			"name": "localhost:8080/api/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/5ba4d223d7e0e24d9ff24e8d",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"5ba4d223d7e0e24d9ff24e8d"
+					]
+				},
+				"description": "Should return measure with provided id\n"
+			},
+			"response": [
+				{
+					"name": "Success - localhost:8080/api/{id}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/5ba8e0acd7e0e22902f03656",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"5ba8e0acd7e0e22902f03656"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 24 Sep 2018 13:04:09 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+							"httpOnly": true,
+							"domain": "localhost",
+							"path": "/",
+							"secure": false,
+							"value": "8BD0450B9985345677BFEE82C4C23113",
+							"key": "JSESSIONID"
+						}
+					],
+					"body": "{\"id\":\"5ba8e0acd7e0e22902f03656\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]}]}"
+				},
+				{
+					"name": "Invalid id - localhost:8080/api/{id}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/sdfdf",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"sdfdf"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 24 Sep 2018 13:02:39 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+							"httpOnly": true,
+							"domain": "localhost",
+							"path": "/",
+							"secure": false,
+							"value": "8BD0450B9985345677BFEE82C4C23113",
+							"key": "JSESSIONID"
+						}
+					],
+					"body": "{\"status\":\"NOT_FOUND\",\"timestamp\":\"2018-09-24T15:02:39.483\",\"errorMessage\":\"EntityNotFoundException\",\"detailedErrorMessage\":\"MeasureSummary was not found for parameters sdfdf\"}"
+				}
+			]
+		},
+		{
+			"name": "Get fv for {{taskId}}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/fv/stateandbehavior.Account",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"fv",
+						"stateandbehavior.Account"
+					]
+				},
+				"description": "Should return measure with provided id\n"
+			},
+			"response": [
+				{
+					"name": "Success - localhost:8080/api/{id}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/5ba8e0acd7e0e22902f03656",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"5ba8e0acd7e0e22902f03656"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 24 Sep 2018 13:04:09 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+							"httpOnly": true,
+							"domain": "localhost",
+							"path": "/",
+							"secure": false,
+							"value": "8BD0450B9985345677BFEE82C4C23113",
+							"key": "JSESSIONID"
+						}
+					],
+					"body": "{\"id\":\"5ba8e0acd7e0e22902f03656\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]}]}"
+				},
+				{
+					"name": "Invalid id - localhost:8080/api/{id}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/sdfdf",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"sdfdf"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 24 Sep 2018 13:02:39 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+							"httpOnly": true,
+							"domain": "localhost",
+							"path": "/",
+							"secure": false,
+							"value": "8BD0450B9985345677BFEE82C4C23113",
+							"key": "JSESSIONID"
+						}
+					],
+					"body": "{\"status\":\"NOT_FOUND\",\"timestamp\":\"2018-09-24T15:02:39.483\",\"errorMessage\":\"EntityNotFoundException\",\"detailedErrorMessage\":\"MeasureSummary was not found for parameters sdfdf\"}"
+				}
+			]
+		},
+		{
+			"name": "Get solution fv for {{taskId}}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:8080/api/fv/solution/stateandbehavior.Account",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"fv",
+						"solution",
+						"stateandbehavior.Account"
+					]
+				},
+				"description": "Should return measure with provided id\n"
+			},
+			"response": [
+				{
+					"name": "Invalid id - localhost:8080/api/{id}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/sdfdf",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"sdfdf"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 24 Sep 2018 13:02:39 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+							"httpOnly": true,
+							"domain": "localhost",
+							"path": "/",
+							"secure": false,
+							"value": "8BD0450B9985345677BFEE82C4C23113",
+							"key": "JSESSIONID"
+						}
+					],
+					"body": "{\"status\":\"NOT_FOUND\",\"timestamp\":\"2018-09-24T15:02:39.483\",\"errorMessage\":\"EntityNotFoundException\",\"detailedErrorMessage\":\"MeasureSummary was not found for parameters sdfdf\"}"
+				},
+				{
+					"name": "Success - localhost:8080/api/{id}",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "localhost:8080/api/5ba8e0acd7e0e22902f03656",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"5ba8e0acd7e0e22902f03656"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 24 Sep 2018 13:04:09 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked",
+							"name": "Transfer-Encoding",
+							"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Tue Jan 19 2038 04:14:07 GMT+0100 (CET)",
+							"httpOnly": true,
+							"domain": "localhost",
+							"path": "/",
+							"secure": false,
+							"value": "8BD0450B9985345677BFEE82C4C23113",
+							"key": "JSESSIONID"
+						}
+					],
+					"body": "{\"id\":\"5ba8e0acd7e0e22902f03656\",\"taskName\":\"Train-oppgave\",\"taskId\":\"stateandbehavior.Train\",\"measures\":[{\"measureProvider\":\"org.metrics.cyclomatic\",\"specificMeasures\":[{\"name\":\"cyclomaticComplexity\",\"value\":3.0}]}]}"
+				}
+			]
+		},
+		{
+			"name": "Add new measureSummary - stateandbehavior.Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\n    \n    \"taskName\": \"Account-oppgave\",\n    \"userId\": \"001\",\n    \"taskId\": \"stateandbehavior.Account\",\n    \"measures\": [\n        {\n            \"measureProvider\": \"org.metrics.cyclomatic\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"cyclomaticComplexity\",\n                    \"value\": 3\n                }\n            ]\n        },\n        {\n            \"measureProvider\": \"no.hal.javalang\",\n            \"specificMeasures\": [\n                {\n                    \"name\": \"for\",\n                    \"value\": 4\n                },\n                {\n                    \"name\": \"foreach\",\n                    \"value\": 1\n                },\n                {\n                    \"name\": \"while\",\n                    \"value\": 4\n                }\n            ]\n        }\n    ]\n }"
+				},
+				"url": {
+					"raw": "localhost:8080/api/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						""
+					]
+				},
+				"description": "Should store a new metric"
+			},
+			"response": []
+		}
+	]
+}
