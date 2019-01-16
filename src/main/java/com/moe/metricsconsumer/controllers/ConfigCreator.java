@@ -4,6 +4,7 @@ package com.moe.metricsconsumer.controllers;
 
 import no.hal.learning.fv.*;
 import no.hal.learning.fv.impl.MetaDataFeatureValuedImpl;
+import org.bson.types.Binary;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -185,7 +186,7 @@ public class ConfigCreator {
 
     FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
     filteredFeatures.setPred(Pred2Kind.GT);
-    filteredFeatures.setVal(3);
+    filteredFeatures.setVal(4);
     filteredFeatures.setOther(metaDataFeatureValued);
 
     // load config from XMI
@@ -201,4 +202,37 @@ public class ConfigCreator {
     dataResource.save(null);
     configResource.save(null);
   }
+
+  public void createAchievementConfig2() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures.setPred(Pred2Kind.GT);
+    filteredFeatures.setVal(4);
+    filteredFeatures.setOther(metaDataFeatureValued);
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig2.xmi"));
+    configResource.getContents().add(filteredFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData2.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+
+    dataResource.save(null);
+    configResource.save(null);
+  }
+
+
 }

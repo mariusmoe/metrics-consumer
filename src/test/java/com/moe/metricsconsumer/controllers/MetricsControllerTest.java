@@ -182,7 +182,7 @@ public class MetricsControllerTest {
       .andDo(MockMvcResultHandlers.print());
   }
 
-  @Test
+  /*@Test
   public void getAllAchievements() throws Exception {
     String taskIdRefAccount = "stateandbehavior.Account";
     Achievement achievement1 = new Achievement(200,
@@ -222,7 +222,7 @@ public class MetricsControllerTest {
       .andExpect(content().json("[{\"id\":null,\"threshold\":200,\"taskIdRef\":\"stateandbehavior.Account\",\"expression\":\"for * 3\",\"name\":\"For expert For for\",\"description\":\"Award for exceptional work on for\",\"cumulative\":false},{\"id\":null,\"threshold\":600,\"taskIdRef\":\"stateandbehavior.Account\",\"expression\":\"while * 5\",\"name\":\"While expert super\",\"description\":\"Award for exceptional work on while nr1\",\"cumulative\":false},{\"id\":null,\"threshold\":1200,\"taskIdRef\":\"stateandbehavior.Account\",\"expression\":\"while * 1\",\"name\":\"While expert easy\",\"description\":\"Award for exceptional work on while next\",\"cumulative\":false}]"))
       .andDo(MockMvcResultHandlers.print());
   }
-
+*/
 
   @Test
   public void deleteMeasureSummary() throws Exception {

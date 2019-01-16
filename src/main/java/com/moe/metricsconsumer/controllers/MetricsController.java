@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.apiErrorHandling.CouldNotSaveException;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
+import com.moe.metricsconsumer.models.ExerciseDocument;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
@@ -15,6 +16,8 @@ import com.moe.metricsconsumer.repositories.MeasureRepository;
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
 import com.sun.xml.internal.bind.v2.TODO;
 import no.hal.learning.fv.*;
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.codehaus.jackson.JsonNode;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -22,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +41,7 @@ import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.validation.Valid;
-import java.io.IOException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
@@ -187,16 +191,22 @@ public class MetricsController {
           .filter(object -> achievement.getId().equals(object.getAchievementRef()))
           .findAny()
           .orElse(null);
+        System.out.println("\n\n");
+        System.out.println("achievement.isCumulative(): " + achievement.isCumulative());
+        System.out.println("userAchievement: " + userAchievement);
+        System.out.println("\n\n");
         if (userAchievement != null) {
           // It exists already -> just update or add to history
-//          userAchievement.getHistory().put(measureSummary.getTaskName(), 5);
+          userAchievement.getHistory().put(measureSummary.getTaskName(), calculatedFeatureList.getFeatures().size());
 //          userAchievementList.add(userAchievement);
         } else {
           // It ain't here -> create a new UserAchievement
           // TODO: create eval method for (if the reward should be given/progress)
+          Map<String, Integer> newHistory = new HashMap<>();
+          newHistory.put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size() );
           UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
             achievement.getId(),
-            AchievementState.REVEALED, null, null);
+            AchievementState.REVEALED, null, newHistory);
           userAchievementList.add(newUserAchievement);
         }
       }
@@ -209,11 +219,48 @@ public class MetricsController {
         } catch (IOException e) {
           e.printStackTrace();
         }
-        // TODO: load config for the right achievement
         // Load config from file system
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+//        ResourceSet resSet = new ResourceSetImpl();
+//        Resource resource = resSet.getResource(URI.createURI("achievementConfig.xmi"), true);
+
+
+/*        Resource resSet2 = new BinaryResourceImpl( URI.createURI( "achievementConfig.xmi"));
+        try {
+          resSet2.load(new ByteArrayInputStream(achievement.getExpression().getData()),null );
+        } catch (IOException e) {
+          e.printStackTrace();
+        }*/
         ResourceSet resSet = new ResourceSetImpl();
-        Resource resource = resSet.getResource(URI.createURI("achievementConfig.xmi"), true);
+        Resource resource = null;
+        FileOutputStream fos = null;
+        if (achievement.getExpression() != null) {
+          try {
+            File tempFile = File.createTempFile("achievementConfigTemp", ".xmi", null);
+            fos = new FileOutputStream(tempFile);
+            fos.write(achievement.getExpression().getData());
+
+            System.out.println(tempFile.getCanonicalPath());
+
+            resource = resSet.getResource(URI.createURI(tempFile.getCanonicalPath()), true);
+
+            System.out.println(resource.getContents());
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        } else {
+          // Fallback - reads static
+          resource = resSet.getResource(URI.createURI("achievementConfig.xmi"), true);
+        }
+
+
+
+
+        System.out.println("Raw print of expression: " + achievement.getExpression());
+
+
 
         FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
         // Replace all references to 'other' in config.xmi with 'featureList'
@@ -233,23 +280,20 @@ public class MetricsController {
 
 
         if (calculatedFeatureList.getFeatures().size() > 0) {
-          giveRewardToUser(achievement, newMeasureSummary.getUserId());
+//          giveRewardToUser(achievement, newMeasureSummary.getUserId());
           System.out.println("GRATULERER!!!");
+
+
+          System.out.println("READ tHIS: " + calculatedFeatureList);
+
+
+          UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
+            achievement.getId(),
+            AchievementState.REVEALED, LocalDateTime.now(), null);
+          System.out.println("newUserAchievement: " + newUserAchievement);
+          userAchievementList.add(newUserAchievement);
+
         }
-
-
-
-
-        System.out.println("READ tHIS: " + calculatedFeatureList);
-
-
-        UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
-          achievement.getId(),
-          AchievementState.REVEALED, null, null);
-        System.out.println("newUserAchievement: " + newUserAchievement);
-        userAchievementList.add(newUserAchievement);
-
-
       }
     };
 

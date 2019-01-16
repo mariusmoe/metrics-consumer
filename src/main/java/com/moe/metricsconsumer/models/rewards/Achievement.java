@@ -5,7 +5,7 @@ import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 
 import javax.validation.constraints.NotNull;
-import java.util.Map;
+
 
 
 @Data
@@ -34,7 +34,7 @@ public class Achievement {
 
 
   /**
-   *
+   * Describes an achievement
    * @param threshold       Value must supass this value to achieve the achievement
    * @param isCumulative   Boolean indicating if the achievement shoudld be rewarded for accumulated score
    * @param taskIdRef       Reference to task if any

@@ -28,6 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 @SpringBootApplication
@@ -218,29 +219,34 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
       ConfigCreator configCreator = new ConfigCreator();
       configCreator.createAchievementConfig();
-      Resource resource =
+      configCreator.createAchievementConfig2();
+     // Resource resource =
       // TODO: Change these according to notes!
+
       String taskIdRefAccount = "stateandbehavior.Account";
-      Achievement achievement1 = new Achievement(200,
+      Achievement achievement1 = new Achievement(
+        200,
         false,
         taskIdRefAccount,
-        new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()),
+        new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig.xmi").toPath())),
+        //new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()),
         "For expert For for",
-        "Award for exceptional work on for"
+        "Award for exceptional work on for loops"
         );
 
+//      achievementConfig2
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
-        null,
+        new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig2.xmi").toPath())),
         "While expert super",
         "Award for exceptional work on while nr1"
         );
 
       Achievement achievement3 = new Achievement(1200,
-        false,
+        true,
         taskIdRefAccount,
-        null,
+        new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig.xmi").toPath())),
         "While expert easy",
         "Award for exceptional work on while next"
       );
