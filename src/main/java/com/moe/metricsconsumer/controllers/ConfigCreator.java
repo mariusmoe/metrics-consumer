@@ -217,7 +217,7 @@ public class ConfigCreator {
 
     FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
     filteredFeatures.setPred(Pred2Kind.GT);
-    filteredFeatures.setVal(4);
+    filteredFeatures.setVal(7);
     filteredFeatures.setOther(metaDataFeatureValued);
 
     // load config from XMI

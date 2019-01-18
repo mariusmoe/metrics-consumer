@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 
+import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.repositories.XmlRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -52,7 +53,6 @@ public class RawDataController {
   }
 
   private ObjectNode saveExFiles(@NonNull String measureSummaryRef, MultipartFile[] uploadingFiles) {
-    ObjectNode res;
 
     // TODO: lookup all ex files for this task with 'measureSummaryRef' and delete them.
     // Reason we only want to keep one copy of the ex file.
@@ -72,20 +72,50 @@ public class RawDataController {
         mongoTemplate.save(exerciseDocument);
         System.out.println(exerciseDocument);
       } catch (Exception e) {
-        e.printStackTrace();
-        res = mapper.createObjectNode();
-        res.put("message", "ERROR: " + e.toString());
-        res.put("status", "4000");
-        return res;
+        return returnSimpleError(e);
       }
     }
 
-    // TODO check for rewards!
+    ObjectNode res;
+    // Check for rewards! its done on retrieval
 
     res = mapper.createObjectNode();
     res.put("message", "Success - document has been saved" );
     res.put("status", "2000");
 
+    return res;
+  }
+
+  @PostMapping("/achievement")
+  @ResponseBody
+  public ObjectNode newAchievement(@RequestHeader(value="achievementRef") String achievementRef, @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles){
+    for(MultipartFile uploadedFile : uploadingFiles) {
+      try {
+        // TODO find achievement in db based on achievementRef
+        // Some db operation
+        achievementDocument.setExpression( new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()));
+        mongoTemplate.save(achievementDocument);
+        System.out.println("achievementDocument: " + achievementDocument);
+      } catch (Exception e) {
+        return returnSimpleError(e);
+      }
+    }
+
+
+    ObjectNode res;
+    res = mapper.createObjectNode();
+    res.put("message", "Success - document has been saved" );
+    res.put("status", "2000");
+
+    return res;
+  }
+
+  private ObjectNode returnSimpleError(Exception e) {
+    ObjectNode res;
+    e.printStackTrace();
+    res = mapper.createObjectNode();
+    res.put("message", "ERROR: " + e.toString());
+    res.put("status", "4000");
     return res;
   }
 }
