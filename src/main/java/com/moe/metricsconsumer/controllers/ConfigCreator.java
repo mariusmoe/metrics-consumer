@@ -2,6 +2,7 @@ package com.moe.metricsconsumer.controllers;
 
 
 
+import javafx.util.Pair;
 import no.hal.learning.fv.*;
 import no.hal.learning.fv.impl.MetaDataFeatureValuedImpl;
 import org.bson.types.Binary;
@@ -11,7 +12,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ConfigCreator {
 
@@ -232,7 +235,49 @@ public class ConfigCreator {
 
     dataResource.save(null);
     configResource.save(null);
+
+
   }
 
+  public ArrayList createAchievementConfig3() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures.setPred(Pred2Kind.GT);
+    filteredFeatures.setVal(2);
+    filteredFeatures.setOther(metaDataFeatureValued);
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
+    configResource.getContents().add(filteredFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+
+    ByteArrayOutputStream dataResourceOutputStream = new ByteArrayOutputStream();
+    dataResource.save(dataResourceOutputStream ,null);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream ,null);
+
+
+    ArrayList<byte[]> list = new ArrayList<>();
+    list.add(dataResourceOutputStream.toByteArray());
+    list.add(configResourceOutputStream.toByteArray());
+
+    return list;
+  }
 
 }

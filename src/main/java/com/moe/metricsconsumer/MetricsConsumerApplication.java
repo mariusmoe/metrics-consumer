@@ -11,6 +11,7 @@ import com.moe.metricsconsumer.repositories.MeasureRepository;
 
 
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
+import javafx.util.Pair;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -220,6 +221,10 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       ConfigCreator configCreator = new ConfigCreator();
       configCreator.createAchievementConfig();
       configCreator.createAchievementConfig2();
+
+      ArrayList<byte[]> temp = configCreator.createAchievementConfig3();
+      byte[] dataResourceByteArray = temp.get(0);
+      byte[] configResourceByteArray = temp.get(1);
      // Resource resource =
       // TODO: Change these according to notes!
 
@@ -228,7 +233,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         200,
         false,
         taskIdRefAccount,
-        new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig.xmi").toPath())),
+        new Binary(configResourceByteArray),
+        new Binary(dataResourceByteArray),
         //new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()),
         "For expert For for",
         "Award for exceptional work on for loops"
@@ -238,7 +244,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
-        new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig2.xmi").toPath())),
+        new Binary( Files.readAllBytes(new File("achievementConfig2.xmi").toPath())),
+        null,
         "While expert super",
         "Award for exceptional work on while nr1"
         );
@@ -247,13 +254,14 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         true,
         taskIdRefAccount,
         new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig.xmi").toPath())),
+        null,
         "While expert easy",
         "Award for exceptional work on while next"
       );
 
       achievementRepository.save(achievement1);
-      achievementRepository.save(achievement2);
-      achievementRepository.save(achievement3);
+//      achievementRepository.save(achievement2);
+//      achievementRepository.save(achievement3);
 
 //      List<Achievement> achievementList = achievementRepository.findAll();
 //

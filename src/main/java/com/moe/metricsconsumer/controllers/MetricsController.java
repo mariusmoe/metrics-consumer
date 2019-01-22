@@ -226,14 +226,6 @@ public class MetricsController {
         // Load config from file system
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 
-        /*
-        Resource resSet2 = new BinaryResourceImpl( URI.createURI( "achievementConfig.xmi"));
-        try {
-          resSet2.load(new ByteArrayInputStream(achievement.getExpression().getData()),null );
-        } catch (IOException e) {
-          e.printStackTrace();
-        }*/
-
         FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
 
         // Printed too many times due to all achivements has the same config atm
@@ -268,30 +260,20 @@ public class MetricsController {
    * @return Resource resource for the expression of the achievement
    */
   private Resource getResource(Achievement achievement) {
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
     ResourceSet resSet = new ResourceSetImpl();
-    Resource resource = null;
-    FileOutputStream fos = null;
-    if (achievement.getExpression() != null) {
-      try {
-        File tempFile = File.createTempFile("achievementConfigTemp", ".xmi", null);
-        fos = new FileOutputStream(tempFile);
-        fos.write(achievement.getExpression().getData());
 
-        System.out.println(tempFile.getCanonicalPath());
-
-        resource = resSet.getResource(URI.createURI(tempFile.getCanonicalPath()), true);
-
-        System.out.println(resource.getContents());
-      } catch (FileNotFoundException e) {
-        e.printStackTrace();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    } else {
-      // Fallback - reads static
-      resource = resSet.getResource(URI.createURI("achievementConfig.xmi"), true);
+    // load config from XMI
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
+    try {
+      configResource.load(new ByteArrayInputStream(achievement.getExpression().getData()),null );
+      dataResource.load(new ByteArrayInputStream(achievement.getDummyData().getData()),null );
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    return resource;
+
+    return configResource;
   }
 
   private FeatureList getCalculatedFeatureList(FeatureValuedContainer featureValuedContainer, Resource resource) {

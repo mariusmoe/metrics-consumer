@@ -93,9 +93,9 @@ public class RawDataController {
       try {
         // TODO find achievement in db based on achievementRef
         // Some db operation
-        achievementDocument.setExpression( new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()));
-        mongoTemplate.save(achievementDocument);
-        System.out.println("achievementDocument: " + achievementDocument);
+//        achievementDocument.setExpression( new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()));
+//        mongoTemplate.save(achievementDocument);
+//        System.out.println("achievementDocument: " + achievementDocument);
       } catch (Exception e) {
         return returnSimpleError(e);
       }

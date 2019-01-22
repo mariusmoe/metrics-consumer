@@ -25,6 +25,8 @@ public class Achievement {
   @NotNull
   private Binary expression;
 
+  private Binary dummyData;
+
   @NotNull
   private String name;
 
@@ -46,6 +48,7 @@ public class Achievement {
                      boolean isCumulative,
                      String taskIdRef,
                      @NotNull Binary expression,
+                     Binary dummyData,
                      @NotNull String name,
                      @NotNull String description
                      ) {
@@ -53,6 +56,7 @@ public class Achievement {
     this.isCumulative = isCumulative;
     this.taskIdRef = taskIdRef;
     this.expression = expression;
+    this.dummyData = dummyData;
     this.name = name;
     this.description = description;
 
