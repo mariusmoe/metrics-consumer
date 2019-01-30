@@ -2,6 +2,7 @@ package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.moe.metricsconsumer.apiErrorHandling.ApiError;
 import com.moe.metricsconsumer.apiErrorHandling.CouldNotSaveException;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.models.ExerciseDocument;
@@ -180,8 +181,7 @@ public class MetricsController {
 
     FeatureValuedContainer featureValuedContainer = controllerUtil.createContainerFromMeasures(measureSummary);
 
-    System.out.println("********************START************************");
-    System.out.println("**************************************************\n\n");
+    System.out.println("********************START************************\n\n");
 
     String userAchievementId = "";
     // Loop over -> add achieved achievements to list as a list of UserAchievement
@@ -196,7 +196,7 @@ public class MetricsController {
       if (achievement.isCumulative()) {
         UserAchievement userAchievement = userAchievements.stream()
           .filter(object -> achievement.getId().equals(object.getAchievementRef())).findAny().orElse(null);
-        System.out.println("achievement.isCumulative(): " + achievement.isCumulative());
+        System.out.println("\nachievement.isCumulative(): " + achievement.isCumulative() + "\n");
 
         FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
         if (userAchievement != null) {
@@ -216,13 +216,8 @@ public class MetricsController {
       }
       else if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
         // The achievement belong to this task -> Create/overwrite userAchievement
-        // TODO: create eval method for (if the reward should be given)
         ConfigCreator configCreator = new ConfigCreator();
-        try {
-          configCreator.createAchievementConfig();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+
         // Load config from file system
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
 
@@ -233,19 +228,16 @@ public class MetricsController {
 
         // Eval method for if achievement should be given
         if (calculatedFeatureList.getFeatures().size() > 0) {
-          System.out.println("GRATULERER!!!");
-          System.out.println("calculatedFeatureList: " + calculatedFeatureList);
+          System.out.println("GRATULERER!\ncalculatedFeatureList: " + calculatedFeatureList);
           UserAchievement newUserAchievement = new UserAchievement(newMeasureSummary.getUserId(),
             achievement.getId(),
-            AchievementState.REVEALED, LocalDateTime.now(), null);
-          System.out.println("newUserAchievement: " + newUserAchievement);
+            AchievementState.UNLOCKED, LocalDateTime.now(), null);
           userAchievementList.add(newUserAchievement);
 
         }
       }
     };
-    System.out.println("******************END*************************");
-    System.out.println("**************************************************\n\n");
+    System.out.println("******************END*************************\n\n");
     System.out.println("userAchievementList: " + userAchievementList);
     // Batch save the achieved achievements
     this.userAchievementRepository.saveAll(userAchievementList);
@@ -280,12 +272,22 @@ public class MetricsController {
     FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
     // Replace all references to 'other' in config.xmi with 'featureList'
     for (EObject eObject : resource.getContents()) {
-
       eObject = controllerUtil.replaceReference(eObject, featureValuedContainer);
-      calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
-
+      if (eObject instanceof FeatureValuedContainer){
+        calculatedFeatureList.set(featureValuedContainerToFeatureList((FeatureValuedContainer) eObject), false);
+      } else {
+        calculatedFeatureList.set(((FeatureValued) eObject).toFeatureList(), false);
+      }
     }
     return calculatedFeatureList;
+  }
+
+  private FeatureList featureValuedContainerToFeatureList(FeatureValuedContainer featureValuedContainer) {
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    for (FeatureValued featureValued : featureValuedContainer.getFeatureValuedGroups()){
+      featureList.set(featureValued.toFeatureList(), false);
+    }
+    return featureList;
   }
 
   /**
@@ -294,6 +296,7 @@ public class MetricsController {
    * @param userId        The user that shall receive the reward
    * @throws Exception
    */
+  @Deprecated
   private void giveRewardToUser(Achievement achievement, String userId) throws CouldNotSaveException {
     UserAchievement userAchievement = new UserAchievement(
       userId, achievement.getId(), AchievementState.UNLOCKED, LocalDateTime.now(), null);
@@ -308,14 +311,14 @@ public class MetricsController {
 
   @PostMapping("/solution")
   @ResponseBody
-  public ObjectNode newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary){
+  public ObjectNode newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws CouldNotSaveException{
     MeasureSummary measureSummary = newMeasureSummary;
     measureSummary.setSolutionManual(true);
     return saveMeasureSummary(measureSummary);
   }
 
 
-  public ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) {
+  public ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) throws CouldNotSaveException {
     ObjectNode res;
     try {
       measureRepository.save(newMeasureSummary);
@@ -324,13 +327,10 @@ public class MetricsController {
       res.put("measureSummary", newMeasureSummary.toString());
       res.put("status", "2000");
     } catch (Exception e) {
-      res =  mapper.createObjectNode();
-      res.put("message", "ERROR: " + e.toString());
-      res.put("status", "4000");
+      throw new CouldNotSaveException(newMeasureSummary.getClass(), newMeasureSummary.toString());
     }
     return res;
   }
-
 
 
   @GetMapping("/achievements/user")
@@ -367,18 +367,5 @@ public class MetricsController {
     LinkedHashMap linkedHashMap = (LinkedHashMap) auth.getPrincipal();
     return this.measureRepository.removeAllByUserId((String) linkedHashMap.get("userid"));
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

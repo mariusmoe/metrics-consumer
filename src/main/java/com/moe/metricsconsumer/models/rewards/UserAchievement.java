@@ -35,7 +35,4 @@ public class UserAchievement {
     this.dateAchieved = dateAchieved;
   }
 
-//  public UserAchievement(String userRef, String achievementRef, AchievementState achievementState, LocalDateTime dateAchieved) {
-//    this(userRef, achievementRef, achievementState,null, dateAchieved);
-//  }
 }

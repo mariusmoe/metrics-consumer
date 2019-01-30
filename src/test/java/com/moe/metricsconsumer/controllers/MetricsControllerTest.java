@@ -2,6 +2,7 @@ package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.moe.metricsconsumer.apiErrorHandling.CouldNotSaveException;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
@@ -163,7 +164,7 @@ public class MetricsControllerTest {
 
 
   @Test
-  public void newSolutionMeasureSummary() throws Exception {
+  public void newSolutionMeasureSummary() throws Exception, CouldNotSaveException {
     // OMG the POST method expect a valid object in the post request! How can you be so stupid moe?
     ObjectNode res = mapper.createObjectNode();
     res.put("measureSummaryRef", measureSummary.getId());

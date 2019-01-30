@@ -222,9 +222,17 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       configCreator.createAchievementConfig();
       configCreator.createAchievementConfig2();
 
-      ArrayList<byte[]> temp = configCreator.createAchievementConfig3();
-      byte[] dataResourceByteArray = temp.get(0);
-      byte[] configResourceByteArray = temp.get(1);
+      ArrayList<byte[]> temp = configCreator.createAchievementConfig4();
+      byte[] dataResourceByteArray5 = temp.get(0);
+      byte[] configResourceByteArray5 = temp.get(1);
+
+      ArrayList<byte[]> temp3 = configCreator.createAchievementConfig3();
+      byte[] dataResourceByteArray3 = temp3.get(0);
+      byte[] configResourceByteArray3 = temp3.get(1);
+
+      ArrayList<byte[]> temp2 = configCreator.createAchievementConfig2();
+      byte[] dataResourceByteArray2 = temp2.get(0);
+      byte[] configResourceByteArray2 = temp2.get(1);
      // Resource resource =
       // TODO: Change these according to notes!
 
@@ -233,8 +241,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         200,
         false,
         taskIdRefAccount,
-        new Binary(configResourceByteArray),
-        new Binary(dataResourceByteArray),
+        new Binary(configResourceByteArray5),
+        new Binary(dataResourceByteArray5),
         //new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()),
         "For expert For for",
         "Award for exceptional work on for loops"
@@ -244,8 +252,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement2 = new Achievement(600,
         false,
         taskIdRefAccount,
-        new Binary( Files.readAllBytes(new File("achievementConfig2.xmi").toPath())),
-        null,
+        new Binary(configResourceByteArray3),
+        new Binary(dataResourceByteArray3),
         "While expert super",
         "Award for exceptional work on while nr1"
         );
@@ -253,14 +261,14 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       Achievement achievement3 = new Achievement(1200,
         true,
         taskIdRefAccount,
-        new Binary(BsonBinarySubType.BINARY, Files.readAllBytes(new File("achievementConfig.xmi").toPath())),
-        null,
+        new Binary(configResourceByteArray2),
+        new Binary(dataResourceByteArray2),
         "While expert easy",
         "Award for exceptional work on while next"
       );
 
       achievementRepository.save(achievement1);
-//      achievementRepository.save(achievement2);
+      //achievementRepository.save(achievement2);
 //      achievementRepository.save(achievement3);
 
 //      List<Achievement> achievementList = achievementRepository.findAll();

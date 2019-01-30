@@ -22,7 +22,7 @@ public class Achievement {
 
   private String taskIdRef;
 
-  @NotNull
+
   private Binary expression;
 
   private Binary dummyData;
@@ -47,7 +47,7 @@ public class Achievement {
   public Achievement(@NotNull int threshold,
                      boolean isCumulative,
                      String taskIdRef,
-                     @NotNull Binary expression,
+                     Binary expression,
                      Binary dummyData,
                      @NotNull String name,
                      @NotNull String description

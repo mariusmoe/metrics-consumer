@@ -2,6 +2,7 @@ package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.moe.metricsconsumer.apiErrorHandling.CouldNotSaveException;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
@@ -92,7 +93,7 @@ public class MetricsControllerFvTest {
   }
 
   @Test
-  public void getOneMeasureFv() throws Exception {
+  public void getOneMeasureFv() throws Exception, CouldNotSaveException {
     // NYI
     ObjectNode res = mapper.createObjectNode();
     res.put("measureSummaryRef", measureSummary.getId());

@@ -2,10 +2,12 @@ package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.moe.metricsconsumer.apiErrorHandling.CouldNotSaveException;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 
 import com.moe.metricsconsumer.models.rewards.Achievement;
+import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.XmlRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 /**
@@ -35,6 +38,9 @@ public class RawDataController {
 
   @Autowired
   XmlRepository xmlRepository;
+
+  @Autowired
+  private AchievementRepository achievementRepository;
 
 
   // Possible extensions - print a warning if some metrics has not been calculated
@@ -88,20 +94,33 @@ public class RawDataController {
 
   @PostMapping("/achievement")
   @ResponseBody
-  public ObjectNode newAchievement(@RequestHeader(value="achievementRef") String achievementRef, @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles){
-    for(MultipartFile uploadedFile : uploadingFiles) {
-      try {
-        // TODO find achievement in db based on achievementRef
-        // Some db operation
-//        achievementDocument.setExpression( new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()));
-//        mongoTemplate.save(achievementDocument);
-//        System.out.println("achievementDocument: " + achievementDocument);
-      } catch (Exception e) {
-        return returnSimpleError(e);
-      }
+  public Achievement newAchievement(@Valid @RequestBody Achievement newAchievement ){
+    return achievementRepository.save(newAchievement);
+  }
+
+
+  @PostMapping("/achievement/file")
+  @ResponseBody
+  public ObjectNode newAchievementFile(
+    @RequestHeader(value="achievementId") String achievementId,
+    @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles) throws CouldNotSaveException {
+
+    Achievement achievement = null;
+    Optional<Achievement> optionalAchievement= achievementRepository.findById(achievementId);
+    if(optionalAchievement.isPresent()){
+      achievement = optionalAchievement.get();
     }
 
+    try {
+      achievement.setExpression( new Binary(BsonBinarySubType.BINARY, uploadingFiles[0].getBytes()));
+      achievement.setDummyData( new Binary(BsonBinarySubType.BINARY, uploadingFiles[1].getBytes()));
+      mongoTemplate.save(achievement);
+      System.out.println("achievementDocument: " + achievement);
+    } catch (Exception e) {
+      throw new CouldNotSaveException(achievement.getClass(), achievement.toString());
+    }
 
+    
     ObjectNode res;
     res = mapper.createObjectNode();
     res.put("message", "Success - document has been saved" );

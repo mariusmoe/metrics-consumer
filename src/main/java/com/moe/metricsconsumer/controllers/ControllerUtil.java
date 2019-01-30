@@ -46,7 +46,6 @@ public class ControllerUtil {
 
   /**
    * Find the reference or the references that is not the same as the eObject's eResource and replace them
-   * (the last part is NYI)
    *
    * @param eObject   The eObject to replace references in
    */
@@ -54,7 +53,7 @@ public class ControllerUtil {
   public EObject replaceReference(EObject eObject, FeatureValuedContainer featureValuedContainer) {
     for (EReference eStructuralFeature : eObject.eClass().getEAllReferences()) {
       // Skip if its a container, isContainment, or is not changeable
-      if (eStructuralFeature.isContainer() || eStructuralFeature.isContainment() || !eStructuralFeature.isChangeable()) {
+      if (eStructuralFeature.isContainer() || !eStructuralFeature.isChangeable()) {
         continue;
       }
       // If there is more than one eStructuralFeature
@@ -62,9 +61,11 @@ public class ControllerUtil {
         EList<? extends EObject> references = (EList<? extends EObject>) eObject.eGet(eStructuralFeature);
         for (int i = 0; i < references.size(); i++) {
           EObject referenced = references.get(i);
-          if (referenced.eResource() != eObject.eResource()) {
+          if (referenced != null && referenced.eResource() != eObject.eResource()) {
             MetaDataFeatureValued metaDataFeatureValuedReferenced = findMetaDataFeatureValuedReferenced(featureValuedContainer, referenced);
             eObject.eSet(eStructuralFeature, metaDataFeatureValuedReferenced);
+          } else if (eStructuralFeature.isContainment()) {
+            replaceReference(referenced, featureValuedContainer);
           }
         }
       } else {
@@ -72,6 +73,8 @@ public class ControllerUtil {
         if (referenced != null && referenced.eResource() != eObject.eResource()) {
           MetaDataFeatureValued metaDataFeatureValuedReferenced = findMetaDataFeatureValuedReferenced(featureValuedContainer, referenced);
           eObject.eSet(eStructuralFeature, metaDataFeatureValuedReferenced);
+        } else if (eStructuralFeature.isContainment()) {
+          replaceReference(referenced, featureValuedContainer);
         }
       }
     }

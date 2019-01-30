@@ -175,7 +175,7 @@ public class ConfigCreator {
     configResource.save(null);
   }
 
-  public void createAchievementConfig() throws IOException {
+  public ArrayList createAchievementConfig() throws IOException {
 
 
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
@@ -202,11 +202,10 @@ public class ConfigCreator {
     Resource dataResource = resSet.createResource(URI.createURI("achievementData.xmi"));
     dataResource.getContents().add(metaDataFeatureValued);
 
-    dataResource.save(null);
-    configResource.save(null);
+    return getByteArrayList(configResource, dataResource);
   }
 
-  public void createAchievementConfig2() throws IOException {
+  public ArrayList createAchievementConfig2() throws IOException {
 
 
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
@@ -233,8 +232,7 @@ public class ConfigCreator {
     Resource dataResource = resSet.createResource(URI.createURI("achievementData2.xmi"));
     dataResource.getContents().add(metaDataFeatureValued);
 
-    dataResource.save(null);
-    configResource.save(null);
+    return getByteArrayList(configResource, dataResource);
 
 
   }
@@ -253,7 +251,7 @@ public class ConfigCreator {
 
     FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
     filteredFeatures.setPred(Pred2Kind.GT);
-    filteredFeatures.setVal(2);
+    filteredFeatures.setVal(7);
     filteredFeatures.setOther(metaDataFeatureValued);
 
     // load config from XMI
@@ -266,11 +264,130 @@ public class ConfigCreator {
     Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
     dataResource.getContents().add(metaDataFeatureValued);
 
+    return getByteArrayList(configResource, dataResource);
+  }
+
+
+  public ArrayList createAchievementConfig4() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+    FeatureList featureList2 = FvFactory.eINSTANCE.createFeatureList();
+    featureList2.getFeatures().put("cyclomaticComplexity", 8.0);
+    featureList2.getFeatures().put("CLOC", 23.0);
+    featureList2.getFeatures().put("NCLOC", 15.0);
+
+    MetaDataFeatureValued metaDataFeatureValued2 = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued2.setFeatureValuedId("org_metrics_cyclomatic");
+    metaDataFeatureValued2.setDelegatedFeatureValued(featureList2);
+
+
+    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures.setPred(Pred2Kind.GT);
+    filteredFeatures.setVal(2);
+    filteredFeatures.setOther(metaDataFeatureValued);
+
+    FilteredFeatures2 filteredFeatures2 = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures2.setPred(Pred2Kind.GT);
+    filteredFeatures2.setVal(2);
+    filteredFeatures2.setOther(metaDataFeatureValued2);
+
+    // TODO: does not work because FeatureValuedContainer contains featureValuedGroups
+    FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+    featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures);
+    featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures2);
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
+    configResource.getContents().add(featureValuedContainer);
+
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+    dataResource.getContents().add(metaDataFeatureValued2);
+
     ByteArrayOutputStream dataResourceOutputStream = new ByteArrayOutputStream();
     dataResource.save(dataResourceOutputStream ,null);
+    dataResource.save(null);
 
     ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
     configResource.save(configResourceOutputStream ,null);
+    configResource.save(null);
+
+
+    ArrayList<byte[]> list = new ArrayList<>();
+    list.add(dataResourceOutputStream.toByteArray());
+    list.add(configResourceOutputStream.toByteArray());
+
+    return list;
+  }
+
+
+
+  public ArrayList createAchievementConfig5() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    featureList.getFeatures().put("foreach", 4.0);
+    featureList.getFeatures().put("while", 5.0);
+    featureList.getFeatures().put("for", 2.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+    FeatureList featureList2 = FvFactory.eINSTANCE.createFeatureList();
+    featureList2.getFeatures().put("cyclomatic", 8.0);
+    featureList2.getFeatures().put("CLOC", 23.0);
+    featureList2.getFeatures().put("NCLOC", 15.0);
+
+    MetaDataFeatureValued metaDataFeatureValued2 = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued2.setFeatureValuedId("org_metrics_cyclomatic");
+    metaDataFeatureValued2.setDelegatedFeatureValued(featureList2);
+
+
+    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures.setPred(Pred2Kind.GT);
+    filteredFeatures.setVal(2);
+    filteredFeatures.setOther(metaDataFeatureValued);
+
+    FilteredFeatures2 filteredFeatures2 = FvFactory.eINSTANCE.createFilteredFeatures2();
+    filteredFeatures2.setPred(Pred2Kind.GT);
+    filteredFeatures2.setVal(2);
+    filteredFeatures2.setOther(metaDataFeatureValued2);
+
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
+    configResource.getContents().add(filteredFeatures);
+    configResource.getContents().add(filteredFeatures2);
+
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+    dataResource.getContents().add(metaDataFeatureValued2);
+
+    return getByteArrayList(configResource, dataResource);
+  }
+
+  private ArrayList getByteArrayList(Resource configResource, Resource dataResource) throws IOException {
+    ByteArrayOutputStream dataResourceOutputStream = new ByteArrayOutputStream();
+    dataResource.save(dataResourceOutputStream, null);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream, null);
 
 
     ArrayList<byte[]> list = new ArrayList<>();
