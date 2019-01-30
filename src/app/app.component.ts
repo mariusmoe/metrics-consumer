@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MatSidenav} from '@angular/material/sidenav';
-import {Router, RouterOutlet} from "@angular/router";
+import {NavigationEnd, Router, RouterOutlet} from "@angular/router";
 import {MeasureSummary, Summary} from "./_models/measure-summary";
 import {MeasureService} from "./_services/measure.service";
 import {Observable} from "rxjs";
@@ -30,12 +30,20 @@ export class AppComponent {
   ) {
     this.authService.getResource();
 
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        (<any>window).ga('set', 'page', event.urlAfterRedirects);
+        (<any>window).ga('send', 'pageview');
+      }
+    });
+
     this.measureService.getSummaries().subscribe(
       (data: Summary[]) => {
         console.log(data);
         this.summaries = data;
       });
   }
+
 
 
   login() {
