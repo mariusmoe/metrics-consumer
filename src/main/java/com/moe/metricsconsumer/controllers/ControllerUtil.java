@@ -1,5 +1,7 @@
 package com.moe.metricsconsumer.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
@@ -10,10 +12,15 @@ import no.hal.learning.fv.MetaDataFeatureValued;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
+
 public class ControllerUtil {
+
+
 
   public FeatureValuedContainer createContainerFromMeasures(MeasureSummary measureSummary) {
     FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
@@ -81,7 +88,8 @@ public class ControllerUtil {
     return eObject;
   }
 
-  private MetaDataFeatureValued findMetaDataFeatureValuedReferenced(FeatureValuedContainer featureValuedContainer, EObject referenced) {
+  private MetaDataFeatureValued findMetaDataFeatureValuedReferenced(FeatureValuedContainer featureValuedContainer,
+                                                                    EObject referenced) {
     // Now find the featureValued with the correct id in the retrieving user's data.
     Iterator<EObject> iterator = featureValuedContainer.eAllContents();
     while (iterator.hasNext()) {
@@ -97,4 +105,18 @@ public class ControllerUtil {
     // Throw error instead?
     return null;
   }
+
+  public ObjectNode jsonResponse(int status, String message, Object ...additionalParams) {
+    Object _additionalParams = (additionalParams.length >= 1) ? additionalParams : null;
+    ObjectMapper mapper = new ObjectMapper();
+    ObjectNode res = mapper.createObjectNode();
+    res.put("status", ""+status);
+    res.put("message", message);
+    if (_additionalParams != null) {
+      res.put("details", mapper.valueToTree(additionalParams));
+    }
+    return res;
+  }
+
+
 }

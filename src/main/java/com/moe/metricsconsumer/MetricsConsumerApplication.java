@@ -268,8 +268,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       );
 
       achievementRepository.save(achievement1);
-      //achievementRepository.save(achievement2);
-//      achievementRepository.save(achievement3);
+      achievementRepository.save(achievement2);
+      achievementRepository.save(achievement3);
 
 //      List<Achievement> achievementList = achievementRepository.findAll();
 //

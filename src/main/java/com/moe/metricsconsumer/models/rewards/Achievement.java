@@ -34,6 +34,7 @@ public class Achievement {
   private String description;
 
 
+  public Achievement() {}
 
   /**
    * Describes an achievement

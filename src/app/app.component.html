@@ -1,9 +1,16 @@
 
   <mat-toolbar class="top-row-toolbar">
-    <button mat-button (click)="sidenav.toggle()">
-      <mat-icon class="example-icon">menu</mat-icon>
-      <span> Measures</span>
-    </button>
+    <div>
+      <button mat-button (click)="sidenav.toggle()">
+        <mat-icon class="example-icon">menu</mat-icon>
+        <span> Measures</span>
+      </button>
+      <button mat-button routerLink="/achievements">
+        <mat-icon class="example-icon">security</mat-icon>
+        <span> Achievements</span>
+      </button>
+
+    </div>
 
     <button mat-button [matMenuTriggerFor]="menu">
       <mat-icon class="example-icon">face</mat-icon>

@@ -85,6 +85,7 @@ public class MetricsControllerFv {
       query.addCriteria(Criteria.where("isSolutionManual").is(true));
       query.addCriteria(Criteria.where("taskId").is(taskId));
       measureSummary = this.mongoTemplate.findOne(query, MeasureSummary.class);
+      measureSummary = this.measureRepository.getFirstByIsSolutionManualAndTaskId(true,taskId);
     } else {
       measureSummary = this.measureRepository.findFirstByUserIdAndTaskId("001", taskId);
     }
@@ -127,8 +128,5 @@ public class MetricsControllerFv {
 
     return calculatedFeatureList;
   }
-
-
-
 
 }

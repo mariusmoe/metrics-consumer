@@ -18,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import { SettingsComponent } from './components/settings/settings.component';
+import { AchievementsComponent } from './components/achievements/achievements.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     AppComponent,
     HomeComponent,
     NotFoundComponent,
-    SettingsComponent
+    SettingsComponent,
+    AchievementsComponent
 
   ],
   imports: [

@@ -1,5 +1,6 @@
 package com.moe.metricsconsumer.repositories;
 
+import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -28,7 +29,7 @@ public interface MeasureRepository extends MongoRepository<MeasureSummary, Strin
 
   public MeasureSummary findFirstByUserIdAndTaskId(String userId, String taskId);
 
-
+  public MeasureSummary getFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
 
 
 }
