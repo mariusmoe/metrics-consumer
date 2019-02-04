@@ -29,6 +29,9 @@ public interface MeasureRepository extends MongoRepository<MeasureSummary, Strin
 
   public MeasureSummary findFirstByUserIdAndTaskId(String userId, String taskId);
 
+
+  public MeasureSummary findFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
+
   public MeasureSummary getFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
 
 

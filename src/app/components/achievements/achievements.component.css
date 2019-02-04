@@ -1,0 +1,14 @@
+.description {
+  margin-left: 24px;
+}
+
+.top-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-refresh {
+  margin-right: 24px;
+}
+

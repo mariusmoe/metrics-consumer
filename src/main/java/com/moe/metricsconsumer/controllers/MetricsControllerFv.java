@@ -47,12 +47,24 @@ public class MetricsControllerFv {
   ControllerUtil controllerUtil = new ControllerUtil();
 
 
+  /**
+   * Get the feature vector for the currently logged in user for the provided task
+   * @param taskId  the task one want to get the fv for
+   * @return
+   * @throws EntityNotFoundException
+   */
   @GetMapping("/{taskId}")
   @ResponseBody
   public FeatureList getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
     return getOneGenericMeasureFv(taskId, false, "001");
   }
 
+  /**
+   * Retrieve the feature value for the solution of the provided task
+   * @param taskId  the task one want to get the solution for
+   * @return
+   * @throws EntityNotFoundException
+   */
   @GetMapping("/solution/{taskId}")
   @ResponseBody
   public FeatureList getOneSolutionMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
@@ -98,7 +110,7 @@ public class MetricsControllerFv {
 
     FeatureValuedContainer featureValuedContainer = controllerUtil.createContainerFromMeasures(measureSummary);
 
-    // TODO: Retreive this config based on task
+    // TODO: Retrieve this config based on task
     // Call class that create dummy fv configuration
     ConfigCreator configCreator = new ConfigCreator();
     try {

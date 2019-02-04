@@ -54,12 +54,10 @@ public class MetricsController {
   @Autowired
   private AchievementRepository achievementRepository;
 
-  ControllerUtil controllerUtil = new ControllerUtil();
-
   @Autowired
   ObjectMapper mapper;
 
-
+  ControllerUtil controllerUtil = new ControllerUtil();
 
   /**
    * Retrieve a list of available tasks. Details of measuresummaries are omitted to save bandwidth
@@ -89,8 +87,6 @@ public class MetricsController {
     return this.measureRepository.findFirstByUserIdAndTaskId("001", taskId);
   }
 
-  // TODO: add all solution routes to its own controller
-
   /**
    * Retrieve the solution guide for the task with the provided taskId
    * @param taskId
@@ -103,7 +99,8 @@ public class MetricsController {
     Query query = new Query();
     query.addCriteria(Criteria.where("isSolutionManual").is(true));
     query.addCriteria(Criteria.where("taskId").is(taskId));
-
+//    TODO: use this and test it!!!
+//    return this.measureRepository.findFirstIsSolutionManualAndTaskId(true, taskId);
     return this.mongoTemplate.findOne(query, MeasureSummary.class);
   }
 
@@ -287,7 +284,14 @@ public class MetricsController {
   }
 
 
+  /**
+   * Saves the provided measure summary
+   * @param newMeasureSummary
+   * @return
+   * @throws CouldNotSaveException
+   */
   public ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) throws CouldNotSaveException {
+    // TODO: convert to simple jsonResponse or skip special formatting?
     ObjectNode res;
     try {
       measureRepository.save(newMeasureSummary);
@@ -301,12 +305,23 @@ public class MetricsController {
     return res;
   }
 
+  /**
+   * Delete the measuresummary with the provided id
+   * @param id id of measuresummary to delete
+   * @return
+   * @throws EntityNotFoundException
+   */
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
   @ResponseBody
   public List<MeasureSummary> deleteMeasureSummary(@NonNull @PathVariable("id") String id) throws EntityNotFoundException {
+    // TODO: check that the user has permission to do this action
     return this.measureRepository.removeById(id);
   }
 
+  /**
+   * Remove all measuresummaries for the currently logged in user
+   * @return a list of the deleted data
+   */
   @Deprecated
   @DeleteMapping("/all/delete")
   @ResponseBody
