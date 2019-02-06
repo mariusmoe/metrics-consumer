@@ -17,6 +17,9 @@ export class AchievementService {
     private errorService: ErrorService)
   { }
 
+  /**
+   * Get a list of all achievements without binary data
+   */
   getAllAchievementsFromService() {
     console.log("get All Achievements called");
     return this.http.get<Achievement[]>(`api/achievement/`)
@@ -25,7 +28,9 @@ export class AchievementService {
       );
   }
 
-
+  /**
+   * Get a list of all the achieved achievements for the logged in user
+   */
   getAllUserAchievementsFromService() {
     console.log("get All Achievements called");
     return this.http.get<UserAchievement[]>(`api/achievement/user`)
@@ -34,7 +39,10 @@ export class AchievementService {
       );
   }
 
-  getAllAchivementDataFromService(): Observable<any[]> {
+  /**
+   * Wait for all achievement data before returning
+   */
+  getAllAchievementDataFromService(): Observable<any[]> {
     let res1 = this.getAllAchievementsFromService();
     let res2 = this.getAllUserAchievementsFromService();
     return forkJoin([res1, res2]);

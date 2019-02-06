@@ -84,7 +84,8 @@ public class MetricsController {
   @GetMapping("/{taskId}")
   @ResponseBody
   public MeasureSummary getMeasureSummary(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
-    return this.measureRepository.findFirstByUserIdAndTaskId("001", taskId);
+    return this.measureRepository.findFirstByUserIdAndTaskId("001", taskId)
+      .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
   }
 
   /**

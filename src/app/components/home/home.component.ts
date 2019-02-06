@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
               name: localMeasureID + ':' + measure.specificMeasures[index].name,
               series: [
                 {name: "Student", value: results[0].measures[measureIndex].specificMeasures[index].value},
-                {name: "Solution", value: results[1].measures[measureIndex].specificMeasures[index].value}
+                {name: "Solution", value: results[1].measures[measureIndex].specificMeasures[index].value || 0}
               ]
             })
           })
@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
       }
 
     });
-  }ø
+  }
 
   /**
    * Retreive the Fv for the specified task
@@ -111,7 +111,6 @@ export class HomeComponent implements OnInit {
     let student = this.measureService.getMeasureFvData(taskId);
     let solutionManual = this.measureService.getSolutionFvMeasureData(taskId);
     console.log('FV');
-    
 
     forkJoin([student, solutionManual]).subscribe(results => {
       if (results[0]) {
@@ -120,20 +119,22 @@ export class HomeComponent implements OnInit {
         console.log(results);
         this.taskName = taskId;
         let studentData = [];
-        
-        let count = 0;
 
         // Go through all measures and add them to the heatmap
         // Important -> Assumes that solution guide and student has the same number of measures
         results[0].featureNames.forEach((featureName, index) => {
-          console.log(results[0].features[index][Object.keys(results[0].features[index])[0]]);
-          
-          
+          let studentValue = 0;
+          if (results[1].features.find(obj => { return Object.keys(obj)[0] == Object.keys(results[0].features[index])[0]}) != null) {
+            let temp =  results[1].features.find(obj => { return Object.keys(obj)[0] == Object.keys(results[0].features[index])[0]});
+            studentValue = temp[Object.keys(temp)[0]];
+          }
           studentData.push({
-            name: 'NYI:' +featureName,
+            name: 'NYI:' + featureName,
             series: [
               { name: "Student", value: results[0].features[index][Object.keys(results[0].features[index])[0]] },
-              { name: "Solution", value: results[1].features[index][Object.keys(results[0].features[index])[0]] }
+              { name: "Solution", value: studentValue || 0 }
+              // Alternatively: does not support value based filtering!
+              // { name: "Solution", value: results[1].features[index][Object.keys(results[0].features[index])[0]] }
             ]
           })
         })

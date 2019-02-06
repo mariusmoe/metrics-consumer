@@ -1,10 +1,10 @@
 export interface Achievement {
   id: String;
-  threshold: Number;
-  isCumulative: boolean;
+  threshold: number;
+  cumulative: boolean;
   taskIdRef: String;
-  expression: Number;
-  dummyData: Number;
+  expression: number;
+  dummyData: number;
   name: String;
   description: String;
 }

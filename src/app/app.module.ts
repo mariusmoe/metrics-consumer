@@ -10,7 +10,7 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatMenuModule,
-  MatSidenavModule, MatTooltipModule, MatCardModule
+  MatSidenavModule, MatTooltipModule, MatCardModule, MatProgressBarModule
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
@@ -45,7 +45,8 @@ import { AchievementsComponent } from './components/achievements/achievements.co
     AppRoutingModule,
     NgxChartsModule,
     MatTooltipModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,7 @@
 package com.moe.metricsconsumer.models;
 
 import lombok.Data;
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 
@@ -16,9 +17,9 @@ public class FvConfiguration {
   @Indexed
   private String taskId;
 
-  private HashMap<String, String> expressionFeature;
+  private Binary expressionFeature;
 
-  public FvConfiguration(String taskId, HashMap<String, String> expressionFeature) {
+  public FvConfiguration(String taskId, Binary expressionFeature) {
     this.taskId = taskId;
     this.expressionFeature = expressionFeature;
   }

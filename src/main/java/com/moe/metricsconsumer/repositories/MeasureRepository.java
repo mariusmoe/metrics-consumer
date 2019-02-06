@@ -27,12 +27,12 @@ public interface MeasureRepository extends MongoRepository<MeasureSummary, Strin
     List<MeasureSummary> findAllByUserId(String userId);
 
 
-  public MeasureSummary findFirstByUserIdAndTaskId(String userId, String taskId);
+  public Optional<MeasureSummary> findFirstByUserIdAndTaskId(String userId, String taskId);
 
 
   public MeasureSummary findFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
 
-  public MeasureSummary getFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
+  public Optional<MeasureSummary> getFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
 
 
 }

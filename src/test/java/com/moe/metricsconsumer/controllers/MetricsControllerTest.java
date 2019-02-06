@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -121,7 +122,7 @@ public class MetricsControllerTest {
   public void getMeasureSummary() throws Exception {
     given(this.measureRepository.findFirstByUserIdAndTaskId("001", "stateandbehavior.Account"))
       .willReturn(
-        measureSummary
+        Optional.of(measureSummary)
       );
     this.mockMvc.perform(get("/api/stateandbehavior.Account"))
       .andExpect(status().isOk())
@@ -151,7 +152,7 @@ public class MetricsControllerTest {
   public void newMeasureSummary() throws Exception  {
     given(this.measureRepository.findFirstByUserIdAndTaskId("001", "stateandbehavior.Account"))
       .willReturn(
-        measureSummary
+        Optional.of(measureSummary)
       );
     this.mockMvc.perform(post("/api/")
       .contentType(TestUtil.APPLICATION_JSON_UTF8)

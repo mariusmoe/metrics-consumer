@@ -22,21 +22,6 @@ export class AchievementsComponent implements OnInit {
     this.getAllAchievementData();
   }
 
-  // getAllAchievements() {
-  //   this.achievementService.getAllAchievementsFromService().subscribe(achievementList => {
-  //     this.achievementList = achievementList;
-  //     console.log(this.achievementList);
-  //   });
-  // }
-  //
-  // getAllUserAchievements() {
-  //   console.log("getAllUserAchievements called!!!");
-  //   this.achievementService.getAllUserAchievementsFromService().subscribe(userAchievementList => {
-  //     this.userAchievementList = userAchievementList;
-  //     console.log(this.userAchievementList);
-  //   });
-  // }
-
   getUserAchievement(achievementRef: string):UserAchievement {
     // console.log(achievementRef);
     return this.userAchievementList.find(obj => {
@@ -45,9 +30,23 @@ export class AchievementsComponent implements OnInit {
   }
 
   private getAllAchievementData() {
-    this.achievementService.getAllAchivementDataFromService().subscribe(responseList => {
+    this.achievementService.getAllAchievementDataFromService().subscribe(responseList => {
       this.achievementList = responseList[0];
       this.userAchievementList = responseList[1];
     });
+  }
+
+  getSumOfHistory(userAchievement: UserAchievement, achievement: Achievement): number{
+    let sumOfPoints = 0;
+    if (userAchievement && userAchievement.history) {
+      Object.keys(userAchievement.history).forEach( key => {
+        sumOfPoints += userAchievement.history[key];
+      });
+      console.log(sumOfPoints);
+      let result = (sumOfPoints / achievement.threshold)*100;
+      return result;
+    } else {
+      return 0.1;
+    }
   }
 }

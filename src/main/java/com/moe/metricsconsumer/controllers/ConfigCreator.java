@@ -20,26 +20,6 @@ public class ConfigCreator {
 
   public void create() throws IOException {
 
-
-
-
-
-/*
-    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
-    metaDataFeatureValued.setDelegation(FvFactory.eINSTANCE.createFeatureList());
-    metaDataFeatureValued.setFeatureValuedId("lang");
-    metaDataFeatureValued.setTags(Arrays.asList("some", "tag"));
-
-    metaDataFeatureValued.getFeatures().put("no_hal_javalang__foreach", 4.0);
-    metaDataFeatureValued.getFeatures().put("no_hal_javalang__while", 5.0);
-    metaDataFeatureValued.getFeatures().put("no_hal_javalang__for", 2.0);
-
-    FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
-    featureValuedContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
-
-
-*/
-
     FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
 
 
@@ -397,4 +377,130 @@ public class ConfigCreator {
     return list;
   }
 
+
+  public byte[] createFvConfig() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+
+
+    featureList.getFeatures().put("foreach", 99.0);
+    featureList.getFeatures().put("while", 99.0);
+    featureList.getFeatures().put("for", 99.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+
+    ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
+    expressionFeatures.setOther(metaDataFeatureValued);
+
+
+    System.out.println(expressionFeatures.getOther());
+
+    // TODO: This should be configurable
+
+
+    expressionFeatures.getFeatures().put("sum", "foreach");
+    expressionFeatures.getFeatures().put("for-while", "for + while");
+    expressionFeatures.getFeatures().put("while", "while");
+    expressionFeatures.getFeatures().put("while-3", "while * 3");
+    expressionFeatures.getFeatures().put("for", "for");
+
+    //expressionFeatures.getFeatures().put("one", "m * n + 1");
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+    configResource.getContents().add(expressionFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream, null);
+
+    return configResourceOutputStream.toByteArray();
+  }
+
+  public byte[] createFvConfig2() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+
+
+    featureList.getFeatures().put("foreach", 99.0);
+    featureList.getFeatures().put("while", 99.0);
+    featureList.getFeatures().put("for", 99.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+
+    DerivedFeatures1 derivedFeatures = FvFactory.eINSTANCE.createDerivedFeatures1();
+    derivedFeatures.setOp(Op2Kind.PLUS);
+    derivedFeatures.setOp1(Op1Kind.NEG);
+    derivedFeatures.setVal(3.0);
+    derivedFeatures.setOther(metaDataFeatureValued);
+
+
+
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+    configResource.getContents().add(derivedFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream, null);
+
+    return configResourceOutputStream.toByteArray();
+  }
+
+
+  public byte[] createFvConfig3() throws IOException {
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+
+
+    featureList.getFeatures().put("foreach", 99.0);
+    featureList.getFeatures().put("while", 99.0);
+    featureList.getFeatures().put("for", 99.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+
+    FilteredFeatures1 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures1();
+    filteredFeatures.setNameFilter("f");
+    filteredFeatures.setPred(Pred1Kind.GT0);
+    filteredFeatures.setOther(metaDataFeatureValued);
+
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+    configResource.getContents().add(filteredFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream, null);
+
+    return configResourceOutputStream.toByteArray();
+  }
 }

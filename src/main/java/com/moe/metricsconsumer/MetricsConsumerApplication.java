@@ -84,6 +84,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       fvConfigurationRepository.deleteAll();
       achievementRepository.deleteAll();
       userAchievementRepository.deleteAll();
+      fvConfigurationRepository.deleteAll();
 
 
 //      //save some dummy data
@@ -196,31 +197,16 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         }
 
       System.out.println("**************************************");
-
-
-      HashMap<String, String> exFeatures = new HashMap<>();
-      exFeatures.put("sum", "no_hal_javalang__foreach + no_hal_javalang__while");
-      exFeatures.put("for-while", "no_hal_javalang__for + no_hal_javalang__while");
-      exFeatures.put("for", "no_hal_javalang__for");
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",exFeatures));
-
-      HashMap<String, String> exFeatures2 = new HashMap<>();
-      exFeatures2.put("sum", "no_hal_javalang__foreach + no_hal_javalang__while");
-      exFeatures2.put("for-while", "no_hal_javalang__for + no_hal_javalang__while");
-      exFeatures2.put("for", "no_hal_javalang__for");
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",exFeatures2));
-
-      HashMap<String, String> exFeatures3 = new HashMap<>();
-      exFeatures3.put("sum", "no_hal_javalang__foreach");
-      exFeatures3.put("for-while", "no_hal_javalang__for + no_hal_javalang__while");
-      exFeatures3.put("while", "no_hal_javalang__while");
-      exFeatures3.put("while-3", "no_hal_javalang__while * 3");
-      exFeatures3.put("for", "no_hal_javalang__for");
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",exFeatures3));
-
       ConfigCreator configCreator = new ConfigCreator();
       configCreator.createAchievementConfig();
       configCreator.createAchievementConfig2();
+
+
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",new Binary(configCreator.createFvConfig())));
+
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",new Binary(configCreator.createFvConfig2())));
+
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(configCreator.createFvConfig3())));
 
       ArrayList<byte[]> temp = configCreator.createAchievementConfig4();
       byte[] dataResourceByteArray5 = temp.get(0);
@@ -238,7 +224,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 
       String taskIdRefAccount = "stateandbehavior.Account";
       Achievement achievement1 = new Achievement(
-        200,
+        11,
         false,
         taskIdRefAccount,
         new Binary(configResourceByteArray5),
@@ -249,7 +235,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         );
 
 //      achievementConfig2
-      Achievement achievement2 = new Achievement(600,
+      Achievement achievement2 = new Achievement(9,
         false,
         taskIdRefAccount,
         new Binary(configResourceByteArray3),
@@ -258,7 +244,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
         "Award for exceptional work on while nr1"
         );
 
-      Achievement achievement3 = new Achievement(1200,
+      Achievement achievement3 = new Achievement(3,
         true,
         taskIdRefAccount,
         new Binary(configResourceByteArray2),
@@ -277,12 +263,6 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 //      userAchievementRepository.save(userAchievement);
 //      UserAchievement userAchievement2 = new UserAchievement("001", achievementList.get(1).getId(), AchievementState.REVEALED, null, null);
 //      userAchievementRepository.save(userAchievement2);
-
-
-
-
-
-
 
 
     }
