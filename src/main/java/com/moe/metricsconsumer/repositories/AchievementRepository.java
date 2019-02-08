@@ -10,7 +10,14 @@ import java.util.List;
 @Repository
 public interface AchievementRepository extends MongoRepository<Achievement, String> {
 
+  /**
+   * Will always return a list, thou it can be empty
+   * @param taskId  the task id to find for
+   * @param cumulative  if the achievement is cumulative
+   * @return  a list with achievements that are cumulative or belong to the task with the provided taskId
+   */
   public List<Achievement> findByTaskIdRefOrIsCumulative(String taskId, boolean cumulative);
+
   /**
    * Returns a list of all achievements without the binary data
    * @return achievements

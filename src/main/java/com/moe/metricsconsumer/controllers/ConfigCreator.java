@@ -11,12 +11,16 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class ConfigCreator {
+
+  Logger logger = LoggerFactory.getLogger(ConfigCreator.class);
 
   public void create() throws IOException {
 
@@ -38,7 +42,7 @@ public class ConfigCreator {
 
 
 
-    System.out.println(expressionFeatures.getOther());
+    logger.debug(expressionFeatures.getOther().toString());
 
     // TODO: This should be configurable
     expressionFeatures.getFeatures().put("sum-for-while", "foreach + while");
@@ -397,7 +401,7 @@ public class ConfigCreator {
     expressionFeatures.setOther(metaDataFeatureValued);
 
 
-    System.out.println(expressionFeatures.getOther());
+    logger.debug(expressionFeatures.getOther().toString());
 
     // TODO: This should be configurable
 

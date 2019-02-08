@@ -11,3 +11,8 @@ mom:
   mongo:
     address: 127.0.0.1
     database: measures
+logging:
+  level:
+    com.moe.metricsconsumer: debug
+
+

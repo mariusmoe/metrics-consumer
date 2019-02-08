@@ -5,7 +5,7 @@ import {Observable, throwError} from 'rxjs';
 import {Measure, MeasureSummary, Summary} from "../_models/measure-summary";
 
 
-import {catchError} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 import { FeatureList } from '../_models/feature-list';
 import {ErrorService} from "./error.service";
 
@@ -20,41 +20,41 @@ export class MeasureService {
   { }
 
   getMeasureData(taskId: string) {
-    console.log("get measure service called");
     return this.http.get<MeasureSummary>(`api/${taskId}`)
       .pipe(
+        tap(_ => console.log("getMeasureData service called")),
         catchError(this.errorService.handleError)
       );
   }
 
   getSolutionMeasureData(taskId: string) {
-    console.log("get solution service called");
     return this.http.get<MeasureSummary>(`api/solution/${taskId}`)
       .pipe(
+        tap(_ => console.log("getSolutionMeasureData service called")),
         catchError(this.errorService.handleError)
       );
   }
 
   getMeasureFvData(taskId: string) {
-    console.log("get measure service called");
     return this.http.get<FeatureList>(`api/fv/${taskId}`)
       .pipe(
+        tap(_ => console.log("getMeasureFvData service called")),
         catchError(this.errorService.handleError)
       );
   }
 
   getSolutionFvMeasureData(taskId: string) {
-    console.log("get solution service called");
     return this.http.get<FeatureList>(`api/fv/solution/${taskId}`)
       .pipe(
+        tap(_ => console.log("getSolutionFvMeasureData service called")),
         catchError(this.errorService.handleError)
       );
   }
 
   getSummaries() {
-    console.log("get summaries called");
     return this.http.get<Summary[]>('api/')
       .pipe(
+        tap(_ => console.log('get summaries called')),
         catchError(this.errorService.handleError)
       );
   }
@@ -62,6 +62,7 @@ export class MeasureService {
   deleteAllUserdata() {
     return this.http.delete<MeasureSummary[]>("api/all/delete")
       .pipe(
+        tap(_ => console.log('deleteAllUserdata called')),
         catchError(this.errorService.handleError)
       );
   }

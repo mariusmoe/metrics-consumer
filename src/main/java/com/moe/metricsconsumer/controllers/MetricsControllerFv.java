@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.lang.NonNull;
@@ -38,6 +40,8 @@ public class MetricsControllerFv {
   private FvConfigurationRepository fvConfigRepository;
 
   ControllerUtil controllerUtil = new ControllerUtil();
+
+  Logger logger = LoggerFactory.getLogger(FvConfigurationRepository.class);
 
 
   /**
@@ -85,7 +89,7 @@ public class MetricsControllerFv {
     if (isSolution) {
       measureSummary = this.measureRepository.getFirstByIsSolutionManualAndTaskId(true,taskId)
         .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
-      System.out.println(measureSummary);
+      logger.debug(measureSummary.toString());
     } else {
       measureSummary = this.measureRepository.findFirstByUserIdAndTaskId("001", taskId)
         .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));

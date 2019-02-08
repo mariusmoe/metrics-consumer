@@ -9,6 +9,8 @@ import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.UserAchievementRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
@@ -37,6 +39,8 @@ public class AchievementsController {
 
   ControllerUtil controllerUtil = new ControllerUtil();
 
+  Logger logger = LoggerFactory.getLogger(AchievementsController.class);
+
   @Autowired
   ObjectMapper mapper;
 
@@ -64,7 +68,7 @@ public class AchievementsController {
   @PostMapping("/")
   @ResponseBody
   public Achievement newAchievement(@Valid @RequestBody Achievement newAchievement ){
-    System.out.println("Try to add new achievement!   " + newAchievement.toString());
+    logger.debug("Try to add new achievement!   " + newAchievement.toString());
     return achievementRepository.save(newAchievement);
   }
 
@@ -87,7 +91,7 @@ public class AchievementsController {
       achievement.setDummyData( new Binary(BsonBinarySubType.BINARY, uploadingFiles[1].getBytes()));
       // TODO: Store image file somewhere and add image path
       mongoTemplate.save(achievement);
-      System.out.println("achievementDocument: " + achievement);
+      logger.debug("achievementDocument: " + achievement);
     } catch (Exception e) {
       throw new CouldNotSaveException(achievement.getClass(), achievement.toString());
     }

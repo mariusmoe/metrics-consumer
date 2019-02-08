@@ -2,11 +2,19 @@
   <div>
 
 
-    <div *ngIf="!name">
+    <div *ngIf="!name && !showInstructions">
       <mat-card class="measure-card">
         <mat-card-title>{{taskName}}</mat-card-title>
       </mat-card>
 
+    </div>
+
+
+    <div *ngIf="showInstructions" class="mat-body top-text">
+          <mat-icon class="left-arrow">
+            arrow_back
+          </mat-icon>
+            Choose an exercise
     </div>
 
     <div *ngIf="!loading">

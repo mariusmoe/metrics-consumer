@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {catchError} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
 import {ErrorService} from "./error.service";
 import {HttpClient} from "@angular/common/http";
 import {Achievement} from "../_models/achievement";
@@ -21,9 +21,9 @@ export class AchievementService {
    * Get a list of all achievements without binary data
    */
   getAllAchievementsFromService() {
-    console.log("get All Achievements called");
     return this.http.get<Achievement[]>(`api/achievement/`)
       .pipe(
+        tap(_ => console.log("get All Achievements called")),
         catchError(this.errorService.handleError)
       );
   }
@@ -32,9 +32,9 @@ export class AchievementService {
    * Get a list of all the achieved achievements for the logged in user
    */
   getAllUserAchievementsFromService() {
-    console.log("get All Achievements called");
     return this.http.get<UserAchievement[]>(`api/achievement/user`)
       .pipe(
+        tap(_ => console.log("get All Achievements called")),
         catchError(this.errorService.handleError)
       );
   }

@@ -5,12 +5,9 @@ import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.FvConfiguration;
 import com.moe.metricsconsumer.models.rewards.UserAchievement;
-import com.moe.metricsconsumer.repositories.AchievementRepository;
-import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
-import com.moe.metricsconsumer.repositories.MeasureRepository;
+import com.moe.metricsconsumer.repositories.*;
 
 
-import com.moe.metricsconsumer.repositories.UserAchievementRepository;
 import javafx.util.Pair;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
@@ -47,17 +44,14 @@ public class MetricsConsumerApplication implements CommandLineRunner {
   @Autowired
   private UserAchievementRepository userAchievementRepository;
 
+  @Autowired
+  private ExerciseDocumentRepository exerciseDocumentRepository;
+
 
 
   public static void main(String[] args) {
         SpringApplication.run(MetricsConsumerApplication.class, args);
     }
-
-
-
-  
-  	
-
 
 
 //  // TODO - remove!
@@ -85,6 +79,8 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       achievementRepository.deleteAll();
       userAchievementRepository.deleteAll();
       fvConfigurationRepository.deleteAll();
+      exerciseDocumentRepository.deleteAll();
+
 
 
 //      //save some dummy data
@@ -196,7 +192,6 @@ public class MetricsConsumerApplication implements CommandLineRunner {
           tempScript.delete();
         }
 
-      System.out.println("**************************************");
       ConfigCreator configCreator = new ConfigCreator();
       configCreator.createAchievementConfig();
       configCreator.createAchievementConfig2();

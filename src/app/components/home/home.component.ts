@@ -14,6 +14,7 @@ import {MeasureSummary} from "../../_models/measure-summary";
 export class HomeComponent implements OnInit {
 
   loading = true;
+  showInstructions = false;
   taskName = ''
 
   multi: any[];
@@ -52,11 +53,17 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe( params =>
-      // this.retriveData(params.get('taskId'))
-      this.retriveFvData(params.get('taskId'))
 
-      );
+    // get taskId from param in url. If no param -> show some instructions
+    this.route.paramMap.subscribe( params => {
+      // this.retriveData(params.get('taskId'))
+      if (params.get('taskId') != null) {
+        this.retriveFvData(params.get('taskId'))
+        this.showInstructions = false;
+      } else {
+        this.showInstructions = true;
+      }
+    });
 
   }
 

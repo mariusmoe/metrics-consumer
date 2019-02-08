@@ -21,9 +21,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-    registry.addResourceHandler("/**/*")
+    //  Not really clear from docs what order is prevalent -> blame this guy:
+    //  https://visola.github.io/2018/01/17/spa-with-spring-boot/index.html
+    registry
+      .addResourceHandler( "/**/*.png")
+      .setCachePeriod(0)
+      .addResourceLocations("classpath:/images/");
+
+
+    registry.addResourceHandler("/", "/**")
       .addResourceLocations("classpath:/static/")
-      .addResourceLocations("classpath:/resource/")
       .resourceChain(true)
       .addResolver(new PathResourceResolver() {
         @Override
@@ -36,18 +43,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
       });
   }
 
-//  @Override
-//  public void addViewControllers(ViewControllerRegistry registry) {
-//    registry.addViewController("/notFound").setViewName("forward:/index.html");
-//  }
-//
-//
-//  @Bean
-//  public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> containerCustomizer() {
-//    return container -> {
-//      container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,
-//        "/user/login"));
-//    };
-//  }
 
 }

@@ -5,9 +5,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 
 import com.moe.metricsconsumer.repositories.AchievementRepository;
+import com.moe.metricsconsumer.repositories.ExerciseDocumentRepository;
 import com.moe.metricsconsumer.repositories.XmlRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.lang.NonNull;
@@ -35,7 +38,12 @@ public class RawDataController {
   @Autowired
   private AchievementRepository achievementRepository;
 
+  @Autowired
+    private ExerciseDocumentRepository exerciseDocumentRepository;
+
   ControllerUtil controllerUtil = new ControllerUtil();
+
+  Logger logger = LoggerFactory.getLogger(RawDataController.class);
 
 
   // Possible extensions - print a warning if some metrics has not been calculated
@@ -66,8 +74,8 @@ public class RawDataController {
         ExerciseDocument exerciseDocument = new ExerciseDocument(measureSummaryRef,
           "ex",
           new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()) );
-        mongoTemplate.save(exerciseDocument);
-        System.out.println(exerciseDocument);
+        exerciseDocumentRepository.save(exerciseDocument);
+        logger.debug(exerciseDocument.toString());
       } catch (Exception e) {
         e.printStackTrace();
         return controllerUtil.jsonResponse(4000, "ERROR");

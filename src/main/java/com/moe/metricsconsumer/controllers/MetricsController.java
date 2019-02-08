@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -58,6 +60,8 @@ public class MetricsController {
   ObjectMapper mapper;
 
   ControllerUtil controllerUtil = new ControllerUtil();
+
+  Logger logger = LoggerFactory.getLogger(MetricsController.class);
 
   /**
    * Retrieve a list of available tasks. Details of measuresummaries are omitted to save bandwidth
@@ -114,11 +118,11 @@ public class MetricsController {
   @PostMapping("/")
   @ResponseBody
   public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws NoSuchFieldException, CouldNotSaveException {
-    System.out.println("********************START************************\n\n");
+    logger.debug("********************START************************\n\n");
     MeasureSummary measureSummary = newMeasureSummary;
     measureSummary.setId(getUserIdAndTaskNameHashed(measureSummary));
     // Get all achievements for this task   |\
-    // Get all cumulative achievements      | \ -> could these be done with one request?
+    // Get all cumulative achievements      | \
     List<Achievement> relevantAchievements = this.achievementRepository.findByTaskIdRefOrIsCumulative(measureSummary.getTaskId(), true);
     // Will find all achievements a user has ever received
     List<UserAchievement> userAchievements = this.userAchievementRepository.findAllByUserRef(measureSummary.getUserId());
@@ -126,7 +130,7 @@ public class MetricsController {
     // Loop over -> add achieved achievements to list as a list of UserAchievement
     List<UserAchievement> userAchievementList = new ArrayList<>();
     for (Achievement achievement : relevantAchievements){
-      System.out.println("--------------------------------------------");
+      logger.debug("--------------------------------------------");
       // Get the expression as a resource for the provided achievement
       Resource resource = getResource(achievement);
       // If it is cumulative we should replace/add the value for this task or create it
@@ -155,10 +159,10 @@ public class MetricsController {
         Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
         FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
         // Printed too many times due to all achivements has the same config atm
-        System.out.println("CalculatedFeatureList: " + calculatedFeatureList);
+        logger.debug("CalculatedFeatureList: " + calculatedFeatureList);
         // Eval method for if achievement should be given
         if (calculatedFeatureList.getFeatures().size() > 0) {
-          System.out.println("GRATULERER!   -   CalculatedFeatureList: " + calculatedFeatureList);
+          logger.debug("GRATULERER!   -   CalculatedFeatureList: " + calculatedFeatureList);
           UserAchievement newUserAchievement = new UserAchievement(measureSummary.getUserId(),
             achievement.getId(),
             AchievementState.UNLOCKED, LocalDateTime.now(), null);
@@ -166,8 +170,8 @@ public class MetricsController {
         }
       }
     };
-    System.out.println("******************END*************************\n\n");
-    System.out.println("userAchievementList: " + userAchievementList);
+    logger.debug("******************END*************************\n\n");
+    logger.debug("userAchievementList: " + userAchievementList);
     // Batch save the achieved achievements
     this.userAchievementRepository.saveAll(userAchievementList);
 
@@ -261,7 +265,7 @@ public class MetricsController {
   private void giveRewardToUser(Achievement achievement, String userId) throws CouldNotSaveException {
     UserAchievement userAchievement = new UserAchievement(
       userId, achievement.getId(), AchievementState.UNLOCKED, LocalDateTime.now(), null);
-    System.out.println("userAchievement: " + userAchievement);
+    logger.debug("userAchievement: " + userAchievement);
     try {
       this.userAchievementRepository.save(userAchievement);
     } catch (Exception ex) {
