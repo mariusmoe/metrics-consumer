@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fv:FilteredFeatures2 xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fv="platform:/plugin/no.hal.learning.execise.model/model/fv.ecore" pred=">" val="4.0">
+  <other xsi:type="fv:MetaDataFeatureValued" href="achievementData.xmi#/"/>
+</fv:FilteredFeatures2>

@@ -11,20 +11,29 @@
 <mat-card class="achievements-card" *ngFor="let achievement of achievementList">
   <mat-card-title>{{achievement.name}}</mat-card-title>
   <mat-card-content>
-    <div *ngIf="achievement.cumulative === true">
-      <mat-progress-bar
-        mode="determinate"
-        [value]="getSumOfHistory(getUserAchievement(achievement.id), achievement)">
-      </mat-progress-bar>
-    </div>
-    {{achievement.description}}
-    <br>
-    <div *ngFor="let userAchievement of [getUserAchievement(achievement.id)]">
-      <div *ngIf="userAchievement">
 
-        <span>{{userAchievement.achievementState}}</span>
+
+    <div class="achievement-container">
+      <div class="achievement-main-content">
+        <div *ngIf="achievement.cumulative === true">
+          <mat-progress-bar
+            mode="determinate"
+            [value]="getSumOfHistory(getUserAchievement(achievement.id), achievement)">
+          </mat-progress-bar>
+        </div>
+        {{achievement.description}}
+        <br>
+        <br>
+        <div *ngFor="let userAchievement of [getUserAchievement(achievement.id)]">
+          <div *ngIf="userAchievement">
+            <span>{{userAchievement.achievementState}}</span>
+          </div>
+        </div>
       </div>
+      <img class="achievement-image" src="{{achievement.id}}.png">
     </div>
+
+
 
   </mat-card-content>
 </mat-card>

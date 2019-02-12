@@ -70,10 +70,13 @@ public class RawDataController {
     } catch (Exception e) {}
 
     for(MultipartFile uploadedFile : uploadingFiles) {
+      // TODO: there might be more than one file!!! fix this for bulk upload
       try {
-        ExerciseDocument exerciseDocument = new ExerciseDocument(measureSummaryRef,
+        ExerciseDocument exerciseDocument = new ExerciseDocument(
+          measureSummaryRef,
           "ex",
-          new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()) );
+          new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes())
+        );
         exerciseDocumentRepository.save(exerciseDocument);
         logger.debug(exerciseDocument.toString());
       } catch (Exception e) {

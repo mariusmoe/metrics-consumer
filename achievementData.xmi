@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fv:MetaDataFeatureValued xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fv="platform:/plugin/no.hal.learning.execise.model/model/fv.ecore" featureValuedId="no_hal_javalang">
+  <delegatedFeatureValued xsi:type="fv:FeatureList">
+    <features key="foreach" value="4.0"/>
+    <features key="while" value="5.0"/>
+    <features key="for" value="2.0"/>
+  </delegatedFeatureValued>
+</fv:MetaDataFeatureValued>

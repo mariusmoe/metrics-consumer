@@ -12,3 +12,18 @@
   margin-right: 24px;
 }
 
+.achievement-image {
+  width: 100px;
+  height: 100px;
+  right: 30px;
+  margin-left: 20px;
+}
+
+.achievement-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.achievement-main-content {
+  width: 80%;
+}

@@ -12,14 +12,22 @@ import org.bson.types.Binary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Should handle everything related to achievements
@@ -43,6 +51,9 @@ public class AchievementsController {
 
   @Autowired
   ObjectMapper mapper;
+
+  @Value("${mom.staticResource}")
+  private String staticPath;
 
   @GetMapping("/user")
   @ResponseBody
@@ -73,6 +84,13 @@ public class AchievementsController {
   }
 
 
+  /**
+   * Save achievement files -> config, data, and image
+   * @param achievementId reference to the achivement metadata object
+   * @param uploadingFiles  the files to upload
+   * @return a success status on file save success
+   * @throws CouldNotSaveException
+   */
   @PostMapping("/file")
   @ResponseBody
   public ObjectNode newAchievementFile(
@@ -86,17 +104,58 @@ public class AchievementsController {
     }
 
     try {
-      // TODO: The ordering of the two files are not guaranteed
-      achievement.setExpression( new Binary(BsonBinarySubType.BINARY, uploadingFiles[0].getBytes()));
-      achievement.setDummyData( new Binary(BsonBinarySubType.BINARY, uploadingFiles[1].getBytes()));
-      // TODO: Store image file somewhere and add image path
+//      for loop over uploaded files
+//      (?i)data, (?i)config regex and png/jpg/jpeg file ending
+      Pattern dataPattern = Pattern.compile("(?i)data");
+      Pattern configPattern = Pattern.compile("(?i)config");
+
+      for (MultipartFile uploadingFile: uploadingFiles) {
+        Matcher dataMatcher = dataPattern.matcher(uploadingFile.getOriginalFilename());
+        Matcher configMatcher = configPattern.matcher(uploadingFile.getOriginalFilename());
+        if (configMatcher.find()){
+          // The filename contains config
+          achievement.setExpression( new Binary(BsonBinarySubType.BINARY, uploadingFile.getBytes()));
+          logger.info("Found config xmi file - saving");
+        }
+        if (dataMatcher.find()){
+          // The filename contains data
+          achievement.setDummyData( new Binary(BsonBinarySubType.BINARY, uploadingFile.getBytes()));
+          logger.info("Found data xmi file - saving");
+        }
+
+        if (uploadingFile.getContentType().split("/")[0].equals("image")) {
+          saveAchievementImage(achievement, uploadingFile);
+        }
+      }
       mongoTemplate.save(achievement);
-      logger.debug("achievementDocument: " + achievement);
+      logger.debug("achievementDocument: " + achievement + "\nSave success");
     } catch (Exception e) {
       throw new CouldNotSaveException(achievement.getClass(), achievement.toString());
     }
 
     return controllerUtil.jsonResponse(2000, "Success - document has been saved");
+  }
+
+  private void saveAchievementImage(Achievement achievement, MultipartFile uploadingFile) {
+    // the uploaded MIME type is an image
+    // save the image with; static path, the document id, and file extension
+    String filename = achievement.getId()+ "." + uploadingFile.getOriginalFilename().replaceAll("^.*\\.(.*)$", "$1");
+    File file = new File(this.staticPath + filename);
+    logger.info("Filename: " + filename);
+    try (InputStream inputStream = uploadingFile.getInputStream()) {
+      if (!file.exists()) {
+        file.createNewFile();
+      }
+      FileOutputStream outputStream = new FileOutputStream(file);
+      int read = 0;
+      byte[] bytes = new byte[1024];
+
+      while ((read = inputStream.read(bytes)) != -1) {
+        outputStream.write(bytes, 0, read);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to store file " + filename, e);
+    }
   }
 
 }

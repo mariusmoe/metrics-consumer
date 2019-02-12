@@ -2,6 +2,7 @@ package com.moe.metricsconsumer.config;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+  @Value("${mom.staticResource}")
+  private String staticPath;
+
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -26,7 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     registry
       .addResourceHandler( "/**/*.png")
       .setCachePeriod(0)
-      .addResourceLocations("classpath:/images/");
+      .addResourceLocations("file:" + this.staticPath);
 
 
     registry.addResourceHandler("/", "/**")

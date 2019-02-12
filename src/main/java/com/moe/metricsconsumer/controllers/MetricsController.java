@@ -170,8 +170,7 @@ public class MetricsController {
         }
       }
     };
-    logger.debug("******************END*************************\n\n");
-    logger.debug("userAchievementList: " + userAchievementList);
+    logger.debug("******************END*************************\n\n userAchievementList: " + userAchievementList);
     // Batch save the achieved achievements
     this.userAchievementRepository.saveAll(userAchievementList);
 
