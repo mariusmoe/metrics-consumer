@@ -19,6 +19,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import { SettingsComponent } from './components/settings/settings.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
+import {FileUploadModule} from "ng2-file-upload";
+import { UploadNewExComponent } from './components/upload-new-ex/upload-new-ex.component';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { AchievementsComponent } from './components/achievements/achievements.co
     HomeComponent,
     NotFoundComponent,
     SettingsComponent,
-    AchievementsComponent
+    AchievementsComponent,
+    UploadNewExComponent
 
   ],
   imports: [
@@ -46,7 +49,8 @@ import { AchievementsComponent } from './components/achievements/achievements.co
     NgxChartsModule,
     MatTooltipModule,
     MatCardModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    FileUploadModule
   ],
   providers: [],
   bootstrap: [AppComponent]

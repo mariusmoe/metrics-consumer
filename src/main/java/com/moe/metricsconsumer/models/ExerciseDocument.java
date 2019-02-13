@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+/**
+ * This data structure represents one of potentially many exercise files connected to a measureSummary
+ */
 @Data
 @Document
 public class ExerciseDocument {
@@ -21,11 +24,17 @@ public class ExerciseDocument {
   private String docType;
 
   @Field
+  private String originalName;
+
+  @Field
   private Binary file;
 
-  public ExerciseDocument(String measureSummaryRef, String docType, Binary file) {
+  public ExerciseDocument() {}
+
+  public ExerciseDocument(String measureSummaryRef, String docType, String originalName, Binary file) {
     this.measureSummaryRef = measureSummaryRef;
     this.docType = docType;
+    this.originalName = originalName;
     this.file = file;
   }
 }

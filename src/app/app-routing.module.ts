@@ -5,6 +5,7 @@ import { HomeComponent } from './components/home/home.component';
 import {AuthGuard} from "./_guards/auth.guard";
 import {SettingsComponent} from "./components/settings/settings.component";
 import {AchievementsComponent} from "./components/achievements/achievements.component";
+import {UploadNewExComponent} from "./components/upload-new-ex/upload-new-ex.component";
 
 
 
@@ -13,6 +14,7 @@ const appRoutes: Routes = [
   { path: 'login', component: HomeComponent },
   { path: 'achievements', component: AchievementsComponent},
   { path: 'user/login', component:  NotFoundComponent},
+  { path: 'upload', component:  UploadNewExComponent},
   { path: 'summary/:taskId', component:  HomeComponent, canActivate: [AuthGuard]},
   { path: 'settings', component:  SettingsComponent, canActivate: [AuthGuard]},
   { path: '**', component:  NotFoundComponent}

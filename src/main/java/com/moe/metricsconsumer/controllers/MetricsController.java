@@ -83,7 +83,7 @@ public class MetricsController {
    * Get the details of a measuresummary based on the selected taskId
    * @param taskId  The task to retrieve details of
    * @return MeasureSummary if found
-   * @throws EntityNotFoundException
+   * @throws EntityNotFoundException error for not found
    */
   @GetMapping("/{taskId}")
   @ResponseBody
@@ -96,7 +96,7 @@ public class MetricsController {
    * Retrieve the solution guide for the task with the provided taskId
    * @param taskId
    * @return solution MeasureSummary
-   * @throws EntityNotFoundException
+   * @throws EntityNotFoundException  error for not found
    */
   @GetMapping("/solution/{taskId}")
   @ResponseBody
@@ -111,9 +111,11 @@ public class MetricsController {
 
   // TODO Add userid to the saved object
   /**
-   * Save a new measuresummary for the current user
-   * @param newMeasureSummary
-   * @return
+   * Save a new measureSummary for the current user
+   *
+   * Also check if awards should be given, gives award per exercise and cumulative
+   * @param newMeasureSummary The content of the new measureSummary to be saved
+   * @return  what has been saved
    */
   @PostMapping("/")
   @ResponseBody
@@ -196,8 +198,7 @@ public class MetricsController {
       e.printStackTrace();
     }
     messageDigest.update(stringBuilder.toString().getBytes());
-    String hashedName = Base64.getEncoder().encodeToString(messageDigest.digest());
-    return hashedName;
+    return Base64.getEncoder().encodeToString(messageDigest.digest());
   }
 
   /**
