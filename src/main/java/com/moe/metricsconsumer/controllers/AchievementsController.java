@@ -115,16 +115,17 @@ public class AchievementsController {
         if (configMatcher.find()){
           // The filename contains config
           achievement.setExpression( new Binary(BsonBinarySubType.BINARY, uploadingFile.getBytes()));
-          logger.info("Found config xmi file - saving");
+          logger.info("Found CONFIG xmi file - saving");
         }
         if (dataMatcher.find()){
           // The filename contains data
           achievement.setDummyData( new Binary(BsonBinarySubType.BINARY, uploadingFile.getBytes()));
-          logger.info("Found data xmi file - saving");
+          logger.info("Found DATA xmi file - saving");
         }
 
         if (uploadingFile.getContentType().split("/")[0].equals("image")) {
           saveAchievementImage(achievement, uploadingFile);
+          logger.info("Saved image");
         }
       }
       mongoTemplate.save(achievement);

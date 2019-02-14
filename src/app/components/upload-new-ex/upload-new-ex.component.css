@@ -1,0 +1,23 @@
+.btn {
+  margin: 5px;
+}
+
+.table {
+  width: 100%;
+  min-width: 400px;
+}
+
+.btn-xs {
+  width: 20px;
+  padding: 0px;
+  /*transform: scale(0.7);*/
+}
+
+.queue {
+  margin-top: 40px;
+}
+
+.title-card {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}

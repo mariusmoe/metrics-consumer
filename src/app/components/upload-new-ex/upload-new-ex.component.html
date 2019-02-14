@@ -1,50 +1,59 @@
-<p>
-  upload-new-ex works!
-</p>
+<div class="main-content">
 
-<input type="file" ng2FileSelect [uploader]="uploader" multiple  />
+  <mat-card class="title-card">
+    <mat-card-title>Upload .ex files</mat-card-title>
+    <mat-card-content>Choose exercise and add your .ex files</mat-card-content>
+  </mat-card>
 
-<div class="col-md-9" style="margin-bottom: 40px">
+<button mat-raised-button color="primary" type="button" onclick="document.getElementById('fileToUpload').click()">
+  <mat-icon class="example-icon">add</mat-icon>
+  <label>
+     Choose files
+  </label>
+</button>
+<input id="fileToUpload" type="file" ng2FileSelect [uploader]="uploader" multiple style="display:none;">
 
-  <h3>Upload queue</h3>
-  <p>Queue length: {{ uploader?.queue?.length }}</p>
+<div class="col-md-9" style="margin-bottom: 40px; margin-top: 40px">
 
-  <table class="table">
+  <h3 class="mat-h3">Upload queue</h3>
+
+
+  <table class="table mat-body" >
     <thead>
     <tr>
-      <th width="50%">Name</th>
+      <th width="40%" align="left">Name</th>
       <th>Size</th>
       <th>Progress</th>
       <th>Status</th>
-      <th>Actions</th>
+      <th width="300px">Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let item of uploader.queue">
-      <td><strong>{{ item?.file?.name }}</strong></td>
-      <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-      <td *ngIf="uploader.isHTML5">
+      <td>{{ item?.file?.name }}</td>
+      <td nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+      <td >
         <div class="progress" style="margin-bottom: 0;">
           <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
         </div>
       </td>
       <td class="text-center">
-        <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-        <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-        <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+        <span *ngIf="item.isSuccess"><mat-icon class="example-icon">done</mat-icon></span>
+        <span *ngIf="item.isCancel"><mat-icon class="example-icon">cancel</mat-icon></span>
+        <span *ngIf="item.isError"><mat-icon class="example-icon">error</mat-icon></span>
       </td>
-      <td nowrap>
-        <button type="button" class="btn btn-success btn-xs"
+      <td>
+        <button mat-button color="primary" type="button" class=" btn-xs"
                 (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-          <span class="glyphicon glyphicon-upload"></span> Upload
+          <mat-icon class="example-icon" [inline]="true">cloud_upload</mat-icon> <label>Upload</label>
         </button>
-        <button type="button" class="btn btn-warning btn-xs"
+        <button mat-button color="accent" type="button" class=" btn-xs"
                 (click)="item.cancel()" [disabled]="!item.isUploading">
-          <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+          <mat-icon class="example-icon" [inline]="true">cancel</mat-icon> <label>Cancel</label>
         </button>
-        <button type="button" class="btn btn-danger btn-xs"
+        <button mat-button color="warn" type="button" class=" btn-xs"
                 (click)="item.remove()">
-          <span class="glyphicon glyphicon-trash"></span> Remove
+          <mat-icon class="example-icon" [inline]="true">delete</mat-icon> <label>Remove</label>
         </button>
       </td>
     </tr>
@@ -52,25 +61,26 @@
   </table>
 
   <div>
-    <div>
+    <div class="queue mat-body">
       Queue progress:
       <div class="progress" style="">
         <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
       </div>
     </div>
-    <button type="button" class="btn btn-success btn-s"
+    <button mat-raised-button color="primary" type="button" class="btn"
             (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-      <span class="glyphicon glyphicon-upload"></span> Upload all
+      <mat-icon class="example-icon">cloud_upload</mat-icon> <label> Upload all</label>
     </button>
-    <button type="button" class="btn btn-warning btn-s"
+    <button mat-raised-button color="accent" type="button" class="btn"
             (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-      <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+      <mat-icon class="example-icon">cancel</mat-icon> <label> Cancel all</label>
     </button>
-    <button type="button" class="btn btn-danger btn-s"
+    <button mat-raised-button color="warn" type="button" class="btn"
             (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-      <span class="glyphicon glyphicon-trash"></span> Remove all
+      <mat-icon class="example-icon">delete</mat-icon> <label> Remove all</label>
     </button>
   </div>
 
 </div>
 
+</div>
