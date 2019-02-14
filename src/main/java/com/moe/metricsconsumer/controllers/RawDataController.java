@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -54,13 +55,16 @@ public class RawDataController {
 
   Logger logger = LoggerFactory.getLogger(RawDataController.class);
 
+  private static final String approvedContentType = "text/xml";
+
+
 
   // Possible extensions - print a warning if some metrics has not been calculated
   // Flow of information - see activity diagram -> need to be sent with a code
   @PostMapping("/")
   @ResponseBody
   public ObjectNode newStudentCode(@Nullable @RequestHeader(value="measureSummaryRef") String measureSummaryRef,
-                                   @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles){
+                                   @RequestParam("files") MultipartFile[] uploadingFiles){
     return saveExFiles(measureSummaryRef, uploadingFiles);
   }
 
@@ -68,11 +72,12 @@ public class RawDataController {
   @PostMapping("/solution")
   @ResponseBody
   public ObjectNode newSolutionCode(@RequestHeader(value="measureSummaryRef") String measureSummaryRef,
-                                    @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles){
+                                    @RequestParam("files") MultipartFile[] uploadingFiles){
     return saveExFiles(measureSummaryRef, uploadingFiles);
   }
 
   private ObjectNode saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles) {
+    logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
       MeasureSummary measureSummary = new MeasureSummary();
@@ -92,9 +97,15 @@ public class RawDataController {
 
     logger.debug("measureSummaryRef: " + measureSummaryRef);
 
+
     List<ExerciseDocument> exerciseDocumentList = new ArrayList<>();
     for(MultipartFile uploadedFile : uploadingFiles) {
+      logger.info("Trying to save");
       try {
+//        if (uploadedFile.getContentType() != approvedContentType) {
+//          logger.warn("NOT an XML file - aborting...");
+//          throw new Exception("Not an XML file");
+//        }
         ExerciseDocument exerciseDocument = new ExerciseDocument(
           measureSummaryRef,
           "ex",
@@ -102,10 +113,11 @@ public class RawDataController {
           new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes())
         );
         exerciseDocumentList.add(exerciseDocument);
-        logger.debug(exerciseDocument.toString());
+        logger.debug(exerciseDocument.toString() + " - ContentType: " +uploadedFile.getContentType());
       } catch (Exception e) {
+        logger.warn("ERROR: "+ e.toString());
         e.printStackTrace();
-        return controllerUtil.jsonResponse(4000, "ERROR");
+        return controllerUtil.jsonResponse(4000, "ERROR" + e.toString());
       }
       exerciseDocumentRepository.saveAll(exerciseDocumentList);
     }

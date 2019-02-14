@@ -43,15 +43,15 @@
         <span *ngIf="item.isError"><mat-icon class="example-icon">error</mat-icon></span>
       </td>
       <td>
-        <button mat-button color="primary" type="button" class=" btn-xs"
+        <button mat-button color="primary" type="button" class="mat-small btn-xs"
                 (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
           <mat-icon class="example-icon" [inline]="true">cloud_upload</mat-icon> <label>Upload</label>
         </button>
-        <button mat-button color="accent" type="button" class=" btn-xs"
+        <button mat-button color="accent" type="button" class="mat-small btn-xs"
                 (click)="item.cancel()" [disabled]="!item.isUploading">
           <mat-icon class="example-icon" [inline]="true">cancel</mat-icon> <label>Cancel</label>
         </button>
-        <button mat-button color="warn" type="button" class=" btn-xs"
+        <button mat-button color="warn" type="button" class="mat-small btn-xs"
                 (click)="item.remove()">
           <mat-icon class="example-icon" [inline]="true">delete</mat-icon> <label>Remove</label>
         </button>
@@ -62,13 +62,12 @@
 
   <div>
     <div class="queue mat-body">
-      Queue progress:
       <div class="progress" style="">
         <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
       </div>
     </div>
     <button mat-raised-button color="primary" type="button" class="btn"
-            (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+            (click)="uploader.uploadAllFiles()" [disabled]="!uploader.getNotUploadedItems().length">
       <mat-icon class="example-icon">cloud_upload</mat-icon> <label> Upload all</label>
     </button>
     <button mat-raised-button color="accent" type="button" class="btn"

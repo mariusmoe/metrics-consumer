@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
+import {FileUploaderCustom} from "../../_services/FileUploaderCustom";
 
 
 const URL = 'http://localhost:8080/api/xml/';
@@ -12,11 +13,19 @@ const URL = 'http://localhost:8080/api/xml/';
 })
 export class UploadNewExComponent implements OnInit {
 
-  public uploader:FileUploader = new FileUploader({url: URL});
+  public uploader:FileUploaderCustom ;
 
-  constructor() { }
+  constructor() {
+    this.uploader = new FileUploaderCustom({
+      url: URL,
+      itemAlias: "uploadingFiles"
+    });
+  }
 
   ngOnInit() {
   }
 
+  uploadAllFiles(){
+    this.uploader.uploadAllFiles();
+  }
 }
