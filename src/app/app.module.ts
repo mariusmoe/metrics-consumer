@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
@@ -21,6 +21,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { AchievementsComponent } from './components/achievements/achievements.component';
 import {FileUploadModule} from "ng2-file-upload";
 import { UploadNewExComponent } from './components/upload-new-ex/upload-new-ex.component';
+import {BaseChangeInterceptor} from "./_interceptors/base-change.Interceptor";
 
 
 @NgModule({
@@ -52,7 +53,9 @@ import { UploadNewExComponent } from './components/upload-new-ex/upload-new-ex.c
     MatProgressBarModule,
     FileUploadModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: BaseChangeInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

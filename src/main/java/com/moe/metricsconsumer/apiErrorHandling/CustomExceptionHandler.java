@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNSUPPORTED_MEDIA_TYPE;
 
 
 @ControllerAdvice
@@ -41,7 +42,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     ApiError apiError = new ApiError(NOT_FOUND,CouldNotSaveException.class.getSimpleName(), ex);
     return buildResponseEntity(apiError);
   }
-
 
   @ExceptionHandler(MultipartException.class)
   public ObjectNode handleError1(MultipartException e, RedirectAttributes redirectAttributes) {

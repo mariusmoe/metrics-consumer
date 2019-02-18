@@ -18,3 +18,25 @@
 .top-text {
   margin-top: 40px;
 }
+
+.details-content {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.val-solution {
+  width: 190px;
+  text-align: left;
+}
+.val-student {
+  width: 190px;
+  text-align: right;
+}
+.val-divider {
+  width: 20px;
+  text-align: center;
+}
+
+.bigger {
+  font-size: large;
+}

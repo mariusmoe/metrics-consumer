@@ -4,6 +4,7 @@ import {MeasureService} from "../../_services/measure.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {forkJoin } from "rxjs";
 import {MeasureSummary} from "../../_models/measure-summary";
+import {FeatureList} from "../../_models/feature-list";
 
 
 @Component({
@@ -44,6 +45,9 @@ export class HomeComponent implements OnInit {
     "domain":["#fff8e1","#ffecb3","#ffe082","#ffd54f","#ffca28","#ffc107","#ffb300","#ffa000",
               "#ff8f00","#ff6f00"]
   };
+  studentList: FeatureList;
+  solutionManualList: FeatureList;
+  objectKeys = Object.keys;
 
   constructor(
     private http: HttpClient,
@@ -58,7 +62,7 @@ export class HomeComponent implements OnInit {
     this.route.paramMap.subscribe( params => {
       // this.retriveData(params.get('taskId'))
       if (params.get('taskId') != null) {
-        this.retriveFvData(params.get('taskId'))
+        this.retrieveFvData(params.get('taskId'))
         this.showInstructions = false;
       } else {
         this.showInstructions = true;
@@ -114,15 +118,15 @@ export class HomeComponent implements OnInit {
    * Retreive the Fv for the specified task
    * @param taskId 
    */
-  retriveFvData (taskId: string) {
+  retrieveFvData (taskId: string) {
     let student = this.measureService.getMeasureFvData(taskId);
     let solutionManual = this.measureService.getSolutionFvMeasureData(taskId);
     console.log('FV');
 
     forkJoin([student, solutionManual]).subscribe(results => {
       if (results[0]) {
-        // results[0] is student
-        // results[1] is solutionManual
+        this.studentList = results[0]; // is student
+        this.solutionManualList = results[1]; // is solutionManual
         console.log(results);
         this.taskName = taskId;
         let studentData = [];
@@ -160,6 +164,17 @@ export class HomeComponent implements OnInit {
   }
 
 
+  findValueInSolutionManualList(val) {
+
+    let solutionObject = this.solutionManualList.features.find( obj => {
+      return Object.keys(obj)[0] === val});
+    if (solutionObject == null) {
+      return undefined
+    } else {
+
+      return solutionObject[Object.keys(solutionObject)[0]];
+    }
+  }
 
 
 
