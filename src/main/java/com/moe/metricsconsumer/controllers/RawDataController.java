@@ -8,8 +8,16 @@ import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.ExerciseDocumentRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import com.moe.metricsconsumer.repositories.XmlRepository;
+import no.hal.learning.exercise.Exercise;
+import no.hal.learning.exercise.ExerciseProposals;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,24 +91,26 @@ public class RawDataController {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
+      // This is a new exercise being added
       MeasureSummary measureSummary = new MeasureSummary();
       // TODO: calculate measureSummary from MultipartFile[]
       // call calculateMeasureSummaryFromExFiles(uploadingFiles, null)
-      MeasureSummary savedMeasureSummary = this.measureRepository.save(measureSummary);
+      MeasureSummary savedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, null);
+      this.measureRepository.save(measureSummary);
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
       // TODO: recalculate measure summary from MultipartFile[]
-      // call calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef)
+      MeasureSummary recalculatedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef);
+      this.measureRepository.save(recalculatedMeasureSummary);
       try {
         xmlRepository.removeByMeasureSummaryRef(measureSummaryRef);
       } catch (Exception e) {
         logger.error(e.toString());
       }
     }
-
     logger.debug("measureSummaryRef: " + measureSummaryRef);
 
-
+    // Start saving files in DB
     List<ExerciseDocument> exerciseDocumentList = new ArrayList<>();
     for(MultipartFile uploadedFile : uploadingFiles) {
       logger.info("Trying to save: " + uploadedFile.getContentType());
@@ -131,6 +142,42 @@ public class RawDataController {
 //    controllerUtil.jsonResponse(2000, "Success - document has been saved");
     return new ResponseEntity<>( controllerUtil.jsonResponse(2000, "Success - document has been saved"),
       HttpStatus.OK);
+  }
+
+  private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef) {
+    for(MultipartFile uploadedFile : uploadingFiles) {
+      Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
+      ResourceSet resSet = new ResourceSetImpl();
+
+      // load config from XMI
+      Resource exFileResource = resSet.createResource(URI.createURI("exFileResource.ex"));
+      try {
+        exFileResource.load(new ByteArrayInputStream(uploadedFile.getBytes()),null );
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      // can exFileResource be an instance of Exercise? or
+      Exercise exercise;
+      ExerciseProposals exerciseProposals;
+      for (EObject eObject : exFileResource.getContents()) {
+        if (eObject instanceof Exercise) {
+          // Find last response
+          exercise = (Exercise) eObject;
+        }
+        if (eObject instanceof ExerciseProposals) {
+          exerciseProposals = (ExerciseProposals) eObject;
+          exerciseProposals.getProposals()    .get(0).getProposals().get(0).getAnswer();
+          exerciseProposals.getAllProposals() .get(0).getProposal();
+          exerciseProposals.getProposals().get(0).getProposals().get(0);
+        }
+      }
+      // TODO: create AST
+      // Give AST to all IMetricProviders
+      // gather results in one MeasureSummary object and return this.
+
+    }
+
+    return null;
   }
 
 

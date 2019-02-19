@@ -3,6 +3,7 @@ package com.moe.metricsconsumer.controllers;
 
 
 import javafx.util.Pair;
+import no.hal.learning.exercise.jdt.metrics.IMetricsProvider;
 import no.hal.learning.fv.*;
 import no.hal.learning.fv.impl.MetaDataFeatureValuedImpl;
 import org.bson.types.Binary;
@@ -24,7 +25,9 @@ public class ConfigCreator {
 
   public void create() throws IOException {
 
-    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+//    IMetricsProvider iMetricsProvider =
+
+      FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
 
 
     featureList.getFeatures().put("foreach", 99.0);

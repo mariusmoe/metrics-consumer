@@ -260,5 +260,6 @@ public class MetricsConsumerApplication implements CommandLineRunner {
 //      userAchievementRepository.save(userAchievement2);
 
 
+
     }
 }
