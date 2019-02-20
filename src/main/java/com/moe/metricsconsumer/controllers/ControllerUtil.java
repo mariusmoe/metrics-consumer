@@ -21,7 +21,11 @@ import java.util.Iterator;
 public class ControllerUtil {
 
 
-
+  /**
+   * Create a featureValuedContainer from a measureSummary
+   * @param measureSummary  the measure summary to use in the conversion
+   * @return  the converted FeatureValuedContainer
+   */
   public FeatureValuedContainer createContainerFromMeasures(MeasureSummary measureSummary) {
     FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
     // Add the meassureSummary to the featureValuedContainer object
@@ -88,6 +92,12 @@ public class ControllerUtil {
     return eObject;
   }
 
+  /**
+   * Find the correct data in the user data to replace with
+   * @param featureValuedContainer  the user data
+   * @param referenced  the reference that shall be changed
+   * @return the MetaDataFeatureValued
+   */
   private MetaDataFeatureValued findMetaDataFeatureValuedReferenced(FeatureValuedContainer featureValuedContainer,
                                                                     EObject referenced) {
     // Now find the featureValued with the correct id in the retrieving user's data.
@@ -106,6 +116,13 @@ public class ControllerUtil {
     return null;
   }
 
+  /**
+   * Simplify and standardize responses for easier parsing
+   * @param status  an internal status code
+   * @param message a custom message
+   * @param additionalParams  optional object to include in the response
+   * @return  the constructed objectNode
+   */
   public ObjectNode jsonResponse(int status, String message, Object ...additionalParams) {
     Object _additionalParams = (additionalParams.length >= 1) ? additionalParams : null;
     ObjectMapper mapper = new ObjectMapper();

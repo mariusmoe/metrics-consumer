@@ -19,6 +19,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class is used for debugging purposes
+ */
 public class ConfigCreator {
 
   Logger logger = LoggerFactory.getLogger(ConfigCreator.class);

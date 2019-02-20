@@ -8,8 +8,15 @@ import com.moe.metricsconsumer.repositories.AchievementRepository;
 import com.moe.metricsconsumer.repositories.ExerciseDocumentRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
 import com.moe.metricsconsumer.repositories.XmlRepository;
+import no.hal.learning.exercise.AbstractStringEdit;
 import no.hal.learning.exercise.Exercise;
+import no.hal.learning.exercise.ExercisePackage;
 import no.hal.learning.exercise.ExerciseProposals;
+import no.hal.learning.exercise.jdt.JdtPackage;
+import no.hal.learning.exercise.jdt.JdtSourceEditEvent;
+import no.hal.learning.exercise.jdt.JdtSourceEditProposal;
+import no.hal.learning.exercise.junit.JunitPackage;
+import no.hal.learning.exercise.workbench.WorkbenchPackage;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.eclipse.emf.common.util.URI;
@@ -35,6 +42,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -145,6 +153,15 @@ public class RawDataController {
   }
 
   private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef) {
+
+    // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
+    // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
+    ExercisePackage exercisePackage = ExercisePackage.eINSTANCE;
+    JdtPackage jdtPackage = JdtPackage.eINSTANCE;
+    JunitPackage junitPackage = JunitPackage.eINSTANCE;
+    WorkbenchPackage workbenchPackage = WorkbenchPackage.eINSTANCE;
+
+
     for(MultipartFile uploadedFile : uploadingFiles) {
       Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
       ResourceSet resSet = new ResourceSetImpl();
@@ -153,22 +170,44 @@ public class RawDataController {
       Resource exFileResource = resSet.createResource(URI.createURI("exFileResource.ex"));
       try {
         exFileResource.load(new ByteArrayInputStream(uploadedFile.getBytes()),null );
-      } catch (IOException e) {
+//        resSet.getResource(URI.createURI("TwitterComparison.ex"), true );
+      } catch (Exception e) {
         e.printStackTrace();
       }
+
+
+//      Kun en tanke -> hva med å traversere exFileResource som et tre og heller ta aksjon hvis objektet er av typen
+//      JdtSourceEditProposal, da skal en hente attempts og gjøre getString() på siste forsøk.
+//      ?
+
       // can exFileResource be an instance of Exercise? or
       Exercise exercise;
       ExerciseProposals exerciseProposals;
       for (EObject eObject : exFileResource.getContents()) {
-        if (eObject instanceof Exercise) {
-          // Find last response
-          exercise = (Exercise) eObject;
-        }
         if (eObject instanceof ExerciseProposals) {
           exerciseProposals = (ExerciseProposals) eObject;
-          exerciseProposals.getProposals()    .get(0).getProposals().get(0).getAnswer();
-          exerciseProposals.getAllProposals() .get(0).getProposal();
-          exerciseProposals.getProposals().get(0).getProposals().get(0);
+          logger.info("Title: " + exerciseProposals.getExercise().getTitle());
+          // Can something more specific than EObject be used in the following 'for loop'
+          for (EObject eObject1:  exerciseProposals.getAllProposals()){
+            // Is it important which stringEdit is used? The last?
+            if (eObject1 instanceof JdtSourceEditProposal) {
+              JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) eObject1;
+              for (EObject eObject2: jdtSourceEditProposal.getAttempts()){
+                if (eObject2 instanceof JdtSourceEditEvent) {
+                  JdtSourceEditEvent jdtSourceEditEvent = (JdtSourceEditEvent) eObject2;
+                  String s = jdtSourceEditEvent.getEdit().getString();
+                  String s2 = jdtSourceEditEvent.getEdit().getString();
+                }
+              }
+
+//              jdtSourceEditProposal.getAnswer()
+              // Get the exercise source code as a string
+              String s = ((AbstractStringEdit) eObject1).getString();
+              // TODO: generate java AST
+              // TODO: pass to an IMetricProvider
+
+            }
+          }
         }
       }
       // TODO: create AST
