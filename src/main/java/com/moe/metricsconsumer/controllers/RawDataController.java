@@ -19,11 +19,14 @@ import no.hal.learning.exercise.junit.JunitPackage;
 import no.hal.learning.exercise.workbench.WorkbenchPackage;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -175,42 +179,83 @@ public class RawDataController {
         e.printStackTrace();
       }
 
+      // Holds a list of source code parts from the incoming .ex file
+      ArrayList<String> sourceCodeList = null;
+
+      TreeIterator<EObject> iterator = exFileResource.getAllContents();
+      while (iterator.hasNext()) {
+        EObject exEObject = iterator.next();
+        // TODO: can there be ndone more aggressive pruning?
+        if (exEObject instanceof Exercise) {
+          iterator.prune();
+        }
+        if (exEObject instanceof JdtSourceEditProposal) {
+          // getString() on the last attempt
+          JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
+          EList eList = jdtSourceEditProposal.getAttempts();
+          if (eList != null && !eList.isEmpty()) {
+            JdtSourceEditEvent lastAttemptOnTask = (JdtSourceEditEvent) eList.get(eList.size()-1);
+            String sourceCode = lastAttemptOnTask.getEdit().getString();
+            sourceCodeList.add(sourceCode);
+          }
+        }
+      }
+
+      // OK, so now we have a bunch of these source code parts that answers different parts of the exercise
+      // Should they all be combined and used to generate an AST or should they all get their own AST?
+
 
 //      Kun en tanke -> hva med å traversere exFileResource som et tre og heller ta aksjon hvis objektet er av typen
 //      JdtSourceEditProposal, da skal en hente attempts og gjøre getString() på siste forsøk.
 //      ?
+//
+//       can exFileResource be an instance of Exercise? or
+//      Exercise exercise;
+//      ExerciseProposals exerciseProposals;
+//       The exFileResource comes with two eObjects one Exercise and one ExerciseProposals
+//      for (EObject eObject : exFileResource.getContents()) {
+//        if (eObject instanceof ExerciseProposals) {
+//          exerciseProposals = (ExerciseProposals) eObject;
+//          logger.info("Title: " + exerciseProposals.getExercise().getTitle());
+//
+//          Iterator<EObject> iterator = exFileResource.getAllContents();
+//          while (iterator.hasNext()) {
+//            EObject exEObject = iterator.next();
+//
+//            if (exEObject instanceof JdtSourceEditProposal) {
+//              // getString() on the last attempt
+//              JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
+//              EList eList = jdtSourceEditProposal.getAttempts();
+//              if (eList != null && !eList.isEmpty()) {
+//                T item = eList.get(eList.size()-1);
+//              }
+//            }
+//          }
+//
+//
+//          // Can something more specific than EObject be used in the following 'for loop'
+//          for (EObject eObject1:  exerciseProposals.getAllProposals()){
+//            // Is it important which stringEdit is used? The last?
+//            if (eObject1 instanceof JdtSourceEditProposal) {
+//              JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) eObject1;
+//              for (EObject eObject2: jdtSourceEditProposal.getAttempts()){
+//                if (eObject2 instanceof JdtSourceEditEvent) {
+//                  JdtSourceEditEvent jdtSourceEditEvent = (JdtSourceEditEvent) eObject2;
+//                  String s = jdtSourceEditEvent.getEdit().getString();
+//                  String s2 = jdtSourceEditEvent.getEdit().getString();
+//                }
+//              }
+//
+////              jdtSourceEditProposal.getAnswer()
+//              // Get the exercise source code as a string
+//              String s = ((AbstractStringEdit) eObject1).getString();
+//
+//
+//            }
+//          }
+//        }
+//      }
 
-      // can exFileResource be an instance of Exercise? or
-      Exercise exercise;
-      ExerciseProposals exerciseProposals;
-      for (EObject eObject : exFileResource.getContents()) {
-        if (eObject instanceof ExerciseProposals) {
-          exerciseProposals = (ExerciseProposals) eObject;
-          logger.info("Title: " + exerciseProposals.getExercise().getTitle());
-          // Can something more specific than EObject be used in the following 'for loop'
-          for (EObject eObject1:  exerciseProposals.getAllProposals()){
-            // Is it important which stringEdit is used? The last?
-            if (eObject1 instanceof JdtSourceEditProposal) {
-              JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) eObject1;
-              for (EObject eObject2: jdtSourceEditProposal.getAttempts()){
-                if (eObject2 instanceof JdtSourceEditEvent) {
-                  JdtSourceEditEvent jdtSourceEditEvent = (JdtSourceEditEvent) eObject2;
-                  String s = jdtSourceEditEvent.getEdit().getString();
-                  String s2 = jdtSourceEditEvent.getEdit().getString();
-                }
-              }
-
-//              jdtSourceEditProposal.getAnswer()
-              // Get the exercise source code as a string
-              String s = ((AbstractStringEdit) eObject1).getString();
-              // TODO: generate java AST
-              // TODO: pass to an IMetricProvider
-
-            }
-          }
-        }
-      }
-      // TODO: create AST
       // Give AST to all IMetricProviders
       // gather results in one MeasureSummary object and return this.
 
