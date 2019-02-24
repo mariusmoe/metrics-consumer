@@ -15,6 +15,10 @@ import no.hal.learning.exercise.ExerciseProposals;
 import no.hal.learning.exercise.jdt.JdtPackage;
 import no.hal.learning.exercise.jdt.JdtSourceEditEvent;
 import no.hal.learning.exercise.jdt.JdtSourceEditProposal;
+import no.hal.learning.exercise.jdt.metrics.AbstractMetricsProvider;
+import no.hal.learning.exercise.jdt.metrics.Activator;
+import no.hal.learning.exercise.jdt.metrics.IMetricsProvider;
+import no.hal.learning.exercise.jdt.metrics.impl.LineCountMetric;
 import no.hal.learning.exercise.junit.JunitPackage;
 import no.hal.learning.exercise.workbench.WorkbenchPackage;
 import org.bson.BsonBinarySubType;
@@ -28,6 +32,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,11 +165,10 @@ public class RawDataController {
 
     // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
     // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
-    ExercisePackage exercisePackage = ExercisePackage.eINSTANCE;
-    JdtPackage jdtPackage = JdtPackage.eINSTANCE;
-    JunitPackage junitPackage = JunitPackage.eINSTANCE;
-    WorkbenchPackage workbenchPackage = WorkbenchPackage.eINSTANCE;
-
+    ExercisePackage   exercisePackage  = ExercisePackage.eINSTANCE;
+    JdtPackage        jdtPackage       = JdtPackage.eINSTANCE;
+    JunitPackage      junitPackage     = JunitPackage.eINSTANCE;
+    WorkbenchPackage  workbenchPackage = WorkbenchPackage.eINSTANCE;
 
     for(MultipartFile uploadedFile : uploadingFiles) {
       Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
@@ -180,12 +184,12 @@ public class RawDataController {
       }
 
       // Holds a list of source code parts from the incoming .ex file
-      ArrayList<String> sourceCodeList = null;
+      ArrayList<String> sourceCodeList = new ArrayList<>();;
 
       TreeIterator<EObject> iterator = exFileResource.getAllContents();
       while (iterator.hasNext()) {
         EObject exEObject = iterator.next();
-        // TODO: can there be ndone more aggressive pruning?
+        // TODO: can there be done more aggressive pruning?
         if (exEObject instanceof Exercise) {
           iterator.prune();
         }
@@ -201,9 +205,45 @@ public class RawDataController {
         }
       }
 
-      // OK, so now we have a bunch of these source code parts that answers different parts of the exercise
-      // Should they all be combined and used to generate an AST or should they all get their own AST?
+      StringBuilder sb = new StringBuilder();
+      for (String s : sourceCodeList)
+      {
+        sb.append(s);
+        sb.append("\n\n");
+      }
 
+      // OK, so now we have a bunch of these source code parts in sourceCodeList that answers different parts of the
+      // exercise. Should they all be combined and used to generate an AST or should they all get their own AST?
+
+      IMetricsProvider lineCountMetric = new LineCountMetric();
+      Object o = lineCountMetric.computeMetrics(sb.toString());
+
+      System.out.println(sb.toString() + "\n\n----------------------\n" + lineCountMetric.computeMetrics(sb.toString()) +
+        "\n----------------------------------------------------\n\n");
+
+
+
+//      https://stackoverflow.com/a/33755879/5489113  or
+//      https://stackoverflow.com/a/45274409/5489113
+
+      // OSGI stuff -> can this be used in any way? if not: How can this be solved instead?
+//      https://stackoverflow.com/questions/8518837/using-osgi-in-a-desktop-standalone-application
+//      public static void main() {
+//
+//        1. get a FrameworkFactory using java.util.ServiceLoader.
+//        2. create an OSGi framework using the FrameworkFactory
+//        3. start the OSGi framework
+//        4. Install your bundle(s).
+//        5. Start all the bundles you installed.
+//        6. Wait for the OSGi framework to shutdown.
+//
+//      }
+//      Activator activator = new Activator();
+//      try {
+//        activator.start(FrameworkUtil.getBundle(IMetricsProvider.class).getBundleContext());
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
 
 //      Kun en tanke -> hva med å traversere exFileResource som et tre og heller ta aksjon hvis objektet er av typen
 //      JdtSourceEditProposal, da skal en hente attempts og gjøre getString() på siste forsøk.
