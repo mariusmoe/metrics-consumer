@@ -72,3 +72,5 @@ src/main/resources/images/
 *.xmi
 
 *.ex
+
+src/main/resources/application\.yml
