@@ -1,6 +1,7 @@
 package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moe.metricsconsumer.config.IMetricsProviderConfig;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
@@ -36,16 +37,25 @@ import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.SystemPropertyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,11 +89,16 @@ public class RawDataController {
   @Autowired
     private ExerciseDocumentRepository exerciseDocumentRepository;
 
+  @Autowired
+  private IMetricsProviderConfig iMetricsProviderConfig;
+
   ControllerUtil controllerUtil = new ControllerUtil();
 
   Logger logger = LoggerFactory.getLogger(RawDataController.class);
 
   private static final String approvedContentType = "application/octet-stream";
+
+
 
 
 
@@ -217,6 +232,26 @@ public class RawDataController {
 
       IMetricsProvider lineCountMetric = new LineCountMetric();
       Object o = lineCountMetric.computeMetrics(sb.toString());
+      logger.info("iMetricsProvidersList: "  + iMetricsProviderConfig.getIMetricsProvidersList().toString());
+      try {
+        logger.info("iMetricsProvidersList: "  + findMyTypes("no.hal.learning.exercise.jdt.metrics").toString());
+//        AbstractMetricsProvider
+//        IMetricsProvider
+//        AbstractASTMetricsProvider
+//        Activator
+//        LineCountMetric
+//        QNameCountersMetric
+//        TokenCountersMetric
+//        ConditionalCountersMetric
+//        DefaultMetricsViewProvider
+//        IMetricsViewProvider
+//        Activator
+//        Loop over these^ and filter based on which
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
 
       System.out.println(sb.toString() + "\n\n----------------------\n" + lineCountMetric.computeMetrics(sb.toString()) +
         "\n----------------------------------------------------\n\n");
@@ -302,6 +337,44 @@ public class RawDataController {
     }
 
     return null;
+  }
+
+  private List<Class> findMyTypes(String basePackage) throws IOException, ClassNotFoundException
+  {
+    ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+    MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resourcePatternResolver);
+
+    List<Class> candidates = new ArrayList<Class>();
+    String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
+      resolveBasePackage(basePackage) + "/" + "**/*.class";
+    org.springframework.core.io.Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+    for (org.springframework.core.io.Resource resource : resources) {
+      if (resource.isReadable()) {
+        MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(resource);
+        if (isCandidate(metadataReader)) {
+          candidates.add(Class.forName(metadataReader.getClassMetadata().getClassName()));
+        }
+      }
+    }
+    return candidates;
+  }
+
+  private String resolveBasePackage(String basePackage) {
+    return ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(basePackage));
+  }
+
+  private boolean isCandidate(MetadataReader metadataReader) throws ClassNotFoundException
+  {
+    try {
+      Class c = Class.forName(metadataReader.getClassMetadata().getClassName());
+      System.out.println(c.getSimpleName());
+      if (c.getAnnotation(XmlRootElement.class) != null) {
+        return true;
+      }
+    }
+    catch(Throwable e){
+    }
+    return false;
   }
 
 
