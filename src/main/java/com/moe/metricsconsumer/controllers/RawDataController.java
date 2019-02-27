@@ -5,23 +5,20 @@ import com.moe.metricsconsumer.config.IMetricsProviderConfig;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
-import com.moe.metricsconsumer.repositories.AchievementRepository;
-import com.moe.metricsconsumer.repositories.ExerciseDocumentRepository;
-import com.moe.metricsconsumer.repositories.MeasureRepository;
-import com.moe.metricsconsumer.repositories.XmlRepository;
-import no.hal.learning.exercise.AbstractStringEdit;
+import com.moe.metricsconsumer.repositories.*;
 import no.hal.learning.exercise.Exercise;
 import no.hal.learning.exercise.ExercisePackage;
-import no.hal.learning.exercise.ExerciseProposals;
+import no.hal.learning.exercise.jdt.JdtLaunchProposal;
 import no.hal.learning.exercise.jdt.JdtPackage;
 import no.hal.learning.exercise.jdt.JdtSourceEditEvent;
 import no.hal.learning.exercise.jdt.JdtSourceEditProposal;
-import no.hal.learning.exercise.jdt.metrics.AbstractMetricsProvider;
-import no.hal.learning.exercise.jdt.metrics.Activator;
 import no.hal.learning.exercise.jdt.metrics.IMetricsProvider;
-import no.hal.learning.exercise.jdt.metrics.impl.LineCountMetric;
 import no.hal.learning.exercise.junit.JunitPackage;
+import no.hal.learning.exercise.junit.JunitTestProposal;
+import no.hal.learning.exercise.workbench.CommandExecutionProposal;
 import no.hal.learning.exercise.workbench.WorkbenchPackage;
+import no.hal.learning.fv.*;
+import no.hal.learning.fv.util.Op2;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.eclipse.emf.common.util.EList;
@@ -31,13 +28,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.osgi.framework.FrameworkUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
@@ -55,13 +50,10 @@ import org.springframework.http.ResponseEntity;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -107,7 +99,7 @@ public class RawDataController {
   @PostMapping("/")
   @ResponseBody
   public ResponseEntity<ObjectNode> newStudentCode(@Nullable @RequestHeader(value="measureSummaryRef") String measureSummaryRef,
-                                       @RequestParam("files") MultipartFile[] uploadingFiles) {
+                                       @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
     return saveExFiles(measureSummaryRef, uploadingFiles);
   }
 
@@ -115,11 +107,11 @@ public class RawDataController {
   @PostMapping("/solution")
   @ResponseBody
   public ResponseEntity newSolutionCode(@RequestHeader(value="measureSummaryRef") String measureSummaryRef,
-                                        @RequestParam("files") MultipartFile[] uploadingFiles) {
+                                        @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
     return saveExFiles(measureSummaryRef, uploadingFiles);
   }
 
-  private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles) {
+  private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles) throws IOException {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
@@ -176,7 +168,8 @@ public class RawDataController {
       HttpStatus.OK);
   }
 
-  private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef) {
+  @SuppressWarnings("unchecked")
+  private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef) throws IOException {
 
     // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
     // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
@@ -184,41 +177,12 @@ public class RawDataController {
     JdtPackage        jdtPackage       = JdtPackage.eINSTANCE;
     JunitPackage      junitPackage     = JunitPackage.eINSTANCE;
     WorkbenchPackage  workbenchPackage = WorkbenchPackage.eINSTANCE;
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
+
 
     for(MultipartFile uploadedFile : uploadingFiles) {
-      Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
-      ResourceSet resSet = new ResourceSetImpl();
-
-      // load config from XMI
-      Resource exFileResource = resSet.createResource(URI.createURI("exFileResource.ex"));
-      try {
-        exFileResource.load(new ByteArrayInputStream(uploadedFile.getBytes()),null );
-//        resSet.getResource(URI.createURI("TwitterComparison.ex"), true );
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
-      // Holds a list of source code parts from the incoming .ex file
-      ArrayList<String> sourceCodeList = new ArrayList<>();;
-
-      TreeIterator<EObject> iterator = exFileResource.getAllContents();
-      while (iterator.hasNext()) {
-        EObject exEObject = iterator.next();
-        // TODO: can there be done more aggressive pruning?
-        if (exEObject instanceof Exercise) {
-          iterator.prune();
-        }
-        if (exEObject instanceof JdtSourceEditProposal) {
-          // getString() on the last attempt
-          JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
-          EList eList = jdtSourceEditProposal.getAttempts();
-          if (eList != null && !eList.isEmpty()) {
-            JdtSourceEditEvent lastAttemptOnTask = (JdtSourceEditEvent) eList.get(eList.size()-1);
-            String sourceCode = lastAttemptOnTask.getEdit().getString();
-            sourceCodeList.add(sourceCode);
-          }
-        }
-      }
+      Resource exFileResource           = getExResource(uploadedFile);
+      ArrayList<String> sourceCodeList  = getSourceCodeList(exFileResource);
 
       StringBuilder sb = new StringBuilder();
       for (String s : sourceCodeList)
@@ -226,111 +190,61 @@ public class RawDataController {
         sb.append(s);
         sb.append("\n\n");
       }
+      logger.debug(sb.toString());
 
-      // OK, so now we have a bunch of these source code parts in sourceCodeList that answers different parts of the
-      // exercise. Should they all be combined and used to generate an AST or should they all get their own AST?
-
-      IMetricsProvider lineCountMetric = new LineCountMetric();
-      Object o = lineCountMetric.computeMetrics(sb.toString());
-      logger.info("iMetricsProvidersList: "  + iMetricsProviderConfig.getIMetricsProvidersList().toString());
+      FeatureValuedContainer fContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+      logger.info("iMetricsProvidersList: "  + iMetricsProviderConfig.getMetricsProviders().toString());
       try {
-        logger.info("iMetricsProvidersList: "  + findMyTypes("no.hal.learning.exercise.jdt.metrics").toString());
-//        AbstractMetricsProvider
-//        IMetricsProvider
-//        AbstractASTMetricsProvider
-//        Activator
-//        LineCountMetric
-//        QNameCountersMetric
-//        TokenCountersMetric
-//        ConditionalCountersMetric
-//        DefaultMetricsViewProvider
-//        IMetricsViewProvider
-//        Activator
-//        Loop over these^ and filter based on which
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (ClassNotFoundException e) {
+        for (String provider : iMetricsProviderConfig.getMetricsProviders()) {
+          logger.info("iMetricsProvider classes: "  + findMyTypes(provider).toString());
+          FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+
+          // Create one featureList
+          // with all providers and sum up results from all source code snippets
+          for (Class c : findMyTypes(provider)){
+            logger.info("name: "+c.getName());
+            for (String sourceCode: sourceCodeList) {
+
+
+
+                IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
+
+
+                System.out.println("iMetricsProvider: " + iMetricsProvider);
+                System.out.println("iMetricsProvider: " + iMetricsProvider.getClass().getDeclaredMethods());
+
+                // DO something here!
+                System.out.println("--------------- Source code -------------\n" + sourceCode);
+                FeatureValued featureValued = iMetricsProvider.computeMetrics(sourceCode);
+                System.out.println(featureValued.toString());
+
+                // DO not remove featureNames -> some thread synchronization will not happen upon removal
+                EList<String> featureNames = featureList.getFeatureNames();
+                if (featureValued.getFeatureNames().size() > 0 && featureNames.contains(featureValued.getFeatureNames().get(0))) {
+                  System.out.println("iMetricsProvider: " + iMetricsProvider.getClass().getDeclaredMethods());
+                  featureList.apply(Op2.PLUS,featureValued.toFeatureList() ,false );
+                } else {
+                  System.out.println("iMetricsProvider: " + iMetricsProvider.getClass().getDeclaredMethods());
+                  featureList.set(featureValued.toFeatureList(), false);
+                }
+
+
+            }
+            logger.debug("Done with all source code snippets for " + c.getSimpleName());
+          }
+
+
+          MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+          metaDataFeatureValued.setFeatureValuedId(provider);
+          metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+          fContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
+        }
+
+      } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
         e.printStackTrace();
       }
 
-      System.out.println(sb.toString() + "\n\n----------------------\n" + lineCountMetric.computeMetrics(sb.toString()) +
-        "\n----------------------------------------------------\n\n");
-
-
-
-//      https://stackoverflow.com/a/33755879/5489113  or
-//      https://stackoverflow.com/a/45274409/5489113
-
-      // OSGI stuff -> can this be used in any way? if not: How can this be solved instead?
-//      https://stackoverflow.com/questions/8518837/using-osgi-in-a-desktop-standalone-application
-//      public static void main() {
-//
-//        1. get a FrameworkFactory using java.util.ServiceLoader.
-//        2. create an OSGi framework using the FrameworkFactory
-//        3. start the OSGi framework
-//        4. Install your bundle(s).
-//        5. Start all the bundles you installed.
-//        6. Wait for the OSGi framework to shutdown.
-//
-//      }
-//      Activator activator = new Activator();
-//      try {
-//        activator.start(FrameworkUtil.getBundle(IMetricsProvider.class).getBundleContext());
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//      }
-
-//      Kun en tanke -> hva med å traversere exFileResource som et tre og heller ta aksjon hvis objektet er av typen
-//      JdtSourceEditProposal, da skal en hente attempts og gjøre getString() på siste forsøk.
-//      ?
-//
-//       can exFileResource be an instance of Exercise? or
-//      Exercise exercise;
-//      ExerciseProposals exerciseProposals;
-//       The exFileResource comes with two eObjects one Exercise and one ExerciseProposals
-//      for (EObject eObject : exFileResource.getContents()) {
-//        if (eObject instanceof ExerciseProposals) {
-//          exerciseProposals = (ExerciseProposals) eObject;
-//          logger.info("Title: " + exerciseProposals.getExercise().getTitle());
-//
-//          Iterator<EObject> iterator = exFileResource.getAllContents();
-//          while (iterator.hasNext()) {
-//            EObject exEObject = iterator.next();
-//
-//            if (exEObject instanceof JdtSourceEditProposal) {
-//              // getString() on the last attempt
-//              JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
-//              EList eList = jdtSourceEditProposal.getAttempts();
-//              if (eList != null && !eList.isEmpty()) {
-//                T item = eList.get(eList.size()-1);
-//              }
-//            }
-//          }
-//
-//
-//          // Can something more specific than EObject be used in the following 'for loop'
-//          for (EObject eObject1:  exerciseProposals.getAllProposals()){
-//            // Is it important which stringEdit is used? The last?
-//            if (eObject1 instanceof JdtSourceEditProposal) {
-//              JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) eObject1;
-//              for (EObject eObject2: jdtSourceEditProposal.getAttempts()){
-//                if (eObject2 instanceof JdtSourceEditEvent) {
-//                  JdtSourceEditEvent jdtSourceEditEvent = (JdtSourceEditEvent) eObject2;
-//                  String s = jdtSourceEditEvent.getEdit().getString();
-//                  String s2 = jdtSourceEditEvent.getEdit().getString();
-//                }
-//              }
-//
-////              jdtSourceEditProposal.getAnswer()
-//              // Get the exercise source code as a string
-//              String s = ((AbstractStringEdit) eObject1).getString();
-//
-//
-//            }
-//          }
-//        }
-//      }
-
+      logger.info(fContainer.toString());
       // Give AST to all IMetricProviders
       // gather results in one MeasureSummary object and return this.
 
@@ -339,6 +253,68 @@ public class RawDataController {
     return null;
   }
 
+
+
+  /**
+   * Uses a tree iterator to go through the exFileResource and finds all source code snippets
+   * @param exFileResource  The file resource with the exercise proposals in
+   * @return  sourceCodeList - a list with source code snippets at each index
+   */
+  private ArrayList<String> getSourceCodeList(Resource exFileResource) {
+    // Holds a list of source code parts from the incoming .ex file
+    ArrayList<String> sourceCodeList = new ArrayList<>();
+
+    // Iterate through the whole ex resource and prune as often as possible
+    TreeIterator<EObject> iterator = exFileResource.getAllContents();
+    while (iterator.hasNext()) {
+      EObject exEObject = iterator.next();
+      if (exEObject instanceof JdtSourceEditProposal) {
+        // getString() on the last attempt
+        JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
+        EList eList = jdtSourceEditProposal.getAttempts();
+        if (eList != null && !eList.isEmpty()) {
+          JdtSourceEditEvent lastAttemptOnTask = (JdtSourceEditEvent) eList.get(eList.size()-1);
+          String sourceCode = lastAttemptOnTask.getEdit().getString();
+          sourceCodeList.add(sourceCode);
+        }
+      } else if (exEObject instanceof Exercise
+        || exEObject instanceof JunitTestProposal
+        || exEObject instanceof JdtLaunchProposal
+        || exEObject instanceof CommandExecutionProposal) {
+        iterator.prune();
+      }
+    }
+    return sourceCodeList;
+  }
+
+  /**
+   * Loads the file into a emf ecore resource
+   * @param uploadedFile  the file that is uploaded (singular)
+   * @return  a resource with the exercise and exercise proposal
+   * @throws IOException
+   */
+  private Resource getExResource(MultipartFile uploadedFile) throws IOException {
+    ResourceSet resSet = new ResourceSetImpl();
+    // load config from XMI
+    Resource exFileResource = resSet.createResource(URI.createURI("exFileResource.ex"));
+    try {
+      exFileResource.load(new ByteArrayInputStream(uploadedFile.getBytes()),null );
+    } catch (IOException e) {
+      logger.warn("Could not: uploadedFile.getBytes(). Something is probably wrong with the file");
+      e.printStackTrace();
+      throw e;
+    }
+    return exFileResource;
+  }
+
+  /**
+   * Will look through provided package and find classes that ends with "Metric". Modified method from
+   * @See <a href="https://stackoverflow.com/a/5343940/5489113">https://stackoverflow.com/a/5343940/5489113</a>
+   * @param basePackage The package that will we looked through
+   * @return  a list of classes that provides the IMetricProvider interface
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
   private List<Class> findMyTypes(String basePackage) throws IOException, ClassNotFoundException
   {
     ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -367,8 +343,7 @@ public class RawDataController {
   {
     try {
       Class c = Class.forName(metadataReader.getClassMetadata().getClassName());
-      System.out.println(c.getSimpleName());
-      if (c.getAnnotation(XmlRootElement.class) != null) {
+      if (c.getSimpleName().endsWith("Metric")) {
         return true;
       }
     }

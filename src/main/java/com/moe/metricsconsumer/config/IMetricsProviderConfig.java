@@ -13,14 +13,14 @@ import java.util.List;
 @ConfigurationProperties
 public class IMetricsProviderConfig {
 
-  private List<String> providers = new ArrayList<>();
+  private List<String> metricsProviders = new ArrayList<>();
 
-  public void setProviders(List<String> providers) {
-    this.providers = providers;
+  public void setMetricsProviders(List<String> metricsProviders) {
+    this.metricsProviders = metricsProviders;
   }
 
-  public List<String> getIMetricsProvidersList() {
-    return this.providers ;
+  public List<String> getMetricsProviders() {
+    return this.metricsProviders;
   }
 
 }
