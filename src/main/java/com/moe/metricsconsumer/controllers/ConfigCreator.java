@@ -513,4 +513,99 @@ public class ConfigCreator {
 
     return configResourceOutputStream.toByteArray();
   }
+
+  public byte[] createFvConfig4() throws IOException {
+
+
+
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+
+
+    featureList.getFeatures().put("PrimitiveType", 99.0);
+    featureList.getFeatures().put("MarkerAnnotation", 99.0);
+//    featureList.getFeatures().put("PrefixExpression.-", 99.0);
+//    featureList.getFeatures().put("MethodDeclaration.public", 99.0);
+//    featureList.getFeatures().put("InfixExpression.<", 99.0);
+//    featureList.getFeatures().put("InfixExpression.>", 99.0);
+    featureList.getFeatures().put("VariableDeclarationStatement", 99.0);
+    featureList.getFeatures().put("Block", 99.0);
+    featureList.getFeatures().put("VariableDeclarationFragment", 99.0);
+    featureList.getFeatures().put("SimpleType", 99.0);
+    featureList.getFeatures().put("SingleVariableDeclaration", 99.0);
+    featureList.getFeatures().put("IfStatement", 99.0);
+    featureList.getFeatures().put("ReturnStatement", 99.0);
+    featureList.getFeatures().put("MethodInvocation", 99.0);
+    featureList.getFeatures().put("PrefixExpression", 99.0);
+    featureList.getFeatures().put("InfixExpression", 99.0);
+    featureList.getFeatures().put("conditionalCount", 99.0);
+    featureList.getFeatures().put("ParameterizedType", 99.0);
+    featureList.getFeatures().put("Modifier", 99.0);
+    featureList.getFeatures().put("SimpleName", 99.0);
+    featureList.getFeatures().put("NumberLiteral", 99.0);
+    featureList.getFeatures().put("QualifiedName", 99.0);
+    featureList.getFeatures().put("MethodDeclaration", 99.0);
+//    featureList.getFeatures().put("TypeDeclaration.public", 99.0);
+    featureList.getFeatures().put("lines", 99.0);
+
+    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+    metaDataFeatureValued.setFeatureValuedId("no_hal_learning_exercise_jdt_metrics");
+    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+
+//
+//    ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
+//    expressionFeatures.setOther(metaDataFeatureValued);
+//
+//
+//    logger.debug(expressionFeatures.getOther().toString());
+//
+//    // TODO: This should be configurable
+//
+//
+//    expressionFeatures.getFeatures().put("Primitive types", "PrimitiveType");
+//    expressionFeatures.getFeatures().put("cyclic", "IfStatement + 1");
+//    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
+//    expressionFeatures.getFeatures().put("Sum expression", "PrefixExpression + InfixExpression");
+//    expressionFeatures.getFeatures().put("Number of PrimitiveType", "PrimitiveType");
+//
+//    //expressionFeatures.getFeatures().put("one", "m * n + 1");
+//
+//    // load config from XMI
+//    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+//    ResourceSet resSet = new ResourceSetImpl();
+//
+//    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+//    configResource.getContents().add(expressionFeatures);
+//
+//    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
+//    dataResource.getContents().add(metaDataFeatureValued);
+//
+//    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+//    configResource.save(configResourceOutputStream, null);
+//
+//    return configResourceOutputStream.toByteArray();
+
+    DerivedFeatures1 derivedFeatures = FvFactory.eINSTANCE.createDerivedFeatures1();
+    derivedFeatures.setOp(Op2Kind.PLUS);
+    derivedFeatures.setOp1(Op1Kind.NEG);
+    derivedFeatures.setVal(3.0);
+    derivedFeatures.setOther(metaDataFeatureValued);
+
+
+
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+    configResource.getContents().add(derivedFeatures);
+
+    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream, null);
+
+    return configResourceOutputStream.toByteArray();
+  }
 }

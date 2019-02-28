@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moe.metricsconsumer.config.IMetricsProviderConfig;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 
+import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.repositories.*;
-import no.hal.learning.exercise.Exercise;
-import no.hal.learning.exercise.ExercisePackage;
+import no.hal.learning.exercise.*;
 import no.hal.learning.exercise.jdt.JdtLaunchProposal;
 import no.hal.learning.exercise.jdt.JdtPackage;
 import no.hal.learning.exercise.jdt.JdtSourceEditEvent;
@@ -100,7 +100,7 @@ public class RawDataController {
   @ResponseBody
   public ResponseEntity<ObjectNode> newStudentCode(@Nullable @RequestHeader(value="measureSummaryRef") String measureSummaryRef,
                                        @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
-    return saveExFiles(measureSummaryRef, uploadingFiles);
+    return saveExFiles(measureSummaryRef, uploadingFiles, "001", false);
   }
 
 
@@ -108,10 +108,10 @@ public class RawDataController {
   @ResponseBody
   public ResponseEntity newSolutionCode(@RequestHeader(value="measureSummaryRef") String measureSummaryRef,
                                         @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
-    return saveExFiles(measureSummaryRef, uploadingFiles);
+    return saveExFiles(measureSummaryRef, uploadingFiles, "001", true);
   }
 
-  private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles) throws IOException {
+  private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles, String userId, boolean isSolutionManual) throws IOException {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
@@ -119,12 +119,12 @@ public class RawDataController {
       MeasureSummary measureSummary = new MeasureSummary();
       // TODO: calculate measureSummary from MultipartFile[]
       // call calculateMeasureSummaryFromExFiles(uploadingFiles, null)
-      MeasureSummary savedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, null);
+      MeasureSummary savedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual);
       this.measureRepository.save(measureSummary);
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
       // TODO: recalculate measure summary from MultipartFile[]
-      MeasureSummary recalculatedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef);
+      MeasureSummary recalculatedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual);
       this.measureRepository.save(recalculatedMeasureSummary);
       try {
         xmlRepository.removeByMeasureSummaryRef(measureSummaryRef);
@@ -169,7 +169,7 @@ public class RawDataController {
   }
 
   @SuppressWarnings("unchecked")
-  private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef) throws IOException {
+  private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef, String userId, boolean isSolutionManual) throws IOException {
 
     // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
     // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
@@ -179,80 +179,46 @@ public class RawDataController {
     WorkbenchPackage  workbenchPackage = WorkbenchPackage.eINSTANCE;
     Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
 
-
-    for(MultipartFile uploadedFile : uploadingFiles) {
-      Resource exFileResource           = getExResource(uploadedFile);
-      ArrayList<String> sourceCodeList  = getSourceCodeList(exFileResource);
-
-      StringBuilder sb = new StringBuilder();
-      for (String s : sourceCodeList)
-      {
-        sb.append(s);
-        sb.append("\n\n");
-      }
-      logger.debug(sb.toString());
-
-      FeatureValuedContainer fContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
-      logger.info("iMetricsProvidersList: "  + iMetricsProviderConfig.getMetricsProviders().toString());
-      try {
-        for (String provider : iMetricsProviderConfig.getMetricsProviders()) {
-          logger.info("iMetricsProvider classes: "  + findMyTypes(provider).toString());
-          FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
-
-          // Create one featureList
-          // with all providers and sum up results from all source code snippets
-          for (Class c : findMyTypes(provider)){
-            logger.info("name: "+c.getName());
-            for (String sourceCode: sourceCodeList) {
-
-
-
-                IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
-
-
-                System.out.println("iMetricsProvider: " + iMetricsProvider);
-                System.out.println("iMetricsProvider: " + iMetricsProvider.getClass().getDeclaredMethods());
-
-                // DO something here!
-                System.out.println("--------------- Source code -------------\n" + sourceCode);
-                FeatureValued featureValued = iMetricsProvider.computeMetrics(sourceCode);
-                System.out.println(featureValued.toString());
-
-                // DO not remove featureNames -> some thread synchronization will not happen upon removal
-                EList<String> featureNames = featureList.getFeatureNames();
-                if (featureValued.getFeatureNames().size() > 0 && featureNames.contains(featureValued.getFeatureNames().get(0))) {
-                  System.out.println("iMetricsProvider: " + iMetricsProvider.getClass().getDeclaredMethods());
-                  featureList.apply(Op2.PLUS,featureValued.toFeatureList() ,false );
-                } else {
-                  System.out.println("iMetricsProvider: " + iMetricsProvider.getClass().getDeclaredMethods());
-                  featureList.set(featureValued.toFeatureList(), false);
-                }
-
-
+    FeatureValuedContainer fContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+    logger.debug("iMetricsProvidersList: "  + iMetricsProviderConfig.getMetricsProviders().toString());
+    try {
+      for (String provider : iMetricsProviderConfig.getMetricsProviders()) {
+        logger.debug("iMetricsProvider classes: " + findMyTypes(provider).toString());
+        FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+        // Create one featureList
+        // with all providers and sum up results from all source code snippets
+        for (Class c : findMyTypes(provider)) {
+          for(MultipartFile uploadedFile : uploadingFiles) {
+            Resource exFileResource           = getExResource(uploadedFile);
+            ArrayList<String> sourceCodeList  = getSourceCodeList(exFileResource);
+            for (String sourceCode : sourceCodeList) {
+              IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
+              FeatureValued featureValued = iMetricsProvider.computeMetrics(sourceCode);
+              featureList.apply(Op2.PLUS, featureValued.toFeatureList(), false);
             }
-            logger.debug("Done with all source code snippets for " + c.getSimpleName());
           }
-
-
-          MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
-          metaDataFeatureValued.setFeatureValuedId(provider);
-          metaDataFeatureValued.setDelegatedFeatureValued(featureList);
-          fContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
         }
-
-      } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-        e.printStackTrace();
+        MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+        metaDataFeatureValued.setFeatureValuedId(provider);
+        metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+        fContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
       }
-
-      logger.info(fContainer.toString());
-      // Give AST to all IMetricProviders
-      // gather results in one MeasureSummary object and return this.
-
+    } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+      e.printStackTrace();
     }
+    logger.info(fContainer.toString());
 
-    return null;
+    // Convert to measureSummary
+    // TODO: naming of the exercise is not yet implemented !!!
+    List<Measure> measures = controllerUtil.createMeasuresFromContainer(fContainer);
+    MeasureSummary measureSummary = new MeasureSummary(userId,
+      isSolutionManual,
+      uploadingFiles[0].getName(),
+      uploadingFiles[0].getName(),
+      measures);
+
+    return measureSummary;
   }
-
 
 
   /**

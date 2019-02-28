@@ -80,7 +80,6 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       fvConfigurationRepository.deleteAll();
       achievementRepository.deleteAll();
       userAchievementRepository.deleteAll();
-      fvConfigurationRepository.deleteAll();
       exerciseDocumentRepository.deleteAll();
 
 
@@ -204,6 +203,7 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",new Binary(configCreator.createFvConfig2())));
 
       fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(configCreator.createFvConfig3())));
+      fvConfigurationRepository.save(new FvConfiguration("files",new Binary(configCreator.createFvConfig4())));
 
       ArrayList<byte[]> temp = configCreator.createAchievementConfig4();
       byte[] dataResourceByteArray5 = temp.get(0);

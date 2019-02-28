@@ -5,17 +5,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
-import no.hal.learning.fv.FeatureList;
-import no.hal.learning.fv.FeatureValuedContainer;
-import no.hal.learning.fv.FvFactory;
-import no.hal.learning.fv.MetaDataFeatureValued;
+import no.hal.learning.fv.*;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 
 public class ControllerUtil {
@@ -30,29 +26,46 @@ public class ControllerUtil {
     FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
     // Add the meassureSummary to the featureValuedContainer object
     for (Measure measure : measureSummary.getMeasures()) {
-
       // Create the feature list
       FeatureList fvList = FvFactory.eINSTANCE.createFeatureList();
-
       // Add all the stuff in the featureList
       for (SpecificMeasure specificMeasure : measure.getSpecificMeasures()) {
         fvList.getFeatures().put(
           specificMeasure.getName().replace(".", "_"),
           (double) specificMeasure.getValue());
       }
-
       // Add metadata to metaDataFeatureValued
       MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
       metaDataFeatureValued.setFeatureValuedId(measure.getMeasureProvider().replace(".", "_"));
-
       // Add featureList to the metadata
       metaDataFeatureValued.setDelegatedFeatureValued(fvList);
-
       // Add the metadata to the root container
       featureValuedContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
-
     }
     return featureValuedContainer;
+  }
+
+  /**
+   * Create measureSummary from featureValuedContainer
+   * @param fContainer the container to transform
+   * @return  measures that can be used in a measureSummary
+   */
+  public List<Measure> createMeasuresFromContainer(FeatureValuedContainer fContainer) {
+    List<Measure> measures = new ArrayList<>();
+    for (FeatureValued o: fContainer.getFeatureValuedGroups()) {
+      if (o instanceof MetaDataFeatureValued) {
+        MetaDataFeatureValued metaDataFeatureValued = (MetaDataFeatureValued) o;
+        FeatureList featureList = metaDataFeatureValued.getDelegatedFeatureValued().toFeatureList();
+        List<SpecificMeasure> specificMeasures = new ArrayList<SpecificMeasure>();
+        for (Map.Entry<String, Double> map: featureList.getFeatures()) {
+          SpecificMeasure specificMeasure = new SpecificMeasure(map.getKey(), map.getValue().floatValue());
+          specificMeasures.add(specificMeasure);
+        }
+        Measure measure = new Measure(metaDataFeatureValued.getFeatureValuedId(), specificMeasures);
+        measures.add(measure);
+      }
+    }
+    return measures;
   }
 
   /**
@@ -134,6 +147,7 @@ public class ControllerUtil {
     }
     return res;
   }
+
 
 
 }
