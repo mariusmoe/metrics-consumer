@@ -19,6 +19,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,7 +33,7 @@ import java.util.*;
 
 @SpringBootApplication
 @EnableConfigurationProperties
-public class MetricsConsumerApplication implements CommandLineRunner {
+public class MetricsConsumerApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
   @Autowired
   private MeasureRepository repository;
