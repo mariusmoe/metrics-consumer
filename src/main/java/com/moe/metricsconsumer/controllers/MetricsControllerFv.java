@@ -124,9 +124,11 @@ public class MetricsControllerFv {
 
     // load config from XMI
     Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
     try {
       // TODO: something goes wrong here!!!
       configResource.load(new ByteArrayInputStream(fvConfiguration.getExpressionFeature().getData()),null );
+      dataResource.load(new ByteArrayInputStream(fvConfiguration.getDataFeature().getData()), null );
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -19,8 +19,13 @@ public class FvConfiguration {
 
   private Binary expressionFeature;
 
-  public FvConfiguration(String taskId, Binary expressionFeature) {
+  private Binary dataFeature;
+
+  public FvConfiguration() {};
+
+  public FvConfiguration(String taskId, Binary expressionFeature, Binary dataFeature) {
     this.taskId = taskId;
     this.expressionFeature = expressionFeature;
+    this.dataFeature = dataFeature;
   }
 }

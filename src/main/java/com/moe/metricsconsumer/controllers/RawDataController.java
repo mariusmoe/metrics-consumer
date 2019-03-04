@@ -120,7 +120,7 @@ public class RawDataController {
       // TODO: calculate measureSummary from MultipartFile[]
       // call calculateMeasureSummaryFromExFiles(uploadingFiles, null)
       MeasureSummary savedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual);
-      this.measureRepository.save(measureSummary);
+      this.measureRepository.save(savedMeasureSummary);
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
       // TODO: recalculate measure summary from MultipartFile[]

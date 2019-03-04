@@ -197,13 +197,29 @@ public class MetricsConsumerApplication implements CommandLineRunner {
       configCreator.createAchievementConfig();
       configCreator.createAchievementConfig2();
 
+      ArrayList<byte[]> t1 = configCreator.createFvConfig();
+      byte[] dResource1 = t1.get(0);
+      byte[] confResource1= t1.get(1);
 
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",new Binary(configCreator.createFvConfig())));
+      ArrayList<byte[]> t2 = configCreator.createFvConfig2();
+      byte[] dResource2 = t2.get(0);
+      byte[] confResource2= t2.get(1);
 
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",new Binary(configCreator.createFvConfig2())));
+      ArrayList<byte[]> t3 = configCreator.createFvConfig3();
+      byte[] dResource3 = t3.get(0);
+      byte[] confResource3= t3.get(1);
 
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(configCreator.createFvConfig3())));
-      fvConfigurationRepository.save(new FvConfiguration("files",new Binary(configCreator.createFvConfig4())));
+      ArrayList<byte[]> t4 = configCreator.createFvConfigFiles();
+      byte[] dResource4 = t4.get(0);
+      byte[] confResource4= t4.get(1);
+
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",new Binary(confResource1), new Binary(dResource1)));
+
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",new Binary(confResource2), new Binary(dResource2)));
+
+      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(confResource3), new Binary(dResource3)));
+
+      fvConfigurationRepository.save(new FvConfiguration("files",new Binary(confResource4), new Binary(dResource4)));
 
       ArrayList<byte[]> temp = configCreator.createAchievementConfig4();
       byte[] dataResourceByteArray5 = temp.get(0);
