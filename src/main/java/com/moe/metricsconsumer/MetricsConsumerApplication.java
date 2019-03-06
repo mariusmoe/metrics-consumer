@@ -8,8 +8,7 @@ import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import com.moe.metricsconsumer.repositories.*;
 
 
-import javafx.util.Pair;
-import org.bson.BsonBinarySubType;
+
 import org.bson.types.Binary;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;

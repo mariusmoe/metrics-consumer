@@ -2,7 +2,7 @@ package com.moe.metricsconsumer.controllers;
 
 
 
-import javafx.util.Pair;
+
 import no.hal.learning.exercise.jdt.metrics.IMetricsProvider;
 import no.hal.learning.fv.*;
 import no.hal.learning.fv.impl.MetaDataFeatureValuedImpl;
