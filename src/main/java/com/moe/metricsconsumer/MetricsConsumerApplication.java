@@ -12,7 +12,7 @@ import com.moe.metricsconsumer.repositories.*;
 import org.bson.types.Binary;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +32,7 @@ import java.util.*;
 
 @SpringBootApplication
 @EnableConfigurationProperties
-public class MetricsConsumerApplication extends SpringBootServletInitializer { //implements CommandLineRunner {
+public class MetricsConsumerApplication extends SpringBootServletInitializer implements CommandLineRunner {
 
   @Autowired
   private MeasureRepository repository;
