@@ -12,7 +12,7 @@ import com.moe.metricsconsumer.repositories.*;
 import org.bson.types.Binary;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+//import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +32,7 @@ import java.util.*;
 
 @SpringBootApplication
 @EnableConfigurationProperties
-public class MetricsConsumerApplication extends SpringBootServletInitializer implements CommandLineRunner {
+public class MetricsConsumerApplication extends SpringBootServletInitializer { //implements CommandLineRunner {
 
   @Autowired
   private MeasureRepository repository;
@@ -172,26 +172,26 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 //		System.out.println(expressionFeatures.getFeatureValue("sum"));
 //		System.out.println(expressionFeatures.getFeatureValue("product and one"));
 
-        File tempScript = File.createTempFile("script", "sh");
-
-        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(
-          tempScript));
-        PrintWriter printWriter = new PrintWriter(streamWriter);
-
-        printWriter.println("#!/bin/bash");
-        printWriter.println("export PATH=$PATH:/home/moe/.nvm/versions/node/v8.12.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin");
-        printWriter.println("newman run ~/Documents/Archive/metrics-consumer.postman_collection.json --folder 000_populate_db");
-
-        printWriter.close();
-
-        try {
-          ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
-          pb.inheritIO();
-          Process process = pb.start();
-          process.waitFor();
-        } finally {
-          tempScript.delete();
-        }
+//        File tempScript = File.createTempFile("script", "sh");
+//
+//        Writer streamWriter = new OutputStreamWriter(new FileOutputStream(
+//          tempScript));
+//        PrintWriter printWriter = new PrintWriter(streamWriter);
+//
+//        printWriter.println("#!/bin/bash");
+//        printWriter.println("export PATH=$PATH:/home/moe/.nvm/versions/node/v8.12.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin");
+//        printWriter.println("newman run ~/Documents/Archive/metrics-consumer.postman_collection.json --folder 000_populate_db");
+//
+//        printWriter.close();
+//
+//        try {
+//          ProcessBuilder pb = new ProcessBuilder("bash", tempScript.toString());
+//          pb.inheritIO();
+//          Process process = pb.start();
+//          process.waitFor();
+//        } finally {
+//          tempScript.delete();
+//        }
 
       ConfigCreator configCreator = new ConfigCreator();
       configCreator.createAchievementConfig();
