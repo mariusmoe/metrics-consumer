@@ -104,112 +104,112 @@
         <groupId>com.googlecode.java-diff-utils.diffutils</groupId>
         <artifactId>diffutils</artifactId>
         <version>1.3</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/diffutils-1.3.0.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/diffutils-1.3.0.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>no.hal.learning.exercise</groupId>
         <artifactId>exercise</artifactId>
         <version>3.6</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/iMetricsProvider-07-mod.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/iMetricsProvider-07-mod.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.core.contenttype</groupId>
         <artifactId>eclipse-core-contenttype</artifactId>
         <version>3.6</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.core.contenttype_3.6.0.v20170207-1037.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.core.contenttype_3.6.0.v20170207-1037.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.core.jobs</groupId>
         <artifactId>eclipse-core-jobs</artifactId>
         <version>3.9.3</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.core.jobs_3.9.3.v20180115-1757.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.core.jobs_3.9.3.v20180115-1757.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.core.resources</groupId>
         <artifactId>eclipse-core-resources</artifactId>
         <version>3.12</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.core.resources_3.12.0.v20170417-1558.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.core.resources_3.12.0.v20170417-1558.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.core.runtime</groupId>
         <artifactId>eclipse-core-runtime</artifactId>
         <version>3.13</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.core.runtime_3.13.0.v20170207-1030.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.core.runtime_3.13.0.v20170207-1030.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.emf.common</groupId>
         <artifactId>emf-common</artifactId>
         <version>2.13</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.emf.common_2.13.0.v20170609-0707.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.emf.common_2.13.0.v20170609-0707.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.emf.ecore.change</groupId>
         <artifactId>ecore-change</artifactId>
         <version>2.11</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.emf.ecore.change_2.11.0.v20170609-0707.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.emf.ecore.change_2.11.0.v20170609-0707.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.emf.ecore.edit</groupId>
         <artifactId>ecore-edit</artifactId>
         <version>2.9</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.emf.ecore.edit_2.9.0.v20170609-0928.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.emf.ecore.edit_2.9.0.v20170609-0928.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.emf.ecore.xmi</groupId>
         <artifactId>ecore-xmi</artifactId>
         <version>2.13</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.emf.ecore.xmi_2.13.0.v20170609-0707.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.emf.ecore.xmi_2.13.0.v20170609-0707.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.emf.ecore</groupId>
         <artifactId>ecore</artifactId>
         <version>2.13</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.emf.ecore_2.13.0.v20170609-0707.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.emf.ecore_2.13.0.v20170609-0707.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.emf.edit</groupId>
-        <artifactId>equinox-edit</artifactId>
+        <artifactId>emf-edit</artifactId>
         <version>2.12</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.emf.edit_2.12.0.v20170609-0928.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.emf.edit_2.12.0.v20170609-0928.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.equinox.common</groupId>
         <artifactId>equinox-common</artifactId>
         <version>3.9</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.equinox.common_3.9.0.v20170207-1454.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.equinox.common_3.9.0.v20170207-1454.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.equinox.preferences</groupId>
         <artifactId>equinox</artifactId>
         <version>3.7</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.equinox.preferences_3.7.0.v20170126-2132.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.equinox.preferences_3.7.0.v20170126-2132.jar</systemPath>-->
       </dependency>
 
 
@@ -217,16 +217,16 @@
         <groupId>org.eclipse.jdt.core</groupId>
         <artifactId>jdt-core</artifactId>
         <version>3.13</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.jdt.core_3.13.102.v20180330-0919.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.jdt.core_3.13.102.v20180330-0919.jar</systemPath>-->
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.osgi</groupId>
         <artifactId>osgi</artifactId>
         <version>3.12</version>
-        <scope>system</scope>
-        <systemPath>/home/moe/master/libs/org.eclipse.osgi_3.12.100.v20180210-1608.jar</systemPath>
+        <!--<scope>system</scope>-->
+        <!--<systemPath>/home/moe/master/libs/org.eclipse.osgi_3.12.100.v20180210-1608.jar</systemPath>-->
       </dependency>
 
       <!-- ################### END of local dependency hell ################### -->
