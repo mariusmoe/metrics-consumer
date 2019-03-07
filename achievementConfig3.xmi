@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fv:FeatureValuedContainer xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fv="platform:/plugin/no.hal.learning.execise.model/model/fv.ecore">
+  <featureValuedGroups xsi:type="fv:FilteredFeatures2" pred=">" val="2.0">
+    <other xsi:type="fv:MetaDataFeatureValued" href="achievementData3.xmi#/0"/>
+  </featureValuedGroups>
+  <featureValuedGroups xsi:type="fv:FilteredFeatures2" pred=">" val="2.0">
+    <other xsi:type="fv:MetaDataFeatureValued" href="achievementData3.xmi#/1"/>
+  </featureValuedGroups>
+</fv:FeatureValuedContainer>
