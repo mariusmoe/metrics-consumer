@@ -308,11 +308,11 @@ public class ConfigCreator {
 
     ByteArrayOutputStream dataResourceOutputStream = new ByteArrayOutputStream();
     dataResource.save(dataResourceOutputStream ,null);
-    dataResource.save(null);
+    //dataResource.save(null);
 
     ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
     configResource.save(configResourceOutputStream ,null);
-    configResource.save(null);
+    //configResource.save(null);
 
 
     ArrayList<byte[]> list = new ArrayList<>();
