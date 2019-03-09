@@ -237,6 +237,7 @@ public class RawDataController {
       if (exEObject instanceof JdtSourceEditProposal) {
         // getString() on the last attempt
         JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
+        logger.info(jdtSourceEditProposal.getAnswer().getClassName());
         EList eList = jdtSourceEditProposal.getAttempts();
         if (eList != null && !eList.isEmpty()) {
           JdtSourceEditEvent lastAttemptOnTask = (JdtSourceEditEvent) eList.get(eList.size()-1);

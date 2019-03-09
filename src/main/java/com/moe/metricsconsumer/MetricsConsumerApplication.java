@@ -21,6 +21,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -82,6 +83,9 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
       userAchievementRepository.deleteAll();
       exerciseDocumentRepository.deleteAll();
 
+
+      File[] files = ResourceUtils.getFile("classpath:solution-src").listFiles();
+      showFiles(files);
 
 
 //      //save some dummy data
@@ -280,4 +284,21 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 
 
     }
+
+  public static void showFiles(File[] files) {
+    for (File file : files) {
+      if (file.isDirectory()) {
+        System.out.println("Directory: " + file.getName());
+        showFiles(file.listFiles()); // Calls same method again.
+      } else {
+//        System.out.println("File: " + file.getPath());
+        if (file.getPath().endsWith(".fxml")) {
+          System.out.println("skip");
+        } else {
+
+          System.out.println("File: " + file.getPath().substring(file.getPath().lastIndexOf("solution-src") + 13).replace("/", ".").replace(".java","" ));
+        }
+      }
+    }
+  }
 }
