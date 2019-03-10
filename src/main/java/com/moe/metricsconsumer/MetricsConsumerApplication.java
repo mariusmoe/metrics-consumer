@@ -1,6 +1,7 @@
 package com.moe.metricsconsumer;
 
 import com.moe.metricsconsumer.controllers.ConfigCreator;
+import com.moe.metricsconsumer.models.ExSolution;
 import com.moe.metricsconsumer.models.rewards.Achievement;
 import com.moe.metricsconsumer.models.rewards.AchievementState;
 import com.moe.metricsconsumer.models.FvConfiguration;
@@ -28,7 +29,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 @SpringBootApplication
@@ -49,6 +52,9 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 
   @Autowired
   private ExerciseDocumentRepository exerciseDocumentRepository;
+
+  @Autowired
+  private ExSolutionRepository exSolutionRepository;
 
 
 
@@ -82,6 +88,7 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
       achievementRepository.deleteAll();
       userAchievementRepository.deleteAll();
       exerciseDocumentRepository.deleteAll();
+      exSolutionRepository.deleteAll();
 
 
       File[] files = ResourceUtils.getFile("classpath:solution-src").listFiles();
@@ -285,20 +292,36 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 
     }
 
-  public static void showFiles(File[] files) {
+  /**
+   * Go through a bunch of files and save exSolutions to mongoDB
+   * @param files the root of where the solution files are stored
+   */
+  public void showFiles(File[] files) {
     for (File file : files) {
       if (file.isDirectory()) {
         System.out.println("Directory: " + file.getName());
         showFiles(file.listFiles()); // Calls same method again.
       } else {
-//        System.out.println("File: " + file.getPath());
-        if (file.getPath().endsWith(".fxml")) {
+        if (!file.getPath().endsWith(".java")) {
           System.out.println("skip");
         } else {
+          String exClassName = file.getPath()
+            .substring(file.getPath().lastIndexOf("solution-src") + 13)
+            .replace("/", ".").replace(".java","" );
+          System.out.println("File: " + exClassName);
 
-          System.out.println("File: " + file.getPath().substring(file.getPath().lastIndexOf("solution-src") + 13).replace("/", ".").replace(".java","" ));
+          String exTitle = exClassName.substring(exClassName.lastIndexOf("."));
+          StringBuilder sb = new StringBuilder();
+          try {
+            Files.lines(Paths.get(file.getPath())).forEach( (line) -> sb.append(line+ System.lineSeparator()));
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+          exSolutionRepository.save(new ExSolution(exClassName, exTitle, 1, sb.toString()));
         }
       }
     }
   }
+
+
 }

@@ -57,33 +57,34 @@ public class ExSolutionController {
     ), HttpStatus.OK);
   }
 
-  /**
-   * Add a new exSolution
-   * @param uploadingFiles  Source files for this task
-   * @param exTitle the ExercisePart title
-   * @param exClassName the classname for the ExercisePart
-   * @return
-   * @throws IOException
-   */
-  @PostMapping("/")
-  @ResponseBody
-  public ResponseEntity newExSolution(@NonNull @RequestParam("files") MultipartFile[] uploadingFiles,
-                                      @NonNull @RequestParam("exTitle") String exTitle,
-                                      @NonNull @RequestParam("exClassName") String exClassName ) throws IOException {
-    List<String> exContent = new ArrayList<>();
-    for (MultipartFile multipartFile: uploadingFiles) {
-      if (!multipartFile.isEmpty()) {
-       byte[] bytes = multipartFile.getBytes();
-       String fileAsString = new String(bytes);
-       exContent.add(fileAsString);
-      }
-    }
-    ExSolution savedSolution = exSolutionRepository.save(new ExSolution(exClassName,exTitle , 1, exContent));
-    return new ResponseEntity<>(controllerUtil.jsonResponse(
-      2000,
-      "Saved exSolution",
-      savedSolution), HttpStatus.OK);
-  }
+//  /**
+//   * Add a new exSolution
+//   * @param uploadingFiles  Source files for this task
+//   * @param exTitle the ExercisePart title
+//   * @param exClassName the classname for the ExercisePart
+//   * @return
+//   * @throws IOException
+//   */
+//  @PostMapping("/")
+//  @ResponseBody
+//  public ResponseEntity newExSolution(@NonNull @RequestParam("files") MultipartFile uploadingFile,
+//                                      @NonNull @RequestParam("exTitle") String exTitle,
+//                                      @NonNull @RequestParam("exClassName") String exClassName ) throws IOException {
+//
+//    String fileAsString = null;
+//      if (!uploadingFile.isEmpty()) {
+//       byte[] bytes = uploadingFile.getBytes();
+//       fileAsString = new String(bytes);
+//      }
+//    }
+//
+//  private String exClassName;
+//  ExSolution savedSolution = exSolutionRepository.save(new ExSolution(exClassName,exTitle , 1, fileAsString));
+//    return new ResponseEntity<>(controllerUtil.jsonResponse(
+//      2000,
+//      "Saved exSolution",
+//      savedSolution), HttpStatus.OK);
+//  }
 
 
 

@@ -111,6 +111,17 @@ public class RawDataController {
     return saveExFiles(measureSummaryRef, uploadingFiles, "001", true);
   }
 
+  /**
+   * Save and calculate measureSummary for the uploaded ex files
+   *
+   * It is assumed that all .ex files uploaded in a bulk belong together and thus is the answer to one exercise.
+   * @param measureSummaryRefParam  reference an old measureSummary
+   * @param uploadingFiles  the .ex files for one exercise
+   * @param userId  the userId of the logged in user
+   * @param isSolutionManual
+   * @return
+   * @throws IOException
+   */
   private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles, String userId, boolean isSolutionManual) throws IOException {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
@@ -163,7 +174,6 @@ public class RawDataController {
       exerciseDocumentRepository.saveAll(exerciseDocumentList);
     }
 
-//    controllerUtil.jsonResponse(2000, "Success - document has been saved");
     return new ResponseEntity<>( controllerUtil.jsonResponse(2000, "Success - document has been saved"),
       HttpStatus.OK);
   }
