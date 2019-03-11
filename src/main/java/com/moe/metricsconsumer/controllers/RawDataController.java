@@ -1,7 +1,9 @@
 package com.moe.metricsconsumer.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 import com.moe.metricsconsumer.config.IMetricsProviderConfig;
+import com.moe.metricsconsumer.models.ExSolution;
 import com.moe.metricsconsumer.models.ExerciseDocument;
 
 import com.moe.metricsconsumer.models.measureSummary.Measure;
@@ -53,7 +55,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -83,6 +87,9 @@ public class RawDataController {
 
   @Autowired
   private IMetricsProviderConfig iMetricsProviderConfig;
+
+  @Autowired
+  private ExSolutionRepository exSolutionRepository;
 
   ControllerUtil controllerUtil = new ControllerUtil();
 
@@ -126,17 +133,21 @@ public class RawDataController {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
-      // This is a new exercise being added
-      MeasureSummary measureSummary = new MeasureSummary();
-      // TODO: calculate measureSummary from MultipartFile[]
-      // call calculateMeasureSummaryFromExFiles(uploadingFiles, null)
-      MeasureSummary savedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual);
+      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual);
+      MeasureSummary savedMeasureSummary = sourceAndSolutionCode.get("student");
+      MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
+      // TODO save the solution as well!!!!
       this.measureRepository.save(savedMeasureSummary);
+      this.measureRepository.save(savedMeasureSummarySolution);
+      // This is a new exercise being added
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
       // TODO: recalculate measure summary from MultipartFile[]
-      MeasureSummary recalculatedMeasureSummary = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual);
+      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual);
+      MeasureSummary recalculatedMeasureSummary = sourceAndSolutionCode.get("student");
+      MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
       this.measureRepository.save(recalculatedMeasureSummary);
+      this.measureRepository.save(savedMeasureSummarySolution);
       try {
         xmlRepository.removeByMeasureSummaryRef(measureSummaryRef);
       } catch (Exception e) {
@@ -145,6 +156,7 @@ public class RawDataController {
     }
     logger.debug("measureSummaryRef: " + measureSummaryRef);
 
+    // TODO: refactor code below to its own method
     // Start saving files in DB
     List<ExerciseDocument> exerciseDocumentList = new ArrayList<>();
     for(MultipartFile uploadedFile : uploadingFiles) {
@@ -179,7 +191,7 @@ public class RawDataController {
   }
 
   @SuppressWarnings("unchecked")
-  private MeasureSummary calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef, String userId, boolean isSolutionManual) throws IOException {
+  private Map<String, MeasureSummary> calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef, String userId, boolean isSolutionManual) throws IOException {
 
     // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
     // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
@@ -190,17 +202,28 @@ public class RawDataController {
     Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ex", new XMIResourceFactoryImpl());
 
     FeatureValuedContainer fContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+    FeatureValuedContainer fContainerSolution = FvFactory.eINSTANCE.createFeatureValuedContainer();
     logger.debug("iMetricsProvidersList: "  + iMetricsProviderConfig.getMetricsProviders().toString());
     try {
       for (String provider : iMetricsProviderConfig.getMetricsProviders()) {
         logger.debug("iMetricsProvider classes: " + findMyTypes(provider).toString());
         FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+        FeatureList solutionFeatureList = FvFactory.eINSTANCE.createFeatureList();
         // Create one featureList
         // with all providers and sum up results from all source code snippets
         for (Class c : findMyTypes(provider)) {
           for(MultipartFile uploadedFile : uploadingFiles) {
             Resource exFileResource           = getExResource(uploadedFile);
-            ArrayList<String> sourceCodeList  = getSourceCodeList(exFileResource);
+            Map<String, ArrayList<String>> sourceAndSolutionCode = getSourceCodeList(exFileResource);
+            ArrayList<String> sourceCodeList  = sourceAndSolutionCode.get("sourceCode");
+            ArrayList<String> solutionCodeList  = sourceAndSolutionCode.get("solutionCode");
+
+            for (String solutionCode : solutionCodeList) {
+              IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
+              FeatureValued featureValued = iMetricsProvider.computeMetrics(solutionCode);
+              solutionFeatureList.apply(Op2.PLUS, featureValued.toFeatureList(), false);
+            }
+
             for (String sourceCode : sourceCodeList) {
               IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
               FeatureValued featureValued = iMetricsProvider.computeMetrics(sourceCode);
@@ -212,6 +235,11 @@ public class RawDataController {
         metaDataFeatureValued.setFeatureValuedId(provider);
         metaDataFeatureValued.setDelegatedFeatureValued(featureList);
         fContainer.getFeatureValuedGroups().add(metaDataFeatureValued);
+
+        MetaDataFeatureValued metaDataFeatureValuedSolution = FvFactory.eINSTANCE.createMetaDataFeatureValued();
+        metaDataFeatureValuedSolution.setFeatureValuedId(provider);
+        metaDataFeatureValuedSolution.setDelegatedFeatureValued(solutionFeatureList);
+        fContainerSolution.getFeatureValuedGroups().add(metaDataFeatureValuedSolution);
       }
     } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
       e.printStackTrace();
@@ -221,14 +249,24 @@ public class RawDataController {
     // Convert to measureSummary
     // TODO: naming of the exercise is not yet implemented !!!
     List<Measure> measures = controllerUtil.createMeasuresFromContainer(fContainer);
+    List<Measure> measuresSolution = controllerUtil.createMeasuresFromContainer(fContainerSolution);
     MeasureSummary measureSummary = new MeasureSummary(userId,
       isSolutionManual,
       uploadingFiles[0].getName(),
       uploadingFiles[0].getName(),
       measures);
+    MeasureSummary measureSummarySolution = new MeasureSummary(userId,
+      true,
+      uploadingFiles[0].getName(),
+      uploadingFiles[0].getName(),
+      measuresSolution);
+    Map<String, MeasureSummary> measureSummaryStudentAndSolution = new HashMap<>();
+    measureSummaryStudentAndSolution.put("student", measureSummary);
+    measureSummaryStudentAndSolution.put("solution", measureSummarySolution);
 
-    return measureSummary;
+    return measureSummaryStudentAndSolution;
   }
+
 
 
   /**
@@ -236,9 +274,10 @@ public class RawDataController {
    * @param exFileResource  The file resource with the exercise proposals in
    * @return  sourceCodeList - a list with source code snippets at each index
    */
-  private ArrayList<String> getSourceCodeList(Resource exFileResource) {
+  private Map<String, ArrayList<String>> getSourceCodeList(Resource exFileResource) {
     // Holds a list of source code parts from the incoming .ex file
     ArrayList<String> sourceCodeList = new ArrayList<>();
+    ArrayList<String> solutionCodeList = new ArrayList<>();
 
     // Iterate through the whole ex resource and prune as often as possible
     TreeIterator<EObject> iterator = exFileResource.getAllContents();
@@ -247,9 +286,20 @@ public class RawDataController {
       if (exEObject instanceof JdtSourceEditProposal) {
         // getString() on the last attempt
         JdtSourceEditProposal jdtSourceEditProposal = (JdtSourceEditProposal) exEObject;
-        logger.info(jdtSourceEditProposal.getAnswer().getClassName());
+        String exClassName = jdtSourceEditProposal.getAnswer().getClassName();
+        ExSolution exSolution = null;
+        // Find the solution code
+        try {
+          exSolution = this.exSolutionRepository.findFirstByExClassName(exClassName)
+            .orElseThrow(() -> new EntityNotFoundException(ExSolution.class, exClassName));
+        } catch (EntityNotFoundException e) {
+          e.printStackTrace();
+        }
         EList eList = jdtSourceEditProposal.getAttempts();
         if (eList != null && !eList.isEmpty()) {
+          // Only add solution if the student has answered the task
+          solutionCodeList.add(exSolution.getExContent());
+          // add the student code
           JdtSourceEditEvent lastAttemptOnTask = (JdtSourceEditEvent) eList.get(eList.size()-1);
           String sourceCode = lastAttemptOnTask.getEdit().getString();
           sourceCodeList.add(sourceCode);
@@ -261,7 +311,10 @@ public class RawDataController {
         iterator.prune();
       }
     }
-    return sourceCodeList;
+    Map<String, ArrayList<String>> sourceAndSolutionCode = new HashMap<>();
+    sourceAndSolutionCode.put("sourceCode", sourceCodeList);
+    sourceAndSolutionCode.put("solutionCode", solutionCodeList);
+    return sourceAndSolutionCode;
   }
 
   /**

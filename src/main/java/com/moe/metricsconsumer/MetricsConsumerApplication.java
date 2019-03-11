@@ -88,11 +88,11 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
       achievementRepository.deleteAll();
       userAchievementRepository.deleteAll();
       exerciseDocumentRepository.deleteAll();
-      exSolutionRepository.deleteAll();
+      //exSolutionRepository.deleteAll();
 
 
-      File[] files = ResourceUtils.getFile("classpath:solution-src").listFiles();
-      showFiles(files);
+//      File[] files = ResourceUtils.getFile("classpath:solution-src").listFiles();
+//      showFiles(files);
 
 
 //      //save some dummy data

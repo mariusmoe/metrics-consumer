@@ -121,6 +121,12 @@ public class ControllerUtil {
         MetaDataFeatureValued referencedMetaDataFeatureValued = (MetaDataFeatureValued) referenced;
         if (((MetaDataFeatureValued) containerIt).getFeatureValuedId().equals(referencedMetaDataFeatureValued.getFeatureValuedId())){
           // Replace reference to data in config xmi
+          // TODO: Ensure consistency between the referenced and the referee (Only needed one way though "containerIt need all metrics in referenced")
+          referencedMetaDataFeatureValued.getFeatures().map().forEach((k,v) -> {
+            if (!((MetaDataFeatureValued) containerIt).getFeatures().containsKey(k)) {
+              ((MetaDataFeatureValued) containerIt).getFeatures().put(k, (double) 0);
+            }
+          });
           return (MetaDataFeatureValued) containerIt;
         }
       }

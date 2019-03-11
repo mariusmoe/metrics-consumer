@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ExSolutionRepository extends MongoRepository<ExSolution, String> {
 
-  public Optional<ExSolution> findFirstByExClassNameAndExTitle(String exClassName, String exTitle);
+  public Optional<ExSolution> findFirstByExClassName(String exClassName);
 
 }

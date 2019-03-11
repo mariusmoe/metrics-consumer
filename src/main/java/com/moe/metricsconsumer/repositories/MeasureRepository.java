@@ -32,7 +32,7 @@ public interface MeasureRepository extends MongoRepository<MeasureSummary, Strin
 
 //  public MeasureSummary findFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
 
-  public Optional<MeasureSummary> getFirstByIsSolutionManualAndTaskId(boolean isSolutionManual, String taskId);
+  public Optional<MeasureSummary> findFirstByUserIdAndTaskIdAndIsSolutionManual(String userId, String taskId, boolean isSolutionManual);
 
 
 }

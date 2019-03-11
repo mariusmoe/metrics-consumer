@@ -87,11 +87,11 @@ public class MetricsControllerFv {
 
     // Based on whether this is a solution -> get the correct metrics
     if (isSolution) {
-      measureSummary = this.measureRepository.getFirstByIsSolutionManualAndTaskId(true,taskId)
+      measureSummary = this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual("001", taskId, true)
         .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
       logger.debug(measureSummary.toString());
     } else {
-      measureSummary = this.measureRepository.findFirstByUserIdAndTaskId("001", taskId)
+      measureSummary = this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual("001", taskId, false)
         .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
     }
 
@@ -104,8 +104,11 @@ public class MetricsControllerFv {
 
     FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
     // Replace all references to 'other' in config.xmi with 'featureList'
+    // TODO -> Not all measures will be calculated if they are not found! (I think)
     for (EObject eObject : resource.getContents()) {
       eObject = controllerUtil.replaceReference(eObject, featureValuedContainer);
+
+      // CAn the error be caught? and then patch itself and try again?
       calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
     }
 
