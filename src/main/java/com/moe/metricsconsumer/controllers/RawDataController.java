@@ -97,6 +97,20 @@ public class RawDataController {
 
   private static final String approvedContentType = "application/octet-stream";
 
+  private static Map<String, String> exerciseNames;
+  static {
+    exerciseNames = new HashMap<>();
+    exerciseNames.put("1", "Øving 01: Objekter og klasser, til⁣stand og oppførsel");
+    exerciseNames.put("2", "Øving 02: Innkapsling og vali⁣dering");
+    exerciseNames.put("3", "Øving 03: Klasser og testing");
+    exerciseNames.put("4", "Øving 04: Objektstrukturer med app");
+    exerciseNames.put("5", "Øving 05: Objektstrukturer");
+    exerciseNames.put("6", "Øving 06: Grensesnitt");
+    exerciseNames.put("7", "Øving 07: Filbehandling med app");
+    exerciseNames.put("8", "Øving 08: Observatør-Observert og Delegering");
+    exerciseNames.put("9", "Øving 09: Arv og abstrakte klasser");
+  }
+
 
 
 
@@ -106,17 +120,26 @@ public class RawDataController {
   @PostMapping("/")
   @ResponseBody
   public ResponseEntity<ObjectNode> newStudentCode(@Nullable @RequestHeader(value="measureSummaryRef") String measureSummaryRef,
+                                       @RequestHeader(value = "exNumber") String exNumber,
                                        @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
-    return saveExFiles(measureSummaryRef, uploadingFiles, "001", false);
+    System.out.println(exNumber);
+    System.out.println(exNumber);
+    System.out.println(exNumber);
+    System.out.println(exNumber);
+    System.out.println(exerciseNames.get(exNumber));
+    System.out.println(exerciseNames.get(exNumber));
+    System.out.println(exerciseNames.get(exNumber));
+    System.out.println(exerciseNames.get(exNumber));
+    return saveExFiles(measureSummaryRef, uploadingFiles, "001", false,  exNumber);
   }
 
 
-  @PostMapping("/solution")
-  @ResponseBody
-  public ResponseEntity newSolutionCode(@RequestHeader(value="measureSummaryRef") String measureSummaryRef,
-                                        @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
-    return saveExFiles(measureSummaryRef, uploadingFiles, "001", true);
-  }
+//  @PostMapping("/solution")
+//  @ResponseBody
+//  public ResponseEntity newSolutionCode(@RequestHeader(value="measureSummaryRef") String measureSummaryRef,
+//                                        @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
+//    return saveExFiles(measureSummaryRef, uploadingFiles, "001", true);
+//  }
 
   /**
    * Save and calculate measureSummary for the uploaded ex files
@@ -129,11 +152,15 @@ public class RawDataController {
    * @return
    * @throws IOException
    */
-  private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam, MultipartFile[] uploadingFiles, String userId, boolean isSolutionManual) throws IOException {
+  private ResponseEntity<ObjectNode> saveExFiles(String measureSummaryRefParam,
+                                                 MultipartFile[] uploadingFiles,
+                                                 String userId,
+                                                 boolean isSolutionManual,
+                                                 String exNumber) throws IOException {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
-      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual);
+      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual, exNumber);
       MeasureSummary savedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
       // TODO save the solution as well!!!!
@@ -143,7 +170,7 @@ public class RawDataController {
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
       // TODO: recalculate measure summary from MultipartFile[]
-      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual);
+      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual, exNumber);
       MeasureSummary recalculatedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
       this.measureRepository.save(recalculatedMeasureSummary);
@@ -191,7 +218,7 @@ public class RawDataController {
   }
 
   @SuppressWarnings("unchecked")
-  private Map<String, MeasureSummary> calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef, String userId, boolean isSolutionManual) throws IOException {
+  private Map<String, MeasureSummary> calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef, String userId, boolean isSolutionManual, String exNumber) throws IOException {
 
     // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
     // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
@@ -252,13 +279,13 @@ public class RawDataController {
     List<Measure> measuresSolution = controllerUtil.createMeasuresFromContainer(fContainerSolution);
     MeasureSummary measureSummary = new MeasureSummary(userId,
       isSolutionManual,
-      uploadingFiles[0].getName(),
-      uploadingFiles[0].getName(),
+      exerciseNames.get(exNumber),
+      exNumber,
       measures);
     MeasureSummary measureSummarySolution = new MeasureSummary(userId,
       true,
-      uploadingFiles[0].getName(),
-      uploadingFiles[0].getName(),
+      exerciseNames.get(exNumber),
+      exNumber,
       measuresSolution);
     Map<String, MeasureSummary> measureSummaryStudentAndSolution = new HashMap<>();
     measureSummaryStudentAndSolution.put("student", measureSummary);

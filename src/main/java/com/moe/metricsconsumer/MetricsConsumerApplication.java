@@ -230,7 +230,15 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 
       fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(confResource3), new Binary(dResource3)));
 
-      fvConfigurationRepository.save(new FvConfiguration("files",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("1",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("2",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("3",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("4",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("5",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("6",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("7",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("8",new Binary(confResource4), new Binary(dResource4)));
+      fvConfigurationRepository.save(new FvConfiguration("9",new Binary(confResource4), new Binary(dResource4)));
 
       ArrayList<byte[]> temp = configCreator.createAchievementConfig4();
       byte[] dataResourceByteArray5 = temp.get(0);

@@ -10,7 +10,7 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatMenuModule,
-  MatSidenavModule, MatTooltipModule, MatCardModule, MatProgressBarModule
+  MatSidenavModule, MatTooltipModule, MatCardModule, MatProgressBarModule, MatSelectModule
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
@@ -51,6 +51,7 @@ import {BaseChangeInterceptor} from "./_interceptors/base-change.Interceptor";
     MatTooltipModule,
     MatCardModule,
     MatProgressBarModule,
+    MatSelectModule,
     FileUploadModule
   ],
   providers: [

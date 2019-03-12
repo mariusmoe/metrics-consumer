@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {forkJoin } from "rxjs";
 import {MeasureSummary} from "../../_models/measure-summary";
 import {FeatureList} from "../../_models/feature-list";
+import {Exercise} from "../../_models/exercise";
 
 
 @Component({
@@ -33,8 +34,22 @@ export class HomeComponent implements OnInit {
   showYAxisLabel = false;
   yAxisLabel = 'Population';
 
+
+
+  exercises: Exercise[] = [
+    {value: '1', viewValue: 'Øving 01: Objekter og klasser, til⁣stand og oppførsel'},
+    {value: '2', viewValue: 'Øving 02: Innkapsling og vali⁣dering'},
+    {value: '3', viewValue: 'Øving 03: Klasser og testing'},
+    {value: '4', viewValue: 'Øving 04: Objektstrukturer med app'},
+    {value: '5', viewValue: 'Øving 05: Objektstrukturer'},
+    {value: '6', viewValue: 'Øving 06: Grensesnitt'},
+    {value: '7', viewValue: 'Øving 07: Filbehandling med app'},
+    {value: '8', viewValue: 'Øving 08: Observatør-Observert og Delegering'},
+    {value: '9', viewValue: 'Øving 09: Arv og abstrakte klasser'},
+  ]
+
   xAxisTickFormatting = function trimLabel(s, max = 40): string {
-  return s.split(":", 2)[1];
+  return s;//.split(":", 2)[1];
   };
 
 
@@ -128,25 +143,23 @@ export class HomeComponent implements OnInit {
         this.studentList = results[0]; // is student
         this.solutionManualList = results[1]; // is solutionManual
         console.log(results);
-        this.taskName = taskId;
+        this.taskName = this.exercises.find(obj => obj.value === taskId).viewValue;
         let studentData = [];
 
         // Go through all measures and add them to the heatmap
         // Important -> Assumes that solution guide and student has the same number of measures
         results[0].featureNames.forEach((featureName, index) => {
-          let studentValue = 0;
-          if (results[1].features.find(obj => { return Object.keys(obj)[0] == Object.keys(results[0].features[index])[0]}) != null) {
-            let temp =  results[1].features.find(obj => { return Object.keys(obj)[0] == Object.keys(results[0].features[index])[0]});
-            studentValue = temp[Object.keys(temp)[0]];
-          }
+          let student = results[0].features.find(o => Object.keys(o)[0] == featureName);
+          let Solution = results[1].features.find(o => Object.keys(o)[0] == featureName);
+
           studentData.push({
-            name: 'NYI:' + featureName,
+            name: featureName,
             series: [
-              { name: "Student", value: results[0].features[index][Object.keys(results[0].features[index])[0]] },
-              { name: "Solution", value: studentValue || 0 }
+              { name: "Student", value: student[Object.keys(student)[0]] },
+              // { name: "Solution", value: studentValue || 0 }
               // Alternatively: does not support value based filtering!
-              // { name: "Solution", value: results[1].features[index][Object.keys(results[0].features[index])[0]] }
-            ]
+              { name: "Solution", value: Solution[Object.keys(Solution)[0]] }
+             ]
           })
         })
 
@@ -174,6 +187,21 @@ export class HomeComponent implements OnInit {
 
       return solutionObject[Object.keys(solutionObject)[0]];
     }
+  }
+
+  public getFeatureTitle(title) {
+    if (title[0].includes(":")) {
+      return title[0].substring(0,title[0].indexOf(":"));
+
+    }
+    return title;
+  }
+
+  public getFeatureBody(title: string) {
+    if (title[0].includes(":")) {
+      return title[0].substring(title[0].indexOf(":")+1);
+    }
+    return title;
   }
 
 

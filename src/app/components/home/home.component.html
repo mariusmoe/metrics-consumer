@@ -1,4 +1,4 @@
-<div class="main-content">
+<div class="main-content padding-bottom">
   <div>
 
 
@@ -36,6 +36,7 @@
           (select)="onSelect($event)"
           [xAxisTickFormatting]="xAxisTickFormatting"
 
+
         >
         </ngx-charts-heat-map>
       </div>
@@ -45,9 +46,10 @@
                 id="card-{{i}}"
                 class="measure-card"
       >
-        <mat-card-title>{{objectKeys(feature)}}</mat-card-title>
+        <mat-card-title>{{getFeatureTitle(objectKeys(feature))}}</mat-card-title>
         <!--<p *ngFor="let measure of specificMeasure.specificMeasures">{{measure.name}} : {{measure.value}}</p>-->
         <mat-card-content>
+          {{getFeatureBody(objectKeys(feature))}}
           <div class="details-content">
             <div class="val-student">
               Student    <span style="padding-left: 15px;" class='bigger'>{{feature[objectKeys(feature)] | json }}</span>

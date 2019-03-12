@@ -519,6 +519,7 @@ public class ConfigCreator {
 
     featureList.getFeatures().put("PrimitiveType", 99.0);
     featureList.getFeatures().put("MarkerAnnotation", 99.0);
+    // TODO: dots in a variable declaration is a no no
 //    featureList.getFeatures().put("PrefixExpression.-", 99.0);
 //    featureList.getFeatures().put("MethodDeclaration.public", 99.0);
 //    featureList.getFeatures().put("InfixExpression.<", 99.0);
@@ -552,8 +553,9 @@ public class ConfigCreator {
 
 
     expressionFeatures.getFeatures().put("Primitive types", "PrimitiveType");
-    expressionFeatures.getFeatures().put("cyclic", "IfStatement + 1");
-    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
+    expressionFeatures.getFeatures().put("Cyclomatic Complexity:Measure the number of linearly independent paths through a program",
+      "conditionalCount + 1");
+//    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
     expressionFeatures.getFeatures().put("Sum expression", "PrefixExpression + InfixExpression");
     expressionFeatures.getFeatures().put("Number of PrimitiveType", "PrimitiveType");
 
