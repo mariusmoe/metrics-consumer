@@ -13,7 +13,11 @@ export class NotFoundComponent implements OnInit {
 
   constructor(private authService: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.isLoggedIn.subscribe(o => {
+      this.loggedIn = o;
+    });
+  }
   // ngOnInit() {
   //   this.authService.isLoggedIn().subscribe(
   //     (res: boolean) => {

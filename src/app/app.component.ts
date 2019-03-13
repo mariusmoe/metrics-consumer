@@ -28,7 +28,24 @@ export class AppComponent {
     private measureService: MeasureService,
     private authService: AuthService
   ) {
-    this.authService.getResource();
+    this.authService.getResource().subscribe(data => {
+      console.log(data);
+      this.authService.setIsLoggedIn(true);
+      localStorage.setItem('currentUser', JSON.stringify(data));
+
+      // (<any>window).ga('set', 'userId', data['somefield']); // Set the user ID using signed-in user_id.
+
+      this.loadSummaries();
+
+    }, error => {
+      try {
+        localStorage.removeItem('currentUser');
+      } catch (e) {
+        console.error(e);
+      }
+      console.log('Not logged in', error)
+
+    });
 
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -37,11 +54,16 @@ export class AppComponent {
       }
     });
 
-    this.measureService.getSummaries().subscribe(
-      (data: Summary[]) => {
-        console.log(data);
-        this.summaries = data;
-      });
+
+  }
+
+  ngOnInit() {
+    this.measureService.newFiles.subscribe(o => {
+      this.loadSummaries();
+    });
+    this.authService.isLoggedIn.subscribe(o => {
+      this.isLoggedIn = o;
+    });
   }
 
 
@@ -51,13 +73,19 @@ export class AppComponent {
   }
 
   logout() {
-    this.authService.logout().subscribe(result => {
-      if (result === true) {
-        this.router.navigateByUrl('/login');
-      } else {
-        console.error('Could not logout at this moment');
-      }
-    })
+    this.authService.logout();
+    this.measureService.notifyNewFiles();
+    window.location.href = "/logout"
+  }
+
+  loadSummaries(){
+    this.measureService.getSummaries().subscribe(
+      (data: Summary[]) => {
+        console.log(data);
+        this.summaries = data;
+      }, error => {
+        this.summaries = null;
+      });
   }
 
 

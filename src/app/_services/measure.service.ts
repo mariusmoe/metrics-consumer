@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {Observable, throwError} from 'rxjs';
@@ -13,6 +13,8 @@ import {ErrorService} from "./error.service";
   providedIn: 'root'
 })
 export class MeasureService {
+
+  @Output() newFiles: EventEmitter<boolean> = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -67,6 +69,10 @@ export class MeasureService {
       );
   }
 
+
+  notifyNewFiles() {
+      this.newFiles.emit();
+  }
 
 
 

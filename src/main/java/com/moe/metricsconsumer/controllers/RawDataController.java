@@ -122,14 +122,6 @@ public class RawDataController {
   public ResponseEntity<ObjectNode> newStudentCode(@Nullable @RequestHeader(value="measureSummaryRef") String measureSummaryRef,
                                        @RequestHeader(value = "exNumber") String exNumber,
                                        @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
-    System.out.println(exNumber);
-    System.out.println(exNumber);
-    System.out.println(exNumber);
-    System.out.println(exNumber);
-    System.out.println(exerciseNames.get(exNumber));
-    System.out.println(exerciseNames.get(exNumber));
-    System.out.println(exerciseNames.get(exNumber));
-    System.out.println(exerciseNames.get(exNumber));
     return saveExFiles(measureSummaryRef, uploadingFiles, "001", false,  exNumber);
   }
 

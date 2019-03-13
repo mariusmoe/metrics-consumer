@@ -72,7 +72,6 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     // get taskId from param in url. If no param -> show some instructions
     this.route.paramMap.subscribe( params => {
       // this.retriveData(params.get('taskId'))
@@ -84,49 +83,6 @@ export class HomeComponent implements OnInit {
       }
     });
 
-  }
-
-  /**
-   * Retreive unconfigured measure data
-   * @param taskId task id 
-   */
-  retriveData(taskId: string) {
-
-    let student = this.measureService.getMeasureData(taskId);
-    let solutionManual = this.measureService.getSolutionMeasureData(taskId);
-
-    forkJoin([student, solutionManual]).subscribe(results => {
-      if (results[0]) {
-        // results[0] is student
-        // results[1] is solutionManual
-        console.log(results);
-        this.taskName = taskId;
-        let studentData = [];
-        this.measureSummaryStudent = results[0];
-        let count = 0;
-
-        // Go through all measures and add them to the heatmap
-        // Important -> Assumes that solution guide and student has the same number of measures
-        results[0].measures.forEach((measure, measureIndex) => {
-          measure.specificMeasures.forEach((specificMeasure, index) => {
-            let localMeasureID = count//(`0${measureIndex}`).slice(-2) + (`0${index}`).slice(-2);
-            count++;
-            studentData.push({
-              name: localMeasureID + ':' + measure.specificMeasures[index].name,
-              series: [
-                {name: "Student", value: results[0].measures[measureIndex].specificMeasures[index].value},
-                {name: "Solution", value: results[1].measures[measureIndex].specificMeasures[index].value || 0}
-              ]
-            })
-          })
-        });
-
-        console.log( studentData);
-        this.multi = [...studentData];
-        this.loading = false;
-      }
-
-    });
   }
 
   /**

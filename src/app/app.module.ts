@@ -22,6 +22,7 @@ import { AchievementsComponent } from './components/achievements/achievements.co
 import {FileUploadModule} from "ng2-file-upload";
 import { UploadNewExComponent } from './components/upload-new-ex/upload-new-ex.component';
 import {BaseChangeInterceptor} from "./_interceptors/base-change.Interceptor";
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {BaseChangeInterceptor} from "./_interceptors/base-change.Interceptor";
     NotFoundComponent,
     SettingsComponent,
     AchievementsComponent,
-    UploadNewExComponent
+    UploadNewExComponent,
+    WelcomeComponent
 
   ],
   imports: [

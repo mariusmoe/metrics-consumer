@@ -1,0 +1,10 @@
+.left-arrow {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-bottom: 3px !important;
+}
+
+
+.top-text {
+  margin-top: 40px;
+}

@@ -21,7 +21,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
+//    http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
 
     // READ THIS to fix "always redirect unauthenticated requests"
     // https://stackoverflow.com/questions/4269686/spring-security-need-403-error-not-redirect/30935622
@@ -30,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     // Now that errors are handled with 401 they should behave like this
     // https://stackoverflow.com/questions/44692781/configure-spring-boot-to-redirect-404-to-a-single-page-app
 
-/*
+
     http
       .csrf().disable()
 //      Secure all routes except some (more strict)
@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .logoutSuccessUrl("/user/login")
       .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
       .deleteCookies("JSESSIONID").invalidateHttpSession(false);
-      */
+
 
 //     Should redirect onlogoutSuccess to bellow, but then cors and csrf has to be fixed!
 //    https://auth.dataporten.no/logout

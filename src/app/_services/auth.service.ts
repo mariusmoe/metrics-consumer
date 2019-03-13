@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import {catchError, map} from 'rxjs/operators';
@@ -11,53 +11,37 @@ import {ErrorService} from "./error.service";
 })
 export class AuthService {
 
-  private _isLoggedIn = false;
+
+  @Output() isLoggedIn: EventEmitter<boolean> = new EventEmitter();
 
   constructor(
     private http: HttpClient,
     private errorService: ErrorService)
   { }
 
-  get isLoggedIn(): boolean {
-    return this._isLoggedIn;
-  }
-
-
   getResource(){
     console.log("get summaries called");
-    this.http.get('api/resource')
+    return this.http.get('api/resource')
       .pipe(
         catchError(this.errorService.handleError)
-      ).subscribe(data => {
-        console.log(data);
-        this._isLoggedIn = true;
-        localStorage.setItem('currentUser', JSON.stringify(data));
-        // (<any>window).ga('set', 'userId', data['somefield']); // Set the user ID using signed-in user_id.
-      }, error => {
-        try {
-          localStorage.removeItem('currentUser');
-        } catch (e) {
-          console.error(e);
-        }
-        console.log('Not logged in', error)
-
-      });
-
-
-
+      );
   }
 
 
-  logout(): Observable<boolean> {
-    this._isLoggedIn = false;
-
+  logout() {
+    this.isLoggedIn.emit(false);
     try {
       localStorage.removeItem('currentUser');
     } catch (e) {
       console.error(e);
     }
+// https://auth.dataporten.no/logout
 
-    return this.http.post('logout', {}).pipe(map(() => true))
+  }
+
+
+  setIsLoggedIn(isLoggedIn:boolean) {
+    this.isLoggedIn.emit(isLoggedIn);
   }
 
 }

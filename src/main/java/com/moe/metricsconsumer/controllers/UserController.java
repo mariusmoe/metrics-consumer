@@ -15,6 +15,7 @@ public class UserController {
   @RequestMapping("/resource")
   @ResponseBody
   public Principal user(Principal principal) {
+    // TODO: add tracker for google analytics
     return principal;
   }
 

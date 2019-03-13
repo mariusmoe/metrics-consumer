@@ -552,12 +552,12 @@ public class ConfigCreator {
     expressionFeatures.setOther(metaDataFeatureValued);
 
 
-    expressionFeatures.getFeatures().put("Primitive types", "PrimitiveType");
+    expressionFeatures.getFeatures().put("Number of method declarations", "MethodDeclaration");
     expressionFeatures.getFeatures().put("Cyclomatic Complexity:Measure the number of linearly independent paths through a program",
       "conditionalCount + 1");
 //    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
     expressionFeatures.getFeatures().put("Sum expression", "PrefixExpression + InfixExpression");
-    expressionFeatures.getFeatures().put("Number of PrimitiveType", "PrimitiveType");
+//    expressionFeatures.getFeatures().put("", "PrimitiveType");
 
 
 
