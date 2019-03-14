@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.Map;
 
 
 @RequestMapping("/api/fv")
@@ -52,8 +54,10 @@ public class MetricsControllerFv {
    */
   @GetMapping("/{taskId}")
   @ResponseBody
-  public FeatureList getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
-    return getOneGenericMeasureFv(taskId, false, "001");
+  public FeatureList getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
+
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    return getOneGenericMeasureFv(taskId, false, principalMap.get("userid"));
   }
 
   /**
@@ -64,8 +68,10 @@ public class MetricsControllerFv {
    */
   @GetMapping("/solution/{taskId}")
   @ResponseBody
-  public FeatureList getOneSolutionMeasureFv(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
-    return getOneGenericMeasureFv(taskId, true);
+  public FeatureList getOneSolutionMeasureFv(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
+
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    return getOneGenericMeasureFv(taskId, true, principalMap.get("userid"));
   }
 
   /**
@@ -79,19 +85,19 @@ public class MetricsControllerFv {
    */
   private FeatureList getOneGenericMeasureFv(String taskId, boolean isSolution, String... userId) throws EntityNotFoundException {
 
-    // TODO: set userId based on the principal
     // The userId is optional for now
     String _userId = (userId.length >= 1) ? userId[0] : "";
+    logger.info("--------- UserID: " + _userId);
 
     MeasureSummary measureSummary;
 
     // Based on whether this is a solution -> get the correct metrics
     if (isSolution) {
-      measureSummary = this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual("001", taskId, true)
+      measureSummary = this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(_userId, taskId, true)
         .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
       logger.debug(measureSummary.toString());
     } else {
-      measureSummary = this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual("001", taskId, false)
+      measureSummary = this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(_userId, taskId, false)
         .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
     }
 
@@ -104,7 +110,7 @@ public class MetricsControllerFv {
 
     FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
     // Replace all references to 'other' in config.xmi with 'featureList'
-    // TODO -> Not all measures will be calculated if they are not found! (I think)
+    // Not all measures will be calculated if they are not found! (I think)
     for (EObject eObject : resource.getContents()) {
       eObject = controllerUtil.replaceReference(eObject, featureValuedContainer);
 
@@ -129,7 +135,6 @@ public class MetricsControllerFv {
     Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
     Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
     try {
-      // TODO: something goes wrong here!!!
       configResource.load(new ByteArrayInputStream(fvConfiguration.getExpressionFeature().getData()),null );
       dataResource.load(new ByteArrayInputStream(fvConfiguration.getDataFeature().getData()), null );
     } catch (IOException e) {

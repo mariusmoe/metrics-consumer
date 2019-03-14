@@ -50,7 +50,7 @@ public class ConfigCreator {
 
     logger.debug(expressionFeatures.getOther().toString());
 
-    // TODO: This should be configurable
+
     expressionFeatures.getFeatures().put("sum-for-while", "foreach + while");
     expressionFeatures.getFeatures().put("add-for-while", "for + while");
     expressionFeatures.getFeatures().put("just-for", "for");
@@ -290,7 +290,7 @@ public class ConfigCreator {
     filteredFeatures2.setVal(2);
     filteredFeatures2.setOther(metaDataFeatureValued2);
 
-    // TODO: does not work because FeatureValuedContainer contains featureValuedGroups
+    // does not work because FeatureValuedContainer contains featureValuedGroups
     FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
     featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures);
     featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures2);
@@ -409,7 +409,7 @@ public class ConfigCreator {
 
     logger.debug(expressionFeatures.getOther().toString());
 
-    // TODO: This should be configurable
+    //  This should be configurable
 
 
     expressionFeatures.getFeatures().put("sum", "foreach");
@@ -519,7 +519,7 @@ public class ConfigCreator {
 
     featureList.getFeatures().put("PrimitiveType", 99.0);
     featureList.getFeatures().put("MarkerAnnotation", 99.0);
-    // TODO: dots in a variable declaration is a no no
+    //  dots in a variable declaration is a no no
 //    featureList.getFeatures().put("PrefixExpression.-", 99.0);
 //    featureList.getFeatures().put("MethodDeclaration.public", 99.0);
 //    featureList.getFeatures().put("InfixExpression.<", 99.0);

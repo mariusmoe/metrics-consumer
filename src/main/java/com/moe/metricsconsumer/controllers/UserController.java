@@ -34,28 +34,16 @@ public class UserController {
   @RequestMapping("/resource")
   @ResponseBody
   public ResponseEntity<ObjectNode> user(Principal principal) {
-    // TODO: add tracker for google analytics
-
-    System.out.println(principal.getName().toString());
-    String[] s = principal.getName().replace("{", "").replace("}","" ).split(",");
-    System.out.println(s);
-    Map<String, String> map = new HashMap<>();
-    for (String s1: s) {
-      map.put(s1.substring(0,s1.indexOf("=")).replace(" ", ""),  s1.substring(s1.indexOf("=")+1));
-    }
-    System.out.println(map);
-
+    Map<String, String> map = this.controllerUtil.getPrincipalAsMap(principal);
     String userId = map.get("userid");
     AnalyticsUser analyticsUser;
     AnalyticsUser analyticsUserOpt = this.analyticsUserRepository.findByUserId(userId).orElse(null);
     if (analyticsUserOpt == null) {
-//      create new user and send the analyticsId
       System.out.println("User was null - creating a new one");
       UUID uuid = UUID.randomUUID();
       AnalyticsUser analyticsUserToSave = new AnalyticsUser(userId, uuid.toString());
       analyticsUser = this.analyticsUserRepository.save(analyticsUserToSave);
     } else {
-//      send the analyticsId
       analyticsUser = analyticsUserOpt;
     }
     Map<String, String> res = new HashMap<>();
@@ -65,14 +53,16 @@ public class UserController {
       HttpStatus.OK);
   }
 
+
+
   @GetMapping("/mod")
   @ResponseBody
   public String getMessageOfTheDay(Principal principal) {
     return "The message of the day is boring for user: " + principal.getName();
   }
 
-  // TODO: Add route for delete all user interaction
-  // TODO: Add route for download of all user data
+  // Add route for delete all user interaction
+  // Add route for download of all user data
 
 
 }

@@ -63,6 +63,13 @@ export class UploadNewExComponent implements OnInit {
 
 
   startUploadAllFiles(){
+    // TODO: send analytics event
+    (<any>window).ga('send', 'event', {
+      eventCategory: 'upload',
+      eventLabel: 'choose',
+      eventAction: 'Choose file for upload',
+      eventValue: 10
+    });
 
     this.uploader.uploadAllFiles();
   }

@@ -63,12 +63,6 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
     }
 
 
-//  // TODO - remove!
-//  @Override
-//  public void configure(WebSecurity webSecurity) throws Exception {
-//    webSecurity.ignoring().antMatchers(POST, "/api");
-//  }
-
 
 
   @Bean
@@ -252,7 +246,7 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
       byte[] dataResourceByteArray2 = temp2.get(0);
       byte[] configResourceByteArray2 = temp2.get(1);
      // Resource resource =
-      // TODO: Change these according to notes!
+      // Change these according to notes!
 
       String taskIdRefAccount = "stateandbehavior.Account";
       Achievement achievement1 = new Achievement(

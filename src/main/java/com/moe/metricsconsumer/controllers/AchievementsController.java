@@ -24,7 +24,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,9 +59,11 @@ public class AchievementsController {
 
   @GetMapping("/user")
   @ResponseBody
-  public List<UserAchievement> getAllAchievedAchievements() {
-    return this.userAchievementRepository.findAllByUserRef("001");
+  public List<UserAchievement> getAllAchievedAchievements(Principal principal) {
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    return this.userAchievementRepository.findAllByUserRef(principalMap.get("userid"));
   }
+
 
 
   @GetMapping("/")
@@ -69,11 +73,13 @@ public class AchievementsController {
   }
 
 
+
   @GetMapping("/with-binary")
   @ResponseBody
   public List<Achievement> getAllAchievementsWithBinary() {
     return this.achievementRepository.findAll();
   }
+
 
 
   @PostMapping("/")

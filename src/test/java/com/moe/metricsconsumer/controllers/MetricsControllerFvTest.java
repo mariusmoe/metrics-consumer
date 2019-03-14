@@ -99,7 +99,7 @@ public class MetricsControllerFvTest {
     res.put("measureSummaryRef", measureSummary.getId());
     res.put("measureSummary", measureSummary.toString());
     res.put("status", "2000");
-    given(this.metricsController.saveMeasureSummary(measureSummary))
+    given(this.metricsController.saveMeasureSummary(measureSummary, null))
       .willReturn(
         res
       );

@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.security.Principal;
 import java.util.*;
 
 
@@ -121,7 +122,7 @@ public class ControllerUtil {
         MetaDataFeatureValued referencedMetaDataFeatureValued = (MetaDataFeatureValued) referenced;
         if (((MetaDataFeatureValued) containerIt).getFeatureValuedId().equals(referencedMetaDataFeatureValued.getFeatureValuedId())){
           // Replace reference to data in config xmi
-          // TODO: Ensure consistency between the referenced and the referee (Only needed one way though "containerIt need all metrics in referenced")
+          // Ensure consistency between the referenced and the referee (Only needed one way though "containerIt need all metrics in referenced")
           referencedMetaDataFeatureValued.getFeatures().map().forEach((k,v) -> {
             if (!((MetaDataFeatureValued) containerIt).getFeatures().containsKey(k)) {
               ((MetaDataFeatureValued) containerIt).getFeatures().put(k, (double) 0);
@@ -152,6 +153,15 @@ public class ControllerUtil {
       res.put("details", mapper.valueToTree(additionalParams));
     }
     return res;
+  }
+
+  public Map<String, String> getPrincipalAsMap(Principal principal) {
+    String[] s = principal.getName().replace("{", "").replace("}","" ).split(",");
+    Map<String, String> map = new HashMap<>();
+    for (String s1: s) {
+      map.put(s1.substring(0,s1.indexOf("=")).replace(" ", ""),  s1.substring(s1.indexOf("=")+1));
+    }
+    return map;
   }
 
 

@@ -34,6 +34,7 @@ import javax.validation.Valid;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -69,10 +70,11 @@ public class MetricsController {
    */
   @GetMapping("/")
   @ResponseBody
-  public List<MeasureSummary> getAllMeasureSummaries() {
+  public List<MeasureSummary> getAllMeasureSummaries(Principal principal) {
     // Distinct is not implemented well in Spring and a set is used to remove duplicates
     // This problem is resolved in mongoclient 2.1.0 but the currently installed mongo springboot use 2.0.10
-    Collection<MeasureSummary> shortList =  measureRepository.findAllByUserId("001")
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    Collection<MeasureSummary> shortList =  measureRepository.findAllByUserId(principalMap .get("userid"))
         .stream()
         .collect(Collectors.toConcurrentMap(MeasureSummary::getTaskId, Function.identity(), (p, q) -> p))
         .values();
@@ -87,8 +89,9 @@ public class MetricsController {
    */
   @GetMapping("/{taskId}")
   @ResponseBody
-  public MeasureSummary getMeasureSummary(@NonNull @PathVariable("taskId") String taskId) throws EntityNotFoundException {
-    return this.measureRepository.findFirstByUserIdAndTaskId("001", taskId)
+  public MeasureSummary getMeasureSummary(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    return this.measureRepository.findFirstByUserIdAndTaskId(principalMap.get("userid"), taskId)
       .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
   }
 
@@ -104,12 +107,11 @@ public class MetricsController {
     Query query = new Query();
     query.addCriteria(Criteria.where("isSolutionManual").is(true));
     query.addCriteria(Criteria.where("taskId").is(taskId));
-//    TODO: use this and test it!!!
 //    return this.measureRepository.findFirstIsSolutionManualAndTaskId(true, taskId);
     return this.mongoTemplate.findOne(query, MeasureSummary.class);
   }
 
-  // TODO Add userid to the saved object
+
   /**
    * Save a new measureSummary for the current user
    *
@@ -119,10 +121,11 @@ public class MetricsController {
    */
   @PostMapping("/")
   @ResponseBody
-  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws NoSuchFieldException, CouldNotSaveException {
+  public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary, Principal principal) throws NoSuchFieldException, CouldNotSaveException {
     logger.debug("********************START************************\n\n");
+
     MeasureSummary measureSummary = newMeasureSummary;
-    measureSummary.setId(getUserIdAndTaskNameHashed(measureSummary));
+    measureSummary.setId(getUserIdAndTaskNameHashed(measureSummary, principal));
     // Get all achievements for this task   |\
     // Get all cumulative achievements      | \
     List<Achievement> relevantAchievements = this.achievementRepository.findByTaskIdRefOrIsCumulative(measureSummary.getTaskId(), true);
@@ -176,7 +179,7 @@ public class MetricsController {
     // Batch save the achieved achievements
     this.userAchievementRepository.saveAll(userAchievementList);
 
-    return saveMeasureSummary(measureSummary);
+    return saveMeasureSummary(measureSummary, principal);
   }
 
   /**
@@ -184,10 +187,11 @@ public class MetricsController {
    * @param measureSummary  The whole measuresummary
    * @return  the hashed name
    */
-  private String getUserIdAndTaskNameHashed(MeasureSummary measureSummary) {
+  private String getUserIdAndTaskNameHashed(MeasureSummary measureSummary, Principal principal) {
     StringBuilder stringBuilder = new StringBuilder();
-    // TODO: use user id from principal instead of provided object
-    stringBuilder.append(measureSummary.getUserId());
+
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    stringBuilder.append(principalMap.get("userid"));
     stringBuilder.append(measureSummary.getTaskName());
     MessageDigest messageDigest = null;
 
@@ -282,10 +286,11 @@ public class MetricsController {
    */
   @PostMapping("/solution")
   @ResponseBody
-  public ObjectNode newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary) throws CouldNotSaveException{
+  public ObjectNode newSolutionMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary, Principal principal) throws CouldNotSaveException{
+
     MeasureSummary measureSummary = newMeasureSummary;
     measureSummary.setSolutionManual(true);
-    return saveMeasureSummary(measureSummary);
+    return saveMeasureSummary(measureSummary, principal);
   }
 
 
@@ -295,8 +300,10 @@ public class MetricsController {
    * @return
    * @throws CouldNotSaveException
    */
-  public ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary) throws CouldNotSaveException {
+  public ObjectNode saveMeasureSummary(@RequestBody @Valid MeasureSummary newMeasureSummary, Principal principal) throws CouldNotSaveException {
     // TODO: convert to simple jsonResponse or skip special formatting?
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    newMeasureSummary.setUserId(principalMap.get("userid"));
     ObjectNode res;
     try {
       measureRepository.save(newMeasureSummary);
@@ -318,9 +325,14 @@ public class MetricsController {
    */
   @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
   @ResponseBody
-  public List<MeasureSummary> deleteMeasureSummary(@NonNull @PathVariable("id") String id) throws EntityNotFoundException {
-    // TODO: check that the user has permission to do this action
-    return this.measureRepository.removeById(id);
+  public List<MeasureSummary> deleteMeasureSummary(@NonNull @PathVariable("id") String id, Principal principal) throws EntityNotFoundException {
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    MeasureSummary measureSummary = this.measureRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class,id));
+    if (measureSummary.getUserId().equals(principalMap.get("userid"))) {
+      return this.measureRepository.removeById(id);
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -330,10 +342,11 @@ public class MetricsController {
   @Deprecated
   @DeleteMapping("/all/delete")
   @ResponseBody
-  public List<MeasureSummary> deleteMeasureSummary() {
+  public List<MeasureSummary> deleteMeasureSummary(Principal principal) {
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     LinkedHashMap linkedHashMap = (LinkedHashMap) auth.getPrincipal();
-    return this.measureRepository.removeAllByUserId((String) linkedHashMap.get("userid"));
+    return this.measureRepository.removeAllByUserId(principalMap.get("userid"));
   }
 
 }

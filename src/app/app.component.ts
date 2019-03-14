@@ -7,6 +7,11 @@ import {MeasureService} from "./_services/measure.service";
 import {Observable} from "rxjs";
 import {AuthService} from "./_services/auth.service";
 
+export interface PrincipalResource {
+  message: string;
+  status: number;
+  details?: object;
+}
 
 @Component({
   selector: 'app-root',
@@ -28,12 +33,14 @@ export class AppComponent {
     private measureService: MeasureService,
     private authService: AuthService
   ) {
-    this.authService.getResource().subscribe(data => {
+    this.authService.getResource().subscribe((data: PrincipalResource)  => {
       console.log(data);
       this.authService.setIsLoggedIn(true);
-      localStorage.setItem('currentUser', JSON.stringify(data));
+      localStorage.setItem('currentUser', JSON.stringify(data.details[0]));
+      console.log(data.details[0][Object.keys(data.details[0])[0]]);
+      let gKey = data.details[0][Object.keys(data.details[0])[0]];
 
-      // (<any>window).ga('set', 'userId', data['somefield']); // Set the user ID using signed-in user_id.
+      (<any>window).ga('set', 'userId', gKey);
 
       this.loadSummaries();
 

@@ -54,6 +54,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,9 +121,12 @@ public class RawDataController {
   @PostMapping("/")
   @ResponseBody
   public ResponseEntity<ObjectNode> newStudentCode(@Nullable @RequestHeader(value="measureSummaryRef") String measureSummaryRef,
-                                       @RequestHeader(value = "exNumber") String exNumber,
-                                       @RequestParam("files") MultipartFile[] uploadingFiles) throws IOException {
-    return saveExFiles(measureSummaryRef, uploadingFiles, "001", false,  exNumber);
+                                                   @RequestHeader(value = "exNumber") String exNumber,
+                                                   @RequestParam("files") MultipartFile[] uploadingFiles,
+                                                   Principal principal) throws IOException {
+
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
+    return saveExFiles(measureSummaryRef, uploadingFiles, principalMap.get("userid"), false,  exNumber);
   }
 
 
@@ -155,13 +159,13 @@ public class RawDataController {
       Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual, exNumber);
       MeasureSummary savedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
-      // TODO save the solution as well!!!!
+      // save the solution as well!!!!
       this.measureRepository.save(savedMeasureSummary);
       this.measureRepository.save(savedMeasureSummarySolution);
       // This is a new exercise being added
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
-      // TODO: recalculate measure summary from MultipartFile[]
+      // recalculate measure summary from MultipartFile[]
       Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual, exNumber);
       MeasureSummary recalculatedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
@@ -175,7 +179,7 @@ public class RawDataController {
     }
     logger.debug("measureSummaryRef: " + measureSummaryRef);
 
-    // TODO: refactor code below to its own method
+    // Should: refactor code below to its own method
     // Start saving files in DB
     List<ExerciseDocument> exerciseDocumentList = new ArrayList<>();
     for(MultipartFile uploadedFile : uploadingFiles) {
@@ -266,7 +270,7 @@ public class RawDataController {
     logger.info(fContainer.toString());
 
     // Convert to measureSummary
-    // TODO: naming of the exercise is not yet implemented !!!
+
     List<Measure> measures = controllerUtil.createMeasuresFromContainer(fContainer);
     List<Measure> measuresSolution = controllerUtil.createMeasuresFromContainer(fContainerSolution);
     MeasureSummary measureSummary = new MeasureSummary(userId,
