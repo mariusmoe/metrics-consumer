@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
 
-  apiBaseUrl: 'Need-to-set-this-in-production'
+  apiBaseUrl: 'metricstdt4100.xyz/'
 };

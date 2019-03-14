@@ -29,7 +29,7 @@ export class AchievementsComponent implements OnInit {
     });
   }
 
-  private getAllAchievementData() {
+  public getAllAchievementData() {
     this.achievementService.getAllAchievementDataFromService().subscribe(responseList => {
       this.achievementList = responseList[0];
       this.userAchievementList = responseList[1];
