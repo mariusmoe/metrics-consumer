@@ -3,6 +3,7 @@ import {FileUploaderCustom} from "../../_services/FileUploaderCustom";
 import {FileItem, ParsedResponseHeaders} from 'ng2-file-upload';
 import {Exercise} from "../../_models/exercise";
 import {MeasureService} from "../../_services/measure.service";
+import {environment} from "../../../environments/environment";
 
 
 const URL = 'http://localhost:8080/api/xml/';
@@ -34,7 +35,7 @@ export class UploadNewExComponent implements OnInit {
 
   constructor(private measureService: MeasureService) {
     this.uploader = new FileUploaderCustom({
-      url: URL,
+      url: environment.uploadUrl,
       itemAlias: "uploadingFiles",
       headers: [{
         name: "exNumber",
