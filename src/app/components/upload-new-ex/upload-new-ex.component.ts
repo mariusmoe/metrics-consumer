@@ -4,6 +4,7 @@ import {FileItem, ParsedResponseHeaders} from 'ng2-file-upload';
 import {Exercise} from "../../_models/exercise";
 import {MeasureService} from "../../_services/measure.service";
 import {environment} from "../../../environments/environment";
+import {MatSnackBar} from "@angular/material";
 
 
 const URL = 'http://localhost:8080/api/xml/';
@@ -33,7 +34,10 @@ export class UploadNewExComponent implements OnInit {
     {value: '9', viewValue: 'Øving 09: Arv og abstrakte klasser'},
   ]
 
-  constructor(private measureService: MeasureService) {
+  constructor(
+    private measureService: MeasureService,
+    private snackBar: MatSnackBar
+  ) {
     this.uploader = new FileUploaderCustom({
       url: environment.uploadUrl,
       itemAlias: "uploadingFiles",
@@ -51,6 +55,7 @@ export class UploadNewExComponent implements OnInit {
   }
 
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+    this.openSnackBar("Opplasting vellykket", "OK");
     let data = JSON.parse(response); //success server response
     console.log("File upload returned: " + status);
     this.measureService.notifyNewFiles();
@@ -59,6 +64,7 @@ export class UploadNewExComponent implements OnInit {
 
   }
   onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
+    this.openSnackBar("Noe gikk galt", "OK");
     let error = JSON.parse(response); //error server response
     console.error(error);
     this.uploader.queue = [];
@@ -86,6 +92,12 @@ export class UploadNewExComponent implements OnInit {
       }
     })
     this.canSubmit = true;
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
 
