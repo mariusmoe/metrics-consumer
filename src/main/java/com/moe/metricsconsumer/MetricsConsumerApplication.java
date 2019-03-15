@@ -82,11 +82,11 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
       achievementRepository.deleteAll();
       userAchievementRepository.deleteAll();
       exerciseDocumentRepository.deleteAll();
-      exSolutionRepository.deleteAll();
+      //exSolutionRepository.deleteAll();
 
 
-      File[] files = ResourceUtils.getFile("classpath:solution-src").listFiles();
-      showFiles(files);
+      // File[] files = ResourceUtils.getFile("classpath:solution-src").listFiles();
+      // showFiles(files);
 
 
 //      //save some dummy data
@@ -248,7 +248,7 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
      // Resource resource =
       // Change these according to notes!
 
-      String taskIdRefAccount = "stateandbehavior.Account";
+      String taskIdRefAccount = "1";
       Achievement achievement1 = new Achievement(
         11,
         false,
@@ -279,9 +279,9 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
         "Award for exceptional work on while next"
       );
 
-      achievementRepository.save(achievement1);
+//      achievementRepository.save(achievement1);
       achievementRepository.save(achievement2);
-      achievementRepository.save(achievement3);
+//      achievementRepository.save(achievement3);
 
 //      List<Achievement> achievementList = achievementRepository.findAll();
 //

@@ -10,7 +10,7 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatMenuModule,
-  MatSidenavModule, MatTooltipModule, MatCardModule, MatProgressBarModule, MatSelectModule
+  MatSidenavModule, MatTooltipModule, MatCardModule, MatProgressBarModule, MatSelectModule, MatSnackBarModule
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
@@ -23,6 +23,7 @@ import {FileUploadModule} from "ng2-file-upload";
 import { UploadNewExComponent } from './components/upload-new-ex/upload-new-ex.component';
 import {BaseChangeInterceptor} from "./_interceptors/base-change.Interceptor";
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import {ErrorInterceptor} from "./_interceptors/errorInterceptor.interceptor";
 
 
 @NgModule({
@@ -54,10 +55,12 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
     MatCardModule,
     MatProgressBarModule,
     MatSelectModule,
+    MatSnackBarModule,
     FileUploadModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: BaseChangeInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: BaseChangeInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor,      multi: true }
   ],
   bootstrap: [AppComponent]
 })
