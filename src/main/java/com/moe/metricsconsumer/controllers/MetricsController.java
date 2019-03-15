@@ -38,7 +38,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
-import java.util.logging.*;
 import java.util.stream.Collectors;
 
 @RequestMapping("/api")
@@ -74,7 +73,7 @@ public class MetricsController {
     // Distinct is not implemented well in Spring and a set is used to remove duplicates
     // This problem is resolved in mongoclient 2.1.0 but the currently installed mongo springboot use 2.0.10
     Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
-    Collection<MeasureSummary> shortList =  measureRepository.findAllByUserId(principalMap .get("userid"))
+    Collection<MeasureSummary> shortList =  measureRepository.findAllByUserId(principalMap.get("userid"))
         .stream()
         .collect(Collectors.toConcurrentMap(MeasureSummary::getTaskId, Function.identity(), (p, q) -> p))
         .values();
@@ -91,7 +90,7 @@ public class MetricsController {
   @ResponseBody
   public MeasureSummary getMeasureSummary(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
     Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
-    return this.measureRepository.findFirstByUserIdAndTaskId(principalMap.get("userid"), taskId)
+    return this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(principalMap.get("userid"), taskId, false)
       .orElseThrow(() -> new EntityNotFoundException(MeasureSummary.class, taskId));
   }
 
@@ -122,65 +121,21 @@ public class MetricsController {
   @PostMapping("/")
   @ResponseBody
   public ObjectNode newMeasureSummary(@Valid @RequestBody MeasureSummary newMeasureSummary, Principal principal) throws NoSuchFieldException, CouldNotSaveException {
-    logger.debug("********************START************************\n\n");
-
     MeasureSummary measureSummary = newMeasureSummary;
     measureSummary.setId(getUserIdAndTaskNameHashed(measureSummary, principal));
     // Get all achievements for this task   |\
     // Get all cumulative achievements      | \
+    Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
     List<Achievement> relevantAchievements = this.achievementRepository.findByTaskIdRefOrIsCumulative(measureSummary.getTaskId(), true);
     // Will find all achievements a user has ever received
-    List<UserAchievement> userAchievements = this.userAchievementRepository.findAllByUserRef(measureSummary.getUserId());
-    FeatureValuedContainer featureValuedContainer = controllerUtil.createContainerFromMeasures(measureSummary);
-    // Loop over -> add achieved achievements to list as a list of UserAchievement
-    List<UserAchievement> userAchievementList = new ArrayList<>();
-    for (Achievement achievement : relevantAchievements){
-      logger.debug("--------------------------------------------");
-      // Get the expression as a resource for the provided achievement
-      Resource resource = getResource(achievement);
-      // If it is cumulative we should replace/add the value for this task or create it
-      if (achievement.isCumulative()) {
-        UserAchievement userAchievement = userAchievements.stream()
-          .filter(object -> achievement.getId().equals(object.getAchievementRef())).findAny().orElse(null);
-        FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
-        if (userAchievement != null) {
-          // It exists already -> just update or add to history
-          userAchievement.getHistory().put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size());
-          userAchievementList.add(userAchievement);
-        } else {
-          // It ain't here -> create a new UserAchievement
-          Map<String, Integer> newHistory = new HashMap<>();
-          newHistory.put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size() );
-          UserAchievement newUserAchievement = new UserAchievement(measureSummary.getUserId(),
-            achievement.getId(),
-            AchievementState.REVEALED, LocalDateTime.now(), newHistory);
-          userAchievementList.add(newUserAchievement);
-        }
-      }
-      else if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
-        // The achievement belong to this task -> Create/overwrite userAchievement
-        ConfigCreator configCreator = new ConfigCreator();
-        // Load config from file system
-        Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
-        FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
-        // Printed too many times due to all achivements has the same config atm
-        logger.debug("CalculatedFeatureList: " + calculatedFeatureList);
-        // Eval method for if achievement should be given
-        if (calculatedFeatureList.getFeatures().size() > 0) {
-          logger.debug("GRATULERER!   -   CalculatedFeatureList: " + calculatedFeatureList);
-          UserAchievement newUserAchievement = new UserAchievement(measureSummary.getUserId(),
-            achievement.getId(),
-            AchievementState.UNLOCKED, LocalDateTime.now(), null);
-          userAchievementList.add(newUserAchievement);
-        }
-      }
-    };
-    logger.debug("******************END*************************\n\n userAchievementList: " + userAchievementList);
-    // Batch save the achieved achievements
-    this.userAchievementRepository.saveAll(userAchievementList);
-
+    List<UserAchievement> userAchievements = this.userAchievementRepository.findAllByUserRef(principalMap.get("userid"));
+    List<UserAchievement> rewardedUserAchievements = controllerUtil.checkAchievements(measureSummary,relevantAchievements, userAchievements);
+    this.userAchievementRepository.saveAll(rewardedUserAchievements);
+    logger.debug(rewardedUserAchievements.toString());
     return saveMeasureSummary(measureSummary, principal);
   }
+
+
 
   /**
    * Combines the user id and task name then hashes it
@@ -205,59 +160,7 @@ public class MetricsController {
     return Base64.getEncoder().encodeToString(messageDigest.digest());
   }
 
-  /**
-   * Get the expression as a resource for the provided achievement
-   * @param achievement to extract the expression from
-   * @return Resource resource for the expression of the achievement
-   */
-  private Resource getResource(Achievement achievement) {
-    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
-    ResourceSet resSet = new ResourceSetImpl();
 
-    // load config from XMI
-    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
-    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
-    try {
-      configResource.load(new ByteArrayInputStream(achievement.getExpression().getData()),null );
-      dataResource.load(new ByteArrayInputStream(achievement.getDummyData().getData()),null );
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return configResource;
-  }
-
-  /**
-   * Converts the eObject with the replaced references to a featureList
-   * @param featureValuedContainer  The container with the userdata
-   * @param resource  the resource loaded from the achievement
-   * @return a featureList representation of the fconstructed fv model
-   */
-  private FeatureList getCalculatedFeatureList(FeatureValuedContainer featureValuedContainer, Resource resource) {
-    FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
-    // Replace all references to 'other' in config.xmi with 'featureList'
-    for (EObject eObject : resource.getContents()) {
-      eObject = controllerUtil.replaceReference(eObject, featureValuedContainer);
-      if (eObject instanceof FeatureValuedContainer){
-        calculatedFeatureList.set(featureValuedContainerToFeatureList((FeatureValuedContainer) eObject), false);
-      } else {
-        calculatedFeatureList.set(((FeatureValued) eObject).toFeatureList(), false);
-      }
-    }
-    return calculatedFeatureList;
-  }
-
-  /**
-   * Helper method for converting containers to featureLists
-   * @param featureValuedContainer
-   * @return
-   */
-  private FeatureList featureValuedContainerToFeatureList(FeatureValuedContainer featureValuedContainer) {
-    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
-    for (FeatureValued featureValued : featureValuedContainer.getFeatureValuedGroups()){
-      featureList.set(featureValued.toFeatureList(), false);
-    }
-    return featureList;
-  }
 
   /**
    * Create a userAchievement and sets the userRef to the userId param

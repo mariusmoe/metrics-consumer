@@ -5,13 +5,24 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.models.measureSummary.SpecificMeasure;
+import com.moe.metricsconsumer.models.rewards.Achievement;
+import com.moe.metricsconsumer.models.rewards.AchievementState;
+import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import no.hal.learning.fv.*;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -165,5 +176,114 @@ public class ControllerUtil {
   }
 
 
+  /**
+   * Check if the provided measureSummary warrants any new achievements
+   * @param measureSummary  the new measureSummary
+   * @param relevantAchievements  all relevant achievements for this user
+   * @param userAchievements  The achievements the user already have
+   * @return a list of updated achievements, ready for being saved to db
+   */
+  public List<UserAchievement> checkAchievements(MeasureSummary measureSummary,
+                                                 List<Achievement> relevantAchievements,
+                                                 List<UserAchievement> userAchievements) {
+
+    FeatureValuedContainer featureValuedContainer = createContainerFromMeasures(measureSummary);
+    // Loop over -> add achieved achievements to list as a list of UserAchievement
+    List<UserAchievement> userAchievementList = new ArrayList<>();
+    for (Achievement achievement : relevantAchievements){
+      // Get the expression as a resource for the provided achievement
+      Resource resource = getResource(achievement);
+      // If it is cumulative we should replace/add the value for this task or create it
+      if (achievement.isCumulative()) {
+        UserAchievement userAchievement = userAchievements.stream()
+          .filter(object -> achievement.getId().equals(object.getAchievementRef())).findAny().orElse(null);
+        FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
+        if (userAchievement != null) {
+          // It exists already -> just update or add to history
+          userAchievement.getHistory().put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size());
+          userAchievementList.add(userAchievement);
+        } else {
+          // It ain't here -> create a new UserAchievement
+          Map<String, Integer> newHistory = new HashMap<>();
+          newHistory.put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size() );
+          UserAchievement newUserAchievement = new UserAchievement(measureSummary.getUserId(),
+            achievement.getId(),
+            AchievementState.REVEALED, LocalDateTime.now(), newHistory);
+          userAchievementList.add(newUserAchievement);
+        }
+      }
+      else if (achievement.getTaskIdRef().equals(measureSummary.getTaskId())) {
+        // The achievement belong to this task -> Create/overwrite userAchievement
+        ConfigCreator configCreator = new ConfigCreator();
+        // Load config from file system
+        Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+        FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
+        // Printed too many times due to all achivements has the same config atm
+        // Eval method for if achievement should be given
+        if (calculatedFeatureList.getFeatures().size() > 0) {
+          UserAchievement newUserAchievement = new UserAchievement(measureSummary.getUserId(),
+            achievement.getId(),
+            AchievementState.UNLOCKED, LocalDateTime.now(), null);
+          userAchievementList.add(newUserAchievement);
+        }
+      }
+    }
+    // Batch save the achieved achievements
+    return userAchievementList;
+  }
+
+  /**
+   * Get the expression as a resource for the provided achievement
+   * @param achievement to extract the expression from
+   * @return Resource resource for the expression of the achievement
+   */
+  private Resource getResource(Achievement achievement) {
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+
+    // load config from XMI
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
+    try {
+      configResource.load(new ByteArrayInputStream(achievement.getExpression().getData()),null );
+      dataResource.load(new ByteArrayInputStream(achievement.getDummyData().getData()),null );
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return configResource;
+  }
+
+  /**
+   * Converts the eObject with the replaced references to a featureList
+   * @param featureValuedContainer  The container with the userdata
+   * @param resource  the resource loaded from the achievement
+   * @return a featureList representation of the fconstructed fv model
+   */
+  private FeatureList getCalculatedFeatureList(FeatureValuedContainer featureValuedContainer, Resource resource) {
+    FeatureList calculatedFeatureList = FvFactory.eINSTANCE.createFeatureList();
+    // Replace all references to 'other' in config.xmi with 'featureList'
+    for (EObject eObject : resource.getContents()) {
+      eObject = replaceReference(eObject, featureValuedContainer);
+      if (eObject instanceof FeatureValuedContainer){
+        calculatedFeatureList.set(featureValuedContainerToFeatureList((FeatureValuedContainer) eObject), false);
+      } else {
+        calculatedFeatureList.set(((FeatureValued) eObject).toFeatureList(), false);
+      }
+    }
+    return calculatedFeatureList;
+  }
+
+  /**
+   * Helper method for converting containers to featureLists
+   * @param featureValuedContainer
+   * @return
+   */
+  private FeatureList featureValuedContainerToFeatureList(FeatureValuedContainer featureValuedContainer) {
+    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
+    for (FeatureValued featureValued : featureValuedContainer.getFeatureValuedGroups()){
+      featureList.set(featureValued.toFeatureList(), false);
+    }
+    return featureList;
+  }
 
 }

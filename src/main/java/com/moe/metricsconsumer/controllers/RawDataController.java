@@ -8,6 +8,8 @@ import com.moe.metricsconsumer.models.ExerciseDocument;
 
 import com.moe.metricsconsumer.models.measureSummary.Measure;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
+import com.moe.metricsconsumer.models.rewards.Achievement;
+import com.moe.metricsconsumer.models.rewards.UserAchievement;
 import com.moe.metricsconsumer.repositories.*;
 import no.hal.learning.exercise.*;
 import no.hal.learning.exercise.jdt.JdtLaunchProposal;
@@ -92,6 +94,9 @@ public class RawDataController {
   @Autowired
   private ExSolutionRepository exSolutionRepository;
 
+  @Autowired
+  private UserAchievementRepository userAchievementRepository;
+
   ControllerUtil controllerUtil = new ControllerUtil();
 
   Logger logger = LoggerFactory.getLogger(RawDataController.class);
@@ -126,7 +131,8 @@ public class RawDataController {
                                                    Principal principal) throws IOException {
 
     Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
-    return saveExFiles(measureSummaryRef, uploadingFiles, principalMap.get("userid"), false,  exNumber);
+    return saveExFiles(measureSummaryRef, uploadingFiles, principalMap.get("userid"),
+      false,  exNumber);
   }
 
 
@@ -156,17 +162,41 @@ public class RawDataController {
     logger.info("saveExFiles called initiating savings...");
     String measureSummaryRef = measureSummaryRefParam;
     if (measureSummaryRef == null) {
-      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, null, userId, isSolutionManual, exNumber);
+      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles,
+        null, userId, isSolutionManual, exNumber);
       MeasureSummary savedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
       // save the solution as well!!!!
-      this.measureRepository.save(savedMeasureSummary);
-      this.measureRepository.save(savedMeasureSummarySolution);
+
+      this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(userId,exNumber , false)
+        .map((m2) -> {
+          savedMeasureSummary.setId(m2.getId());
+          return this.measureRepository.save(savedMeasureSummary);
+      }).orElse(this.measureRepository.save(savedMeasureSummary));
+
+      this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(userId,exNumber , true)
+        .map((m2) -> {
+          savedMeasureSummarySolution.setId(m2.getId());
+          return this.measureRepository.save(savedMeasureSummarySolution);
+      }).orElse(this.measureRepository.save(savedMeasureSummarySolution));
+
+      // TODO check if the new measureSummary warrants a reward
+      List<Achievement> relevantAchievements = this.achievementRepository.findByTaskIdRefOrIsCumulative(
+        savedMeasureSummary.getTaskId(), true);
+      // Will find all achievements a user has ever received
+      List<UserAchievement> userAchievements = this.userAchievementRepository.findAllByUserRef(userId);
+      List<UserAchievement> rewardedUserAchievements = controllerUtil.checkAchievements(
+        savedMeasureSummary,relevantAchievements, userAchievements);
+      this.userAchievementRepository.saveAll(rewardedUserAchievements);
+      logger.debug(rewardedUserAchievements.toString());
+
+
       // This is a new exercise being added
       measureSummaryRef = savedMeasureSummary.getId();
     } else {
       // recalculate measure summary from MultipartFile[]
-      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles, measureSummaryRef, userId, isSolutionManual, exNumber);
+      Map<String, MeasureSummary> sourceAndSolutionCode = calculateMeasureSummaryFromExFiles(uploadingFiles,
+        measureSummaryRef, userId, isSolutionManual, exNumber);
       MeasureSummary recalculatedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
       this.measureRepository.save(recalculatedMeasureSummary);
@@ -214,10 +244,15 @@ public class RawDataController {
   }
 
   @SuppressWarnings("unchecked")
-  private Map<String, MeasureSummary> calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles, String measureSummaryRef, String userId, boolean isSolutionManual, String exNumber) throws IOException {
+  private Map<String, MeasureSummary> calculateMeasureSummaryFromExFiles(MultipartFile[] uploadingFiles,
+                                                                         String measureSummaryRef,
+                                                                         String userId,
+                                                                         boolean isSolutionManual,
+                                                                         String exNumber) throws IOException {
 
     // These packages are not yet in memory or loaded by a manifest file and has to be loaded in memory to be found
-    // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
+    // See: https://wiki.eclipse.org/EMF/FAQ#I_get_a_PackageNotFoundException:_e.g..2C_.22Package_with_uri_.27http:.2F.
+    // 2Fcom.example.company.ecore.27_not_found..22_What_do_I_need_to_do.3F
     ExercisePackage   exercisePackage  = ExercisePackage.eINSTANCE;
     JdtPackage        jdtPackage       = JdtPackage.eINSTANCE;
     JunitPackage      junitPackage     = JunitPackage.eINSTANCE;

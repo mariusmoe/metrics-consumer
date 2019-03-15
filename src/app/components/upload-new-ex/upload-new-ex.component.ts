@@ -54,11 +54,13 @@ export class UploadNewExComponent implements OnInit {
     let data = JSON.parse(response); //success server response
     console.log(data);
     this.measureService.notifyNewFiles();
+    this.uploader.clearQueue();
 
   }
   onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     let error = JSON.parse(response); //error server response
     console.error(error);
+    this.uploader.clearQueue();
   }
 
 
