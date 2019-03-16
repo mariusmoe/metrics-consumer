@@ -38,3 +38,26 @@
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
+
+
+.to-add {
+  font-weight: lighter;
+  display: flex;
+  vertical-align: middle !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
+.add-icon {
+  padding-top: 5px;
+  margin-right: 5px;
+}
+
+.hide-overflow {
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
+.divider {
+  margin-top: 20px;
+}

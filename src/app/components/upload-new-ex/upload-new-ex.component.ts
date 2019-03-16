@@ -5,6 +5,8 @@ import {Exercise} from "../../_models/exercise";
 import {MeasureService} from "../../_services/measure.service";
 import {environment} from "../../../environments/environment";
 import {MatSnackBar} from "@angular/material";
+import {switchMap} from "rxjs/operators";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 
 
 const URL = 'http://localhost:8080/api/xml/';
@@ -21,6 +23,8 @@ export class UploadNewExComponent implements OnInit {
   public uploader:FileUploaderCustom ;
 
   public canSubmit = false;
+  public exerciseToUpload = '1';
+  private sub: any;
 
   exercises: Exercise[] = [
     {value: '1', viewValue: 'Øving 01: Objekter og klasser, til⁣stand og oppførsel'},
@@ -36,7 +40,9 @@ export class UploadNewExComponent implements OnInit {
 
   constructor(
     private measureService: MeasureService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.uploader = new FileUploaderCustom({
       url: environment.uploadUrl,
@@ -51,8 +57,20 @@ export class UploadNewExComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sub = this.route.params.subscribe(params => {
+      this.exerciseToUpload = params['id'];
+      console.log("param changed " + params['id'])
 
+      this.uploader.options.headers.map((obj) => {
+        if (obj.name == "exNumber") {
+          obj.value = params['id'];
+        }
+      });
+      console.log(this.uploader.options.headers);
+      this.canSubmit = true;
+    });
   }
+
 
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     this.openSnackBar("Opplasting vellykket", "OK");

@@ -7,7 +7,7 @@
 <br>
   <div class="select-container">
     <mat-form-field class="select-container">
-      <mat-select placeholder="Øving 00" (selectionChange)="changedExercise($event)">
+      <mat-select placeholder="Velg en øving" (selectionChange)="changedExercise($event)" [(value)]="exerciseToUpload">
         <mat-option *ngFor="let exercise of exercises" [value]="exercise.value">
           {{exercise.viewValue}}
         </mat-option>
@@ -31,11 +31,11 @@
   <table class="table mat-body" >
     <thead>
     <tr>
-      <th width="40%" align="left">Name</th>
-      <th>Size</th>
-      <th>Progress</th>
+      <th width="40%" align="left">Navn</th>
+      <th>Størelse</th>
+      <th>Framgang</th>
       <th>Status</th>
-      <th width="300px">Actions</th>
+      <th width="300px">Handlinger</th>
     </tr>
     </thead>
     <tbody>
