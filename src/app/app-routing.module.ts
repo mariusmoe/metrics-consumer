@@ -15,6 +15,7 @@ const appRoutes: Routes = [
   { path: 'login', component: WelcomeComponent },
   { path: 'achievements', component: AchievementsComponent, canActivate: [AuthGuard]},
   { path: 'user/login', component:  NotFoundComponent},
+  { path: 'upload/:id', component:  UploadNewExComponent, canActivate: [AuthGuard]},
   { path: 'upload', component:  UploadNewExComponent, canActivate: [AuthGuard]},
   { path: 'summary/:taskId', component:  HomeComponent, canActivate: [AuthGuard]},
   { path: 'settings', component:  SettingsComponent, canActivate: [AuthGuard]},

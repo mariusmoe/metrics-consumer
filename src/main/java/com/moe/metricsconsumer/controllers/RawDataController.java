@@ -57,10 +57,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -262,6 +260,7 @@ public class RawDataController {
     FeatureValuedContainer fContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
     FeatureValuedContainer fContainerSolution = FvFactory.eINSTANCE.createFeatureValuedContainer();
     logger.debug("iMetricsProvidersList: "  + iMetricsProviderConfig.getMetricsProviders().toString());
+    ArrayList<String> includedClassesTotal = new ArrayList<>();
     try {
       for (String provider : iMetricsProviderConfig.getMetricsProviders()) {
         logger.debug("iMetricsProvider classes: " + findMyTypes(provider).toString());
@@ -269,12 +268,18 @@ public class RawDataController {
         FeatureList solutionFeatureList = FvFactory.eINSTANCE.createFeatureList();
         // Create one featureList
         // with all providers and sum up results from all source code snippets
-        for (Class c : findMyTypes(provider)) {
+        List<Class> providersList = findMyTypes(provider);
+        HashSet<Object> seen=new HashSet<>();
+        providersList.removeIf(e->!seen.add(e.getSimpleName()));
+        logger.debug("iMetricsProvider classes2: " + providersList);
+        for (Class c : providersList) {
           for(MultipartFile uploadedFile : uploadingFiles) {
             Resource exFileResource           = getExResource(uploadedFile);
             Map<String, ArrayList<String>> sourceAndSolutionCode = getSourceCodeList(exFileResource);
             ArrayList<String> sourceCodeList  = sourceAndSolutionCode.get("sourceCode");
             ArrayList<String> solutionCodeList  = sourceAndSolutionCode.get("solutionCode");
+            ArrayList<String> includedClasses  = sourceAndSolutionCode.get("includedClasses");
+            includedClassesTotal.addAll(includedClasses);
 
             for (String solutionCode : solutionCodeList) {
               IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
@@ -321,6 +326,11 @@ public class RawDataController {
     Map<String, MeasureSummary> measureSummaryStudentAndSolution = new HashMap<>();
     measureSummaryStudentAndSolution.put("student", measureSummary);
     measureSummaryStudentAndSolution.put("solution", measureSummarySolution);
+    List<String> listWithoutDuplicates = new ArrayList<>(
+      new HashSet<>(includedClassesTotal));
+    logger.info("\n\n----------------------------");
+    logger.info(listWithoutDuplicates.toString());
+    logger.info("\n\n----------------------------");
 
     return measureSummaryStudentAndSolution;
   }
@@ -336,6 +346,7 @@ public class RawDataController {
     // Holds a list of source code parts from the incoming .ex file
     ArrayList<String> sourceCodeList = new ArrayList<>();
     ArrayList<String> solutionCodeList = new ArrayList<>();
+    ArrayList<String> includedClasses = new ArrayList<>();
 
     // Iterate through the whole ex resource and prune as often as possible
     TreeIterator<EObject> iterator = exFileResource.getAllContents();
@@ -361,6 +372,10 @@ public class RawDataController {
           JdtSourceEditEvent lastAttemptOnTask = (JdtSourceEditEvent) eList.get(eList.size()-1);
           String sourceCode = lastAttemptOnTask.getEdit().getString();
           sourceCodeList.add(sourceCode);
+          // Add the class to includedClasses
+          includedClasses.add(exClassName);
+
+//          lastAttemptOnTask.getProposal().getCompletion();
         }
       } else if (exEObject instanceof Exercise
         || exEObject instanceof JunitTestProposal
@@ -372,6 +387,7 @@ public class RawDataController {
     Map<String, ArrayList<String>> sourceAndSolutionCode = new HashMap<>();
     sourceAndSolutionCode.put("sourceCode", sourceCodeList);
     sourceAndSolutionCode.put("solutionCode", solutionCodeList);
+    sourceAndSolutionCode.put("includedClasses", includedClasses);
     return sourceAndSolutionCode;
   }
 

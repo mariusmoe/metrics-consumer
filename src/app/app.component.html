@@ -59,6 +59,20 @@
           </div>
         </button>
       </div>
+      <mat-divider class="divider"></mat-divider>
+      <div *ngFor="let summary of notUploadedSummaries(summaries)" class="container-task">
+        <button
+          mat-button
+          routerLink="/upload/{{summary.value}}"
+          routerLinkActive="active"
+          class="btn-task">
+          <div class="summary-task-name-class to-add">
+            <!--Should give these a more transparent look-->
+            <div><mat-icon class="example-icon add-icon">add_circle_outline</mat-icon> </div>
+            <div class="hide-overflow">{{summary.viewValue}}</div>
+          </div>
+        </button>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <router-outlet></router-outlet>

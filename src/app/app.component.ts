@@ -6,6 +6,7 @@ import {MeasureSummary, Summary} from "./_models/measure-summary";
 import {MeasureService} from "./_services/measure.service";
 import {Observable} from "rxjs";
 import {AuthService} from "./_services/auth.service";
+import {Exercise} from "./_models/exercise";
 
 export interface PrincipalResource {
   message: string;
@@ -21,11 +22,20 @@ export interface PrincipalResource {
 export class AppComponent {
   title = 'Demo';
   data:any;
-
   isLoggedIn: boolean;
-
   summaries: Summary[];
 
+  exercises: Exercise[] = [
+    {value: '1', viewValue: 'Øving 01: Objekter og klasser, til⁣stand og oppførsel'},
+    {value: '2', viewValue: 'Øving 02: Innkapsling og vali⁣dering'},
+    {value: '3', viewValue: 'Øving 03: Klasser og testing'},
+    {value: '4', viewValue: 'Øving 04: Objektstrukturer med app'},
+    {value: '5', viewValue: 'Øving 05: Objektstrukturer'},
+    {value: '6', viewValue: 'Øving 06: Grensesnitt'},
+    {value: '7', viewValue: 'Øving 07: Filbehandling med app'},
+    {value: '8', viewValue: 'Øving 08: Observatør-Observert og Delegering'},
+    {value: '9', viewValue: 'Øving 09: Arv og abstrakte klasser'},
+  ]
 
   constructor(
     private http: HttpClient,
@@ -93,6 +103,17 @@ export class AppComponent {
       }, error => {
         this.summaries = null;
       });
+  }
+
+  notUploadedSummaries(summaries: Summary[]): Exercise[] {
+    if (summaries) {
+      let ex = this.exercises;
+      return ex.filter( (o) => {
+        if (!summaries.find(s => s.taskId === o.value)) {
+          return o
+        }
+      })
+    }
   }
 
 

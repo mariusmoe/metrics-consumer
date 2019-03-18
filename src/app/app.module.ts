@@ -10,7 +10,13 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatMenuModule,
-  MatSidenavModule, MatTooltipModule, MatCardModule, MatProgressBarModule, MatSelectModule, MatSnackBarModule
+  MatSidenavModule,
+  MatTooltipModule,
+  MatCardModule,
+  MatProgressBarModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatDividerModule
 } from '@angular/material';
 import { HomeComponent } from './components/home/home.component';
 
@@ -56,6 +62,7 @@ import {ErrorInterceptor} from "./_interceptors/errorInterceptor.interceptor";
     MatProgressBarModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatDividerModule,
     FileUploadModule
   ],
   providers: [

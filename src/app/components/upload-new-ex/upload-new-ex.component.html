@@ -7,7 +7,7 @@
 <br>
   <div class="select-container">
     <mat-form-field class="select-container">
-      <mat-select placeholder="Øving 00" (selectionChange)="changedExercise($event)">
+      <mat-select placeholder="Velg en øving" (selectionChange)="changedExercise($event)" [(value)]="exerciseToUpload">
         <mat-option *ngFor="let exercise of exercises" [value]="exercise.value">
           {{exercise.viewValue}}
         </mat-option>
@@ -18,24 +18,24 @@
 <button mat-raised-button color="primary" type="button" onclick="document.getElementById('fileToUpload').click()">
   <mat-icon class="example-icon">add</mat-icon>
   <label>
-     Choose files
+     Velg filer
   </label>
 </button>
 <input id="fileToUpload" type="file" ng2FileSelect [(uploader)]="uploader" multiple style="display:none;">
 
 <div class="col-md-9" style="margin-bottom: 40px; margin-top: 40px">
 
-  <h3 class="mat-h3">Upload queue</h3>
+  <h3 class="mat-h3">Opplastningskø</h3>
 
 
   <table class="table mat-body" >
     <thead>
     <tr>
-      <th width="40%" align="left">Name</th>
-      <th>Size</th>
-      <th>Progress</th>
+      <th width="40%" align="left">Navn</th>
+      <th>Størelse</th>
+      <th>Framgang</th>
       <th>Status</th>
-      <th width="300px">Actions</th>
+      <th width="300px">Handlinger</th>
     </tr>
     </thead>
     <tbody>
@@ -59,11 +59,11 @@
         <!--</button>-->
         <button mat-button color="accent" type="button" class="mat-small btn-xs"
                 (click)="item.cancel()" [disabled]="!item.isUploading">
-          <mat-icon class="example-icon" [inline]="true">cancel</mat-icon> <label>Cancel</label>
+          <mat-icon class="example-icon" [inline]="true">cancel</mat-icon> <label>Avbryt</label>
         </button>
         <button mat-button color="warn" type="button" class="mat-small btn-xs"
                 (click)="item.remove()">
-          <mat-icon class="example-icon" [inline]="true">delete</mat-icon> <label>Remove</label>
+          <mat-icon class="example-icon" [inline]="true">delete</mat-icon> <label>Fjern</label>
         </button>
       </td>
     </tr>
@@ -79,17 +79,17 @@
     <button mat-raised-button color="primary" type="button" class="btn"
             matTooltip="You need to select an exercise and files for upload"
             aria-label="You need to select an exercise and files for upload"
-            [matTooltipDisabled]="uploader.getNotUploadedItems().length > 0 || canSubmit == true"
-            (click)="startUploadAllFiles()" [disabled]="!uploader.getNotUploadedItems().length || canSubmit == false">
-      <mat-icon class="example-icon">cloud_upload</mat-icon> <label> Upload all</label>
+            [matTooltipDisabled]="uploader.getNotUploadedItems().length && exerciseToUpload"
+            (click)="startUploadAllFiles()" [disabled]="!uploader.getNotUploadedItems().length || canSubmit == false || !exerciseToUpload">
+      <mat-icon class="example-icon">cloud_upload</mat-icon> <label> Last opp alle</label>
     </button>
     <button mat-raised-button color="accent" type="button" class="btn"
             (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-      <mat-icon class="example-icon">cancel</mat-icon> <label> Cancel all</label>
+      <mat-icon class="example-icon">cancel</mat-icon> <label> Avbryt alle</label>
     </button>
     <button mat-raised-button color="warn" type="button" class="btn"
             (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-      <mat-icon class="example-icon">delete</mat-icon> <label> Remove all</label>
+      <mat-icon class="example-icon">delete</mat-icon> <label> Fjern alle</label>
     </button>
   </div>
 
