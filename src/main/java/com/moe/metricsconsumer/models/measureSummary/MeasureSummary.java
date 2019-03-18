@@ -27,20 +27,24 @@ public class MeasureSummary {
 
   private List<Measure> measures;
 
+  private List<String> includedClasses;
+
 
 
   public MeasureSummary() {}
 
-  public MeasureSummary(String userId, String taskName, String taskId, List<Measure> measures) {
-    this(userId, false, taskName, taskId, measures);
+  public MeasureSummary(String userId, String taskName, String taskId, List<Measure> measures, List<String> includedClasses) {
+    this(userId, false, taskName, taskId, measures, includedClasses);
   }
 
-  public MeasureSummary(String userId, boolean isSolutionManual, String taskName, String taskId, List<Measure> measures) {
+  public MeasureSummary(String userId, boolean isSolutionManual, String taskName, String taskId, List<Measure> measures,
+                        List<String> includedClasses) {
     this.userId = userId;
     this.isSolutionManual = isSolutionManual;
     this.taskName = taskName;
     this.taskId = taskId;
     this.measures = measures;
+    this.includedClasses = includedClasses;
   }
 
   public String getTaskId() {

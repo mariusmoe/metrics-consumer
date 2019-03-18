@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -80,7 +81,7 @@ public class WebLayerTest {
     someMeasure.add(new Measure("org.metrics.cyclomatic", someSpecificMeasure));
     someMeasure.add(new Measure("no.hal.javalang", someSpecificMeasure21));
     List<MeasureSummary> result = new ArrayList<>();
-    result.add(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure));
+    result.add(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure, Arrays.asList("test1", "test2")));
 
     given(this.measureRepository.findAllByUserId("001"))
       .willReturn(

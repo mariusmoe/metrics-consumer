@@ -63,6 +63,7 @@ export class HomeComponent implements OnInit {
   studentList: FeatureList;
   solutionManualList: FeatureList;
   objectKeys = Object.keys;
+  includedClasses: string[];
 
   constructor(
     private http: HttpClient,
@@ -96,17 +97,19 @@ export class HomeComponent implements OnInit {
 
     forkJoin([student, solutionManual]).subscribe(results => {
       if (results[0]) {
-        this.studentList = results[0]; // is student
-        this.solutionManualList = results[1]; // is solutionManual
+        this.studentList = results[0].featureList; // is student
+        this.solutionManualList = results[1].featureList; // is solutionManual
+        console.log("Results");
         console.log(results);
-        this.taskName = this.exercises.find(obj => obj.value === taskId).viewValue;
+        this.taskName = results[0].measureSummary.taskName;
+        this.includedClasses = results[0].measureSummary.includedClasses;
         let studentData = [];
 
         // Go through all measures and add them to the heatmap
         // Important -> Assumes that solution guide and student has the same number of measures
-        results[0].featureNames.forEach((featureName, index) => {
-          let student = results[0].features.find(o => Object.keys(o)[0] == featureName);
-          let Solution = results[1].features.find(o => Object.keys(o)[0] == featureName);
+        results[0].featureList.featureNames.forEach((featureName, index) => {
+          let student = results[0].featureList.features.find(o => Object.keys(o)[0] == featureName);
+          let Solution = results[1].featureList.features.find(o => Object.keys(o)[0] == featureName);
 
           studentData.push({
             name: featureName,

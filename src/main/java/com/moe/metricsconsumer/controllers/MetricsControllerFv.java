@@ -3,6 +3,7 @@ package com.moe.metricsconsumer.controllers;
 import com.moe.metricsconsumer.apiErrorHandling.EntityNotFoundException;
 
 import com.moe.metricsconsumer.models.FvConfiguration;
+import com.moe.metricsconsumer.models.FvResponse;
 import com.moe.metricsconsumer.models.measureSummary.MeasureSummary;
 import com.moe.metricsconsumer.repositories.FvConfigurationRepository;
 import com.moe.metricsconsumer.repositories.MeasureRepository;
@@ -54,7 +55,7 @@ public class MetricsControllerFv {
    */
   @GetMapping("/{taskId}")
   @ResponseBody
-  public FeatureList getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
+  public FvResponse getOneMeasureFv(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
 
     Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
     return getOneGenericMeasureFv(taskId, false, principalMap.get("userid"));
@@ -68,7 +69,7 @@ public class MetricsControllerFv {
    */
   @GetMapping("/solution/{taskId}")
   @ResponseBody
-  public FeatureList getOneSolutionMeasureFv(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
+  public FvResponse getOneSolutionMeasureFv(@NonNull @PathVariable("taskId") String taskId, Principal principal) throws EntityNotFoundException {
 
     Map<String, String> principalMap = this.controllerUtil.getPrincipalAsMap(principal);
     return getOneGenericMeasureFv(taskId, true, principalMap.get("userid"));
@@ -83,7 +84,7 @@ public class MetricsControllerFv {
    * @return a feature list
    * @throws EntityNotFoundException
    */
-  private FeatureList getOneGenericMeasureFv(String taskId, boolean isSolution, String... userId) throws EntityNotFoundException {
+  private FvResponse getOneGenericMeasureFv(String taskId, boolean isSolution, String... userId) throws EntityNotFoundException {
 
     // The userId is optional for now
     String _userId = (userId.length >= 1) ? userId[0] : "";
@@ -117,8 +118,7 @@ public class MetricsControllerFv {
       // CAn the error be caught? and then patch itself and try again?
       calculatedFeatureList = ((FeatureValued) eObject).toFeatureList();
     }
-
-    return calculatedFeatureList;
+    return new FvResponse(measureSummary,calculatedFeatureList);
   }
 
 

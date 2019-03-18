@@ -472,6 +472,19 @@ public class ConfigCreator {
 
     MetaDataFeatureValued metaDataFeatureValued = createDummyMetaFeatureList();
 
+    ExpressionFeatures expressionFeatures = getExpressionFeatures(metaDataFeatureValued);
+
+    // load config from XMI
+    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
+    ResourceSet resSet = new ResourceSetImpl();
+    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
+    configResource.getContents().add(expressionFeatures);
+    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
+    dataResource.getContents().add(metaDataFeatureValued);
+    return getByteArrayList(configResource, dataResource);
+  }
+
+  public ExpressionFeatures getExpressionFeatures(MetaDataFeatureValued metaDataFeatureValued) {
     ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
     expressionFeatures.setOther(metaDataFeatureValued);
 
@@ -482,18 +495,7 @@ public class ConfigCreator {
 //    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
     expressionFeatures.getFeatures().put("Sum expression", "PrefixExpression + InfixExpression");
 //    expressionFeatures.getFeatures().put("", "PrimitiveType");
-
-    // load config from XMI
-    Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
-    ResourceSet resSet = new ResourceSetImpl();
-
-    Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
-    configResource.getContents().add(expressionFeatures);
-
-    Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
-    dataResource.getContents().add(metaDataFeatureValued);
-
-    return getByteArrayList(configResource, dataResource);
+    return expressionFeatures;
   }
 
 
