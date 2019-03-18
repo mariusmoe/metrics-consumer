@@ -77,11 +77,11 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 
     @Override
     public void run(String... args) throws Exception{
-      repository.deleteAll();
-      fvConfigurationRepository.deleteAll();
-      achievementRepository.deleteAll();
-      userAchievementRepository.deleteAll();
-      exerciseDocumentRepository.deleteAll();
+//      repository.deleteAll();
+//      fvConfigurationRepository.deleteAll();
+//      achievementRepository.deleteAll();
+//      userAchievementRepository.deleteAll();
+//      exerciseDocumentRepository.deleteAll();
       //exSolutionRepository.deleteAll();
 
 
@@ -218,21 +218,21 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
       byte[] dResource4 = t4.get(0);
       byte[] confResource4= t4.get(1);
 
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",new Binary(confResource1), new Binary(dResource1)));
-
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",new Binary(confResource2), new Binary(dResource2)));
-
-      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(confResource3), new Binary(dResource3)));
-
-      fvConfigurationRepository.save(new FvConfiguration("1",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("2",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("3",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("4",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("5",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("6",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("7",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("8",new Binary(confResource4), new Binary(dResource4)));
-      fvConfigurationRepository.save(new FvConfiguration("9",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Account",new Binary(confResource1), new Binary(dResource1)));
+//
+//      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Location",new Binary(confResource2), new Binary(dResource2)));
+//
+//      fvConfigurationRepository.save(new FvConfiguration("stateandbehavior.Digit",new Binary(confResource3), new Binary(dResource3)));
+//
+//      fvConfigurationRepository.save(new FvConfiguration("1",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("2",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("3",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("4",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("5",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("6",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("7",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("8",new Binary(confResource4), new Binary(dResource4)));
+//      fvConfigurationRepository.save(new FvConfiguration("9",new Binary(confResource4), new Binary(dResource4)));
 
       ArrayList<byte[]> temp = configCreator.createAchievementConfig4();
       byte[] dataResourceByteArray5 = temp.get(0);
@@ -279,9 +279,9 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
         "Du har skrevet over 500 linjer med kode"
       );
 
-      achievementRepository.save(achievement1);
+//      achievementRepository.save(achievement1);
 //      achievementRepository.save(achievement2);
-      achievementRepository.save(achievement3);
+//      achievementRepository.save(achievement3);
 
 //      List<Achievement> achievementList = achievementRepository.findAll();
 //
