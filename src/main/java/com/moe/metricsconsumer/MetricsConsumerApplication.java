@@ -250,38 +250,38 @@ public class MetricsConsumerApplication extends SpringBootServletInitializer imp
 
       String taskIdRefAccount = "1";
       Achievement achievement1 = new Achievement(
-        11,
-        false,
+        30,
+        true,
         taskIdRefAccount,
         new Binary(configResourceByteArray5),
         new Binary(dataResourceByteArray5),
         //new Binary(BsonBinarySubType.BINARY, uploadedFile.getBytes()),
-        "For expert For for",
-        "Award for exceptional work on for loops"
+        "If ekspert",
+        "Sååå mange If statements (mer enn 30)"
         );
 
 //      achievementConfig2
       Achievement achievement2 = new Achievement(9,
         false,
-        taskIdRefAccount,
+        "8",
         new Binary(configResourceByteArray3),
         new Binary(dataResourceByteArray3),
         "While expert super",
         "Award for exceptional work on while nr1"
         );
 
-      Achievement achievement3 = new Achievement(3,
+      Achievement achievement3 = new Achievement(500,
         true,
-        taskIdRefAccount,
+        "8",
         new Binary(configResourceByteArray2),
         new Binary(dataResourceByteArray2),
-        "While expert easy",
-        "Award for exceptional work on while next"
+        "500 linjer med kode",
+        "Du har skrevet over 500 linjer med kode"
       );
 
-//      achievementRepository.save(achievement1);
-      achievementRepository.save(achievement2);
-//      achievementRepository.save(achievement3);
+      achievementRepository.save(achievement1);
+//      achievementRepository.save(achievement2);
+      achievementRepository.save(achievement3);
 
 //      List<Achievement> achievementList = achievementRepository.findAll();
 //

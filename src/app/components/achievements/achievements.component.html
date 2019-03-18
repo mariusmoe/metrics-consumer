@@ -27,6 +27,8 @@
         <div *ngFor="let userAchievement of [getUserAchievement(achievement.id)]">
           <div *ngIf="userAchievement">
             <span>{{userAchievement.achievementState}}</span>
+            <br>
+            Totalt: {{sumOfHistoryRaw(userAchievement).toString()}}
           </div>
         </div>
       </div>

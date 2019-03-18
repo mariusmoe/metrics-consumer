@@ -74,11 +74,10 @@ export class UploadNewExComponent implements OnInit {
 
   onSuccessItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {
     this.openSnackBar("Opplasting vellykket", "OK");
-    let data = JSON.parse(response); //success server response
-    console.log("File upload returned: " + status);
+    let uploadedExercise = this.uploader.options.headers.find(o => o.name === "exNumber");
     this.measureService.notifyNewFiles();
-    console.log(this.uploader.queue);
     this.uploader.queue = [];
+    this.router.navigate(["summary", uploadedExercise.value ]);
 
   }
   onErrorItem(item: FileItem, response: string, status: number, headers: ParsedResponseHeaders): any {

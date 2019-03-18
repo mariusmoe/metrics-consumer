@@ -182,10 +182,14 @@ public class RawDataController {
         savedMeasureSummary.getTaskId(), true);
       // Will find all achievements a user has ever received
       List<UserAchievement> userAchievements = this.userAchievementRepository.findAllByUserRef(userId);
-      List<UserAchievement> rewardedUserAchievements = controllerUtil.checkAchievements(
-        savedMeasureSummary,relevantAchievements, userAchievements);
-      this.userAchievementRepository.saveAll(rewardedUserAchievements);
-      logger.debug(rewardedUserAchievements.toString());
+      try {
+        List<UserAchievement> rewardedUserAchievements = controllerUtil.checkAchievements(
+          savedMeasureSummary,relevantAchievements, userAchievements);
+        this.userAchievementRepository.saveAll(rewardedUserAchievements);
+        logger.debug(rewardedUserAchievements.toString());
+      } catch (Exception e) {
+        logger.error(e.toString());
+      }
 
       // This is a new exercise being added
       measureSummaryRef = savedMeasureSummary.getId();

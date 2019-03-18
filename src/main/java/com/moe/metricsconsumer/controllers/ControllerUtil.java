@@ -200,12 +200,12 @@ public class ControllerUtil {
         FeatureList calculatedFeatureList = getCalculatedFeatureList(featureValuedContainer, resource);
         if (userAchievement != null) {
           // It exists already -> just update or add to history
-          userAchievement.getHistory().put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size());
+          userAchievement.getHistory().put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().values().stream().mapToInt(o -> o.intValue()).sum());
           userAchievementList.add(userAchievement);
         } else {
           // It ain't here -> create a new UserAchievement
           Map<String, Integer> newHistory = new HashMap<>();
-          newHistory.put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().size() );
+          newHistory.put(measureSummary.getTaskName(),calculatedFeatureList.getFeatures().values().stream().mapToInt(o -> o.intValue()).sum());
           UserAchievement newUserAchievement = new UserAchievement(measureSummary.getUserId(),
             achievement.getId(),
             AchievementState.REVEALED, LocalDateTime.now(), newHistory);

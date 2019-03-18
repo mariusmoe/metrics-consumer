@@ -88,7 +88,7 @@ public class MetricsControllerFv {
 
     // The userId is optional for now
     String _userId = (userId.length >= 1) ? userId[0] : "";
-    logger.info("--------- UserID: " + _userId);
+    logger.debug("--------- UserID: " + _userId);
 
     MeasureSummary measureSummary;
 
