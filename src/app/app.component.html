@@ -3,15 +3,15 @@
     <div>
       <button mat-button (click)="sidenav.toggle()">
         <mat-icon class="example-icon">menu</mat-icon>
-        <span> Measures</span>
+        <span> Metrikker</span>
       </button>
       <button mat-button routerLink="/achievements">
         <mat-icon class="example-icon">security</mat-icon>
-        <span> Achievements</span>
+        <span> Prestasjoner</span>
       </button>
       <button mat-button routerLink="/upload">
         <mat-icon class="example-icon">cloud_upload</mat-icon>
-        <span> Upload</span>
+        <span> Last opp</span>
       </button>
 
     </div>
@@ -23,10 +23,10 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item routerLink="/settings">
       <mat-icon class="example-icon">settings</mat-icon>
-      Settings</button>
+      Innstillinger</button>
     <button mat-menu-item (click)="logout()" [disabled]="!isLoggedIn">
       <mat-icon class="example-icon">exit_to_app</mat-icon>
-      Logout</button>
+      Logg ut</button>
   </mat-menu>
 
 

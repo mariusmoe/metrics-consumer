@@ -1,9 +1,12 @@
+import {FeatureList} from "./feature-list";
+
 export interface MeasureSummary {
   // TODO: describe the measure object here - should be doable :)
   taskName:string;
   taskId: string;
   id: string;
   measures: SpecificMeasure[];
+  includedClasses: string[];
 }
 
 export interface SpecificMeasure {
@@ -23,6 +26,11 @@ export interface Summary {
   taskId:string;
   measures?:string;
   solutionManual: boolean;
+}
+
+export interface FvResponse {
+  measureSummary: MeasureSummary ;
+  featureList: FeatureList;
 }
 
 

@@ -193,31 +193,47 @@ public class ConfigCreator {
   public ArrayList createAchievementConfig2() throws IOException {
 
 
-    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
-    featureList.getFeatures().put("foreach", 4.0);
-    featureList.getFeatures().put("while", 5.0);
-    featureList.getFeatures().put("for", 2.0);
+    MetaDataFeatureValued metaDataFeatureValued = createDummyMetaFeatureList();
 
-    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
-    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
-    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+    FeatureList featureList2 = FvFactory.eINSTANCE.createFeatureList();
+    featureList2.getFeatures().put("lines", 8.0);
 
-    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
-    filteredFeatures.setPred(Pred2Kind.GT);
-    filteredFeatures.setVal(7);
+    FilteredFeatures1 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures1();
+    filteredFeatures.setNameFilter("lines");
+    filteredFeatures.setPred(Pred1Kind.GT0);
     filteredFeatures.setOther(metaDataFeatureValued);
+
+
+    // does not work because FeatureValuedContainer contains featureValuedGroups
+    FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
+    featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures);
+
 
     // load config from XMI
     Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
     ResourceSet resSet = new ResourceSetImpl();
 
-    Resource configResource = resSet.createResource(URI.createURI("achievementConfig2.xmi"));
-    configResource.getContents().add(filteredFeatures);
+    Resource configResource = resSet.createResource(URI.createURI("achievementConfig3.xmi"));
+    configResource.getContents().add(featureValuedContainer);
 
-    Resource dataResource = resSet.createResource(URI.createURI("achievementData2.xmi"));
+    Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
     dataResource.getContents().add(metaDataFeatureValued);
 
-    return getByteArrayList(configResource, dataResource);
+
+    ByteArrayOutputStream dataResourceOutputStream = new ByteArrayOutputStream();
+    dataResource.save(dataResourceOutputStream, null);
+    //dataResource.save(null);
+
+    ByteArrayOutputStream configResourceOutputStream = new ByteArrayOutputStream();
+    configResource.save(configResourceOutputStream, null);
+    //configResource.save(null);
+
+
+    ArrayList<byte[]> list = new ArrayList<>();
+    list.add(dataResourceOutputStream.toByteArray());
+    list.add(configResourceOutputStream.toByteArray());
+
+    return list;
 
 
   }
@@ -247,39 +263,21 @@ public class ConfigCreator {
   public ArrayList createAchievementConfig4() throws IOException {
 
 
-    FeatureList featureList = FvFactory.eINSTANCE.createFeatureList();
-    featureList.getFeatures().put("foreach", 4.0);
-    featureList.getFeatures().put("while", 5.0);
-    featureList.getFeatures().put("for", 2.0);
-
-    MetaDataFeatureValued metaDataFeatureValued = FvFactory.eINSTANCE.createMetaDataFeatureValued();
-    metaDataFeatureValued.setFeatureValuedId("no_hal_javalang");
-    metaDataFeatureValued.setDelegatedFeatureValued(featureList);
+    MetaDataFeatureValued metaDataFeatureValued = createDummyMetaFeatureList();
 
     FeatureList featureList2 = FvFactory.eINSTANCE.createFeatureList();
-    featureList2.getFeatures().put("cyclomaticComplexity", 8.0);
-    featureList2.getFeatures().put("CLOC", 23.0);
-    featureList2.getFeatures().put("NCLOC", 15.0);
+    featureList2.getFeatures().put("IfStatement", 8.0);
 
-    MetaDataFeatureValued metaDataFeatureValued2 = FvFactory.eINSTANCE.createMetaDataFeatureValued();
-    metaDataFeatureValued2.setFeatureValuedId("org_metrics_cyclomatic");
-    metaDataFeatureValued2.setDelegatedFeatureValued(featureList2);
-
-
-    FilteredFeatures2 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures2();
-    filteredFeatures.setPred(Pred2Kind.GT);
-    filteredFeatures.setVal(2);
+    FilteredFeatures1 filteredFeatures = FvFactory.eINSTANCE.createFilteredFeatures1();
+    filteredFeatures.setNameFilter("IfStatement");
+    filteredFeatures.setPred(Pred1Kind.GT0);
     filteredFeatures.setOther(metaDataFeatureValued);
 
-    FilteredFeatures2 filteredFeatures2 = FvFactory.eINSTANCE.createFilteredFeatures2();
-    filteredFeatures2.setPred(Pred2Kind.GT);
-    filteredFeatures2.setVal(2);
-    filteredFeatures2.setOther(metaDataFeatureValued2);
 
     // does not work because FeatureValuedContainer contains featureValuedGroups
     FeatureValuedContainer featureValuedContainer = FvFactory.eINSTANCE.createFeatureValuedContainer();
     featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures);
-    featureValuedContainer.getFeatureValuedGroups().add(filteredFeatures2);
+
 
     // load config from XMI
     Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
@@ -290,7 +288,7 @@ public class ConfigCreator {
 
     Resource dataResource = resSet.createResource(URI.createURI("achievementData3.xmi"));
     dataResource.getContents().add(metaDataFeatureValued);
-    dataResource.getContents().add(metaDataFeatureValued2);
+
 
     ByteArrayOutputStream dataResourceOutputStream = new ByteArrayOutputStream();
     dataResource.save(dataResourceOutputStream, null);
@@ -472,28 +470,31 @@ public class ConfigCreator {
 
     MetaDataFeatureValued metaDataFeatureValued = createDummyMetaFeatureList();
 
-    ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
-    expressionFeatures.setOther(metaDataFeatureValued);
-
-
-    expressionFeatures.getFeatures().put("Number of method declarations", "MethodDeclaration");
-    expressionFeatures.getFeatures().put("Cyclomatic Complexity:Measure the number of linearly independent paths through a program",
-      "conditionalCount + 1");
-//    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
-    expressionFeatures.getFeatures().put("Sum expression", "PrefixExpression + InfixExpression");
-//    expressionFeatures.getFeatures().put("", "PrimitiveType");
+    ExpressionFeatures expressionFeatures = getExpressionFeatures(metaDataFeatureValued);
 
     // load config from XMI
     Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("xmi", new XMIResourceFactoryImpl());
     ResourceSet resSet = new ResourceSetImpl();
-
     Resource configResource = resSet.createResource(URI.createURI("config.xmi"));
     configResource.getContents().add(expressionFeatures);
-
     Resource dataResource = resSet.createResource(URI.createURI("data.xmi"));
     dataResource.getContents().add(metaDataFeatureValued);
-
     return getByteArrayList(configResource, dataResource);
+  }
+
+  public ExpressionFeatures getExpressionFeatures(MetaDataFeatureValued metaDataFeatureValued) {
+    ExpressionFeatures expressionFeatures = FvFactory.eINSTANCE.createExpressionFeatures();
+    expressionFeatures.setOther(metaDataFeatureValued);
+
+
+    expressionFeatures.getFeatures().put("Antall metodedeklarasjoner:Et lavere antall metodedeklarasjoner enn LF kan være en indikasjon på at en ikke har delt opp koden sin nok.", "MethodDeclaration");
+    expressionFeatures.getFeatures().put("Syklomatisk kompleksitet:Måler antall lineære uavhengige veier gjennom programmet. En verdi over 10 er ofte ikke ønskelig.",
+      "conditionalCount + 1");
+//    expressionFeatures.getFeatures().put("qualified names", "QualifiedName");
+    expressionFeatures.getFeatures().put("Antall linjer kode:Antall linjer kode blir ofte brukt som et mål på volum. Mange fler linjer enn LF kan være en indikasjon på uspesefikk kode", "lines");
+//    expressionFeatures.getFeatures().put("Antall linjer kode:Antall linjer kode blir ofte brukt som et mål på volum. Mange fler linjer enn LF kan være en indikasjon på uspesefikk kode", "lines / MethodDeclaration");
+//    expressionFeatures.getFeatures().put("", "PrimitiveType");
+    return expressionFeatures;
   }
 
 

@@ -31,7 +31,7 @@ export class AchievementsComponent implements OnInit {
 
   public getAllAchievementData() {
     this.achievementService.getAllAchievementDataFromService().subscribe(responseList => {
-      console.log(responseList);
+      // console.log(responseList);
       this.achievementList = responseList[0];
       this.userAchievementList = responseList[1];
     });
@@ -43,11 +43,22 @@ export class AchievementsComponent implements OnInit {
       Object.keys(userAchievement.history).forEach( key => {
         sumOfPoints += userAchievement.history[key];
       });
-      console.log(sumOfPoints);
       let result = (sumOfPoints / achievement.threshold)*100;
       return result;
     } else {
       return 0.1;
     }
+  }
+
+  sumOfHistoryRaw(userAchievement: UserAchievement): number {
+    let sumOfPoints = 0;
+    if (userAchievement && userAchievement.history) {
+      Object.keys(userAchievement.history).forEach( key => {
+        sumOfPoints += userAchievement.history[key];
+      });
+      return sumOfPoints;
+    }
+
+    return 0;
   }
 }

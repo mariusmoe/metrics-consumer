@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -80,10 +81,10 @@ public class MetricsControllerFvTest {
     someMeasure.add(new Measure("org.metrics.cyclomatic", someSpecificMeasure));
     someMeasure.add(new Measure("no.hal.javalang", someSpecificMeasure21));
     measureSummaryList = new ArrayList<>();
-    measureSummaryList.add(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure));
+    measureSummaryList.add(new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure, Arrays.asList("test1", "test2")));
 
-    measureSummary = new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure);
-    measureSummarySolution = new MeasureSummary("001", true,"Account-oppgave", "stateandbehavior.Account", someMeasure);
+    measureSummary = new MeasureSummary("001","Account-oppgave", "stateandbehavior.Account", someMeasure, Arrays.asList("test1", "test2"));
+    measureSummarySolution = new MeasureSummary("001", true,"Account-oppgave", "stateandbehavior.Account", someMeasure, Arrays.asList("test1", "test2"));
 
   }
 

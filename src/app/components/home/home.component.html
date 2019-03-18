@@ -2,9 +2,15 @@
   <div>
 
 
-    <div *ngIf="taskName && !showInstructions">
+    <div *ngIf="taskName && !showInstructions && includedClasses">
       <mat-card class="measure-card">
         <mat-card-title>{{taskName}}</mat-card-title>
+        <mat-card-content>
+          Grunnlag for metrikker:
+          <div *ngFor="let includedFile of includedClasses" class="mat-small included-measures">
+            {{includedFile}}
+          </div>
+        </mat-card-content>
       </mat-card>
 
     </div>

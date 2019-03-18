@@ -164,30 +164,32 @@ public class RawDataController {
         null, userId, isSolutionManual, exNumber);
       MeasureSummary savedMeasureSummary = sourceAndSolutionCode.get("student");
       MeasureSummary savedMeasureSummarySolution  = sourceAndSolutionCode.get("solution");
-      // save the solution as well!!!!
 
+      // save the solution as well!!!!
       this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(userId,exNumber , false)
         .map((m2) -> {
           savedMeasureSummary.setId(m2.getId());
           return this.measureRepository.save(savedMeasureSummary);
       }).orElse(this.measureRepository.save(savedMeasureSummary));
-
       this.measureRepository.findFirstByUserIdAndTaskIdAndIsSolutionManual(userId,exNumber , true)
         .map((m2) -> {
           savedMeasureSummarySolution.setId(m2.getId());
           return this.measureRepository.save(savedMeasureSummarySolution);
       }).orElse(this.measureRepository.save(savedMeasureSummarySolution));
 
-      // TODO check if the new measureSummary warrants a reward
+      // check if the new measureSummary warrants a reward
       List<Achievement> relevantAchievements = this.achievementRepository.findByTaskIdRefOrIsCumulative(
         savedMeasureSummary.getTaskId(), true);
       // Will find all achievements a user has ever received
       List<UserAchievement> userAchievements = this.userAchievementRepository.findAllByUserRef(userId);
-      List<UserAchievement> rewardedUserAchievements = controllerUtil.checkAchievements(
-        savedMeasureSummary,relevantAchievements, userAchievements);
-      this.userAchievementRepository.saveAll(rewardedUserAchievements);
-      logger.debug(rewardedUserAchievements.toString());
-
+      try {
+        List<UserAchievement> rewardedUserAchievements = controllerUtil.checkAchievements(
+          savedMeasureSummary,relevantAchievements, userAchievements);
+        this.userAchievementRepository.saveAll(rewardedUserAchievements);
+        logger.debug(rewardedUserAchievements.toString());
+      } catch (Exception e) {
+        logger.error(e.toString());
+      }
 
       // This is a new exercise being added
       measureSummaryRef = savedMeasureSummary.getId();
@@ -272,15 +274,14 @@ public class RawDataController {
         HashSet<Object> seen=new HashSet<>();
         providersList.removeIf(e->!seen.add(e.getSimpleName()));
         logger.debug("iMetricsProvider classes2: " + providersList);
-        for (Class c : providersList) {
-          for(MultipartFile uploadedFile : uploadingFiles) {
-            Resource exFileResource           = getExResource(uploadedFile);
-            Map<String, ArrayList<String>> sourceAndSolutionCode = getSourceCodeList(exFileResource);
-            ArrayList<String> sourceCodeList  = sourceAndSolutionCode.get("sourceCode");
-            ArrayList<String> solutionCodeList  = sourceAndSolutionCode.get("solutionCode");
-            ArrayList<String> includedClasses  = sourceAndSolutionCode.get("includedClasses");
-            includedClassesTotal.addAll(includedClasses);
-
+        for(MultipartFile uploadedFile : uploadingFiles) {
+          Resource exFileResource           = getExResource(uploadedFile);
+          Map<String, ArrayList<String>> sourceAndSolutionCode = getSourceCodeList(exFileResource);
+          ArrayList<String> sourceCodeList  = sourceAndSolutionCode.get("sourceCode");
+          ArrayList<String> solutionCodeList  = sourceAndSolutionCode.get("solutionCode");
+          ArrayList<String> includedClasses  = sourceAndSolutionCode.get("includedClasses");
+          includedClassesTotal.addAll(includedClasses);
+          for (Class c : providersList) {
             for (String solutionCode : solutionCodeList) {
               IMetricsProvider iMetricsProvider = (IMetricsProvider) Class.forName(c.getName()).newInstance();
               FeatureValued featureValued = iMetricsProvider.computeMetrics(solutionCode);
@@ -313,24 +314,26 @@ public class RawDataController {
 
     List<Measure> measures = controllerUtil.createMeasuresFromContainer(fContainer);
     List<Measure> measuresSolution = controllerUtil.createMeasuresFromContainer(fContainerSolution);
+    List<String> includedClassesTotalNoDuplicate = new ArrayList<>(
+      new HashSet<>(includedClassesTotal));
     MeasureSummary measureSummary = new MeasureSummary(userId,
       isSolutionManual,
       exerciseNames.get(exNumber),
       exNumber,
-      measures);
+      measures,
+      includedClassesTotalNoDuplicate);
     MeasureSummary measureSummarySolution = new MeasureSummary(userId,
       true,
       exerciseNames.get(exNumber),
       exNumber,
-      measuresSolution);
+      measuresSolution,
+      includedClassesTotalNoDuplicate);
     Map<String, MeasureSummary> measureSummaryStudentAndSolution = new HashMap<>();
     measureSummaryStudentAndSolution.put("student", measureSummary);
     measureSummaryStudentAndSolution.put("solution", measureSummarySolution);
-    List<String> listWithoutDuplicates = new ArrayList<>(
-      new HashSet<>(includedClassesTotal));
-    logger.info("\n\n----------------------------");
-    logger.info(listWithoutDuplicates.toString());
-    logger.info("\n\n----------------------------");
+    // Remove duplicates in case of more metricProviders
+
+
 
     return measureSummaryStudentAndSolution;
   }

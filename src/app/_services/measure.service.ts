@@ -2,7 +2,7 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 
 import {Observable, throwError} from 'rxjs';
-import {Measure, MeasureSummary, Summary} from "../_models/measure-summary";
+import {FvResponse, Measure, MeasureSummary, Summary} from "../_models/measure-summary";
 
 
 import {catchError, tap} from "rxjs/operators";
@@ -38,7 +38,7 @@ export class MeasureService {
   }
 
   getMeasureFvData(taskId: string) {
-    return this.http.get<FeatureList>(`api/fv/${taskId}`)
+    return this.http.get<FvResponse>(`api/fv/${taskId}`)
       .pipe(
         tap(_ => console.log("getMeasureFvData service called")),
         catchError(this.errorService.handleError)
@@ -46,7 +46,7 @@ export class MeasureService {
   }
 
   getSolutionFvMeasureData(taskId: string) {
-    return this.http.get<FeatureList>(`api/fv/solution/${taskId}`)
+    return this.http.get<FvResponse>(`api/fv/solution/${taskId}`)
       .pipe(
         tap(_ => console.log("getSolutionFvMeasureData service called")),
         catchError(this.errorService.handleError)
