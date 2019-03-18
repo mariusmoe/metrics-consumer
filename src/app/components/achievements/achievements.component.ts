@@ -31,7 +31,7 @@ export class AchievementsComponent implements OnInit {
 
   public getAllAchievementData() {
     this.achievementService.getAllAchievementDataFromService().subscribe(responseList => {
-      console.log(responseList);
+      // console.log(responseList);
       this.achievementList = responseList[0];
       this.userAchievementList = responseList[1];
     });

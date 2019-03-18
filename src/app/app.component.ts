@@ -44,10 +44,10 @@ export class AppComponent {
     private authService: AuthService
   ) {
     this.authService.getResource().subscribe((data: PrincipalResource)  => {
-      console.log(data);
+      // console.log(data);
       this.authService.setIsLoggedIn(true);
       localStorage.setItem('currentUser', JSON.stringify(data.details[0]));
-      console.log(data.details[0][Object.keys(data.details[0])[0]]);
+      // console.log(data.details[0][Object.keys(data.details[0])[0]]);
       let gKey = data.details[0][Object.keys(data.details[0])[0]];
 
       (<any>window).ga('set', 'userId', gKey);
@@ -98,7 +98,7 @@ export class AppComponent {
   loadSummaries(){
     this.measureService.getSummaries().subscribe(
       (data: Summary[]) => {
-        console.log(data);
+        // console.log(data);
         this.summaries = data;
       }, error => {
         this.summaries = null;

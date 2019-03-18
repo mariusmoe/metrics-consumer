@@ -93,14 +93,14 @@ export class HomeComponent implements OnInit {
   retrieveFvData (taskId: string) {
     let student = this.measureService.getMeasureFvData(taskId);
     let solutionManual = this.measureService.getSolutionFvMeasureData(taskId);
-    console.log('FV');
+    // console.log('FV');
 
     forkJoin([student, solutionManual]).subscribe(results => {
       if (results[0]) {
         this.studentList = results[0].featureList; // is student
         this.solutionManualList = results[1].featureList; // is solutionManual
-        console.log("Results");
-        console.log(results);
+        // console.log("Results");
+        // console.log(results);
         this.taskName = results[0].measureSummary.taskName;
         this.includedClasses = results[0].measureSummary.includedClasses;
         let studentData = [];
@@ -122,7 +122,7 @@ export class HomeComponent implements OnInit {
           })
         })
 
-        console.log( studentData);
+        // console.log( studentData);
         this.loading = false;
         this.multi = [...studentData];
       }
@@ -131,7 +131,7 @@ export class HomeComponent implements OnInit {
   }
 
   onSelect(event) {
-    console.log(event);
+    // console.log(event);
     console.log(event.series.split(":", 2)[0]);
   }
 

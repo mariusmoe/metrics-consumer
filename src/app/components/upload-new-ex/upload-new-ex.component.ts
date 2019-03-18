@@ -59,7 +59,7 @@ export class UploadNewExComponent implements OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.exerciseToUpload = params['id'];
-      console.log("param changed " + params['id'])
+      // console.log("param changed " + params['id'])
 
       this.uploader.options.headers.map((obj) => {
         if (obj.name == "exNumber") {
@@ -102,7 +102,7 @@ export class UploadNewExComponent implements OnInit {
   }
 
   changedExercise(event) {
-    console.log(event.value);
+    // console.log(event.value);
     this.uploader.options.headers.map((obj) => {
       if (obj.name == "exNumber") {
         obj.value = event.value;
