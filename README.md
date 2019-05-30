@@ -1,5 +1,9 @@
 # System for gamification of lab work in TDT4100
+
+> Using measures to give indications of qualities in student exercises 
+
 ## Project structure
+
 ```
 e2e         --> Angular end to end testing
 libs        --> External jars
@@ -13,31 +17,47 @@ src
   ```
 
 
+## Installation
 
-# Client
+### Prerequisites
+- node and npm 
+- angular CLI: 6.2.1
+- Java 1.8
+- MongoDB 3.6.3
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.1.
+### Setup
 
-## Development server
+- Clone this repo to your local machine using https://github.com/mariusmoe/metrics-consumer.git
+- Go to `libs/` and run commands from `maven-manual-imports`
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Authentication provider
+> The application uses spring security oauth2 implicit flow. 
+- Create an account at an authentication provider or set up an Authorization Server. 
+  - An example is Feide dataporten
+- Create the Spring configuration file at `metrics-consumer/src/main/resources/` and fill in the provided fields from the authentication provider:
+```security:
+  oauth2:
+    client:
+      accessTokenUri: 
+      userAuthorizationUri: 
+      clientId: 
+      clientSecret: 
+    resource:
+      userInfoUri: 
+mom:
+  mongo:
+    address: 127.0.0.1
+    database: measures
+  staticResource: 
+logging:
+  level:
+    com.moe.metricsconsumer: info
+metricsProviders:
+  - no.hal.learning.exercise.jdt.metrics
+```
+### Build
+- Run `ng build --prod` to build Angular static files
+  - The target path for Angular production build is set to `target/classes/static`
+- Run `mvn clean package` and deploy war to tomcat 
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
