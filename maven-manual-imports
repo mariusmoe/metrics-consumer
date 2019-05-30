@@ -1,0 +1,74 @@
+mvn install:install-file -Dfile="iMetricsProvider-07-mod.jar" -DgroupId="no.hal.learning.exercise" -DartifactId="exercise" -Dversion=3.6 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="diffutils-1.3.0.jar" -DgroupId="com.googlecode.java-diff-utils.diffutils" -DartifactId="exercise" -Dversion=1.3 -Dpackaging=jar
+
+mvn install:install-file -Dfile="iMetricsProvider-07-mod.jar" -DgroupId="no.hal.learning.exercise" -DartifactId="exercise" -Dversion=3.6 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="diffutils-1.3.0.jar" -DgroupId="com.googlecode.java-diff-utils.diffutils" -DartifactId="diffutils" -Dversion=1.3 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.core.contenttype_3.6.0.v20170207-1037.jar" -DgroupId="org.eclipse.core.contenttype" -DartifactId="eclipse-core-contenttype" -Dversion=3.6 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.core.jobs_3.9.3.v20180115-1757.jar" -DgroupId="org.eclipse.core.jobs" -DartifactId="eclipse-core-jobs" -Dversion=3.9.3 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.core.resources_3.12.0.v20170417-1558.jar" -DgroupId="org.eclipse.core.resources" -DartifactId="eclipse-core-resources" -Dversion=3.12 -Dpackaging=jar
+
+mvn install:install-file -Dfile="org.eclipse.core.runtime_3.13.0.v20170207-1030.jar" -DgroupId="org.eclipse.core.runtime" -DartifactId="eclipse-core-runtime" -Dversion=3.13 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.emf.common_2.13.0.v20170609-0707.jar" -DgroupId="org.eclipse.emf.common" -DartifactId="emf-common" -Dversion=2.13 -Dpackaging=jar
+
+mvn install:install-file -Dfile="org.eclipse.emf.ecore.change_2.11.0.v20170609-0707.jar" -DgroupId="org.eclipse.emf.ecore.change" -DartifactId="ecore-change" -Dversion=2.11 -Dpackaging=jar
+
+mvn install:install-file -Dfile="org.eclipse.emf.ecore.edit_2.9.0.v20170609-0928.jar" -DgroupId="org.eclipse.emf.ecore.edit" -DartifactId="ecore-edit" -Dversion=2.9 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.emf.ecore.xmi_2.13.0.v20170609-0707.jar" -DgroupId="org.eclipse.emf.ecore.xmi" -DartifactId="ecore-xmi" -Dversion=2.13 -Dpackaging=jar
+
+mvn install:install-file -Dfile="org.eclipse.emf.ecore_2.13.0.v20170609-0707.jar" -DgroupId="org.eclipse.emf.ecore" -DartifactId="ecore" -Dversion=2.13 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.emf.edit_2.12.0.v20170609-0928.jar" -DgroupId="org.eclipse.emf.edit" -DartifactId="emf-edit" -Dversion=2.12 -Dpackaging=jar
+
+
+ mvn install:install-file -Dfile="org.eclipse.equinox.common_3.9.0.v20170207-1454.jar" -DgroupId="org.eclipse.equinox.common" -DartifactId="equinox-common" -Dversion=3.9 -Dpackaging=jar
+
+mvn install:install-file -Dfile="org.eclipse.equinox.preferences_3.7.0.v20170126-2132.jar" -DgroupId="org.eclipse.equinox.preferences" -DartifactId="equinox" -Dversion=3.7 -Dpackaging=jar
+
+
+mvn install:install-file -Dfile="org.eclipse.jdt.core_3.13.102.v20180330-0919.jar" -DgroupId="org.eclipse.jdt.core" -DartifactId="jdt-core" -Dversion=3.13 -Dpackaging=jar
+
+
+ mvn install:install-file -Dfile="org.eclipse.osgi_3.12.100.v20180210-1608.jar" -DgroupId="org.eclipse.osgi" -DartifactId="osgi" -Dversion=3.12 -Dpackaging=jar
+
+
+
+curl -O http://mirror.cc.columbia.edu/pub/software/apache/tomcat/tomcat-9/v9.0.10/bin/apache-tomcat-9.0.10.tar.gz
+
+
+/usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
