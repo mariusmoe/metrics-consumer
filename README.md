@@ -1,3 +1,19 @@
+# System for gamification of lab work in TDT4100
+## Project structure
+```
+e2e         --> Angular end to end testing
+libs        --> External jars
+postman     --> postman project backup
+src
+  app         --> Angular
+  assets      --> Angular
+  environment --> Angular
+  main        --> Java Spring backend
+  test        --> Java Spring tests
+  ```
+
+
+
 # Client
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.1.
